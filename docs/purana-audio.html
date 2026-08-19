@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Purāṇa Audio Project</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Commissioning recitation of the Purāṇas that is addressable at the verse from the moment it is recorded.">
+<style>
+  /* ── tokens: light is the base, both dark states redefine only these ───── */
+  :root{
+    --paper:#ECEFEF;
+    --leaf:#F8FAFA;
+    --leaf-2:#E2E7E8;
+    --rule:#C6CFD1;
+    --rule-soft:#D8DFE0;
+    --ink:#15202A;
+    --ink-2:#4C5D68;
+    --ink-3:#74848D;
+    --indigo:#2B3A72;
+    --indigo-soft:#E0E4F1;
+    --madder:#9C3B2E;
+    --madder-soft:#F0E0DC;
+    --shadow:0 1px 2px rgba(21,32,42,.06), 0 8px 24px -12px rgba(21,32,42,.18);
+
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua","URW Palladio L",Georgia,serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono","JetBrains Mono",Menlo,Consolas,"Liberation Mono",monospace;
+
+    --measure:68ch;
+    --rail:8.5rem;
+    --gap:2.75rem;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#12181D;
+      --leaf:#1A2229;
+      --leaf-2:#222C34;
+      --rule:#33404A;
+      --rule-soft:#28333B;
+      --ink:#DDE4E7;
+      --ink-2:#9DAAB3;
+      --ink-3:#7A8790;
+      --indigo:#9DB0E8;
+      --indigo-soft:#232C45;
+      --madder:#D98C7C;
+      --madder-soft:#33241F;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#12181D;
+    --leaf:#1A2229;
+    --leaf-2:#222C34;
+    --rule:#33404A;
+    --rule-soft:#28333B;
+    --ink:#DDE4E7;
+    --ink-2:#9DAAB3;
+    --ink-3:#7A8790;
+    --indigo:#9DB0E8;
+    --indigo-soft:#232C45;
+    --madder:#D98C7C;
+    --madder-soft:#33241F;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.7);
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--serif);
+    font-size:17px;
+    line-height:1.62;
+    text-rendering:optimizeLegibility;
+  }
+
+  /* ── the rail grid: marginal column carries section numbers + notes ────── */
+  .sheet{
+    max-width:calc(var(--rail) + var(--measure) + 6rem);
+    margin:0 auto;
+    padding:0 1.75rem 7rem;
+  }
+  section{
+    display:grid;
+    grid-template-columns:var(--rail) minmax(0,1fr);
+    column-gap:2.5rem;
+    padding-block:var(--gap);
+    border-top:1px solid var(--rule-soft);
+  }
+  section > .body{display:flex;flex-direction:column;gap:1.15rem;min-width:0}
+  .marg{
+    display:flex;flex-direction:column;gap:.5rem;
+    padding-top:.45rem;
+  }
+  .num{
+    font-family:var(--mono);
+    font-size:.72rem;letter-spacing:.14em;
+    color:var(--madder);
+    font-variant-numeric:tabular-nums;
+  }
+  .marg p{
+    margin:0;font-family:var(--mono);
+    font-size:.68rem;line-height:1.55;color:var(--ink-3);
+    letter-spacing:.01em;
+  }
+  @media (max-width:760px){
+    section{grid-template-columns:1fr;row-gap:1rem}
+    .marg{flex-direction:row;flex-wrap:wrap;gap:.75rem;align-items:baseline;padding-top:0}
+    :root{--gap:2.1rem}
+  }
+
+  /* ── type scale ─────────────────────────────────────────────────────────── */
+  h1,h2,h3{margin:0;text-wrap:balance;font-weight:600;line-height:1.18}
+  h1{font-size:clamp(2.3rem,6vw,3.4rem);letter-spacing:-.015em}
+  h2{font-size:1.42rem;letter-spacing:-.005em}
+  h3{font-size:1rem;letter-spacing:.005em;color:var(--ink-2)}
+  p{margin:0;max-width:var(--measure)}
+  a{color:var(--indigo);text-decoration-thickness:1px;text-underline-offset:2px}
+  a:focus-visible,summary:focus-visible{outline:2px solid var(--indigo);outline-offset:3px;border-radius:2px}
+  strong{font-weight:600}
+  em{font-style:italic}
+  .lede{font-size:1.16rem;color:var(--ink-2);max-width:60ch}
+  .eyebrow{
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--ink-3);
+  }
+  .fig{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:.94em}
+  .dv{font-family:var(--mono);color:var(--madder);padding-inline:.15em}
+
+  /* ── masthead ───────────────────────────────────────────────────────────── */
+  header.mast{
+    display:grid;grid-template-columns:var(--rail) minmax(0,1fr);
+    column-gap:2.5rem;padding-block:4.5rem 2.75rem;
+  }
+  @media (max-width:760px){header.mast{grid-template-columns:1fr;row-gap:1.25rem}}
+  .mast .body{display:flex;flex-direction:column;gap:1.4rem}
+  .sanskrit{
+    font-size:clamp(1.05rem,2.6vw,1.3rem);color:var(--madder);
+    letter-spacing:.04em;font-family:var(--serif);
+  }
+  .subtitle{font-size:1.05rem;color:var(--ink-2);max-width:56ch}
+
+  /* the asymmetry: the whole argument in two figures */
+  .asym{
+    display:grid;grid-template-columns:1fr auto 1fr;align-items:center;
+    gap:1.25rem;margin-top:.75rem;padding:1.4rem 1.5rem;
+    background:var(--leaf);border:1px solid var(--rule);border-radius:3px;
+    box-shadow:var(--shadow);
+  }
+  .asym .side{display:flex;flex-direction:column;gap:.3rem;min-width:0}
+  .asym .n{font-family:var(--mono);font-size:1.55rem;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .asym .k{font-family:var(--mono);font-size:.68rem;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+  .asym .s{font-size:.92rem;color:var(--ink-2)}
+  .asym .vs{
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;color:var(--madder);
+    writing-mode:vertical-rl;text-orientation:mixed;
+  }
+  .asym .have .n{color:var(--indigo)}
+  .asym .want .n{color:var(--madder)}
+  @media (max-width:640px){
+    .asym{grid-template-columns:1fr;gap:1rem}
+    .asym .vs{writing-mode:horizontal-tb;border-top:1px solid var(--rule);padding-top:.9rem}
+  }
+
+  /* ── specimen: the design idea — mono = machine, serif = scholar ────────── */
+  .specimen{
+    background:var(--leaf);border:1px solid var(--rule);border-radius:3px;
+    padding:1.5rem 1.6rem;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;gap:1rem;overflow-x:auto;
+  }
+  .spec-head{
+    display:flex;flex-wrap:wrap;align-items:baseline;gap:.55rem;
+    padding-bottom:.85rem;border-bottom:1px solid var(--rule-soft);
+  }
+  .hw{font-size:1.3rem;font-weight:600;letter-spacing:.005em}
+  .hw-dev{font-size:1.15rem;color:var(--madder)}
+  .tag{
+    font-family:var(--mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;
+    padding:.18rem .5rem;border-radius:2px;white-space:nowrap;
+  }
+  .tag.m{background:var(--indigo-soft);color:var(--indigo)}
+  .tag.s{background:var(--madder-soft);color:var(--madder)}
+  .spec-body{font-size:.99rem;line-height:1.75}
+  .cite{font-family:var(--mono);font-size:.86em;color:var(--indigo);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .gloss{font-style:italic;color:var(--ink-2)}
+  .legend{
+    display:flex;flex-wrap:wrap;gap:1.25rem;padding-top:.9rem;
+    border-top:1px solid var(--rule-soft);
+    font-family:var(--mono);font-size:.68rem;color:var(--ink-3);letter-spacing:.02em;
+  }
+  .legend span{display:flex;align-items:center;gap:.45rem}
+  .swatch{width:.7rem;height:.7rem;border-radius:1px;flex:none}
+  .sw-m{background:var(--indigo)}
+  .sw-s{background:var(--madder)}
+
+  /* ── tables ─────────────────────────────────────────────────────────────── */
+  .tw{overflow-x:auto;border:1px solid var(--rule);border-radius:3px;background:var(--leaf)}
+  table{border-collapse:collapse;width:100%;font-size:.9rem}
+  th,td{padding:.6rem .85rem;text-align:left;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+  thead th{
+    font-family:var(--mono);font-size:.66rem;letter-spacing:.11em;text-transform:uppercase;
+    color:var(--ink-3);font-weight:400;background:var(--leaf-2);white-space:nowrap;
+  }
+  tbody tr:last-child td{border-bottom:0}
+  td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+  td.n{color:var(--indigo)}
+  caption{
+    caption-side:bottom;text-align:left;padding:.7rem .85rem;
+    font-family:var(--mono);font-size:.68rem;color:var(--ink-3);line-height:1.5;
+    border-top:1px solid var(--rule-soft);
+  }
+
+  /* ── stages: the pipeline, with the human step marked ───────────────────── */
+  .stages{display:flex;flex-direction:column;gap:0;margin:0;padding:0;list-style:none;counter-reset:st}
+  .stages li{
+    display:grid;grid-template-columns:2.4rem minmax(0,1fr);gap:1rem;
+    padding:1rem 0;border-bottom:1px solid var(--rule-soft);
+  }
+  .stages li:last-child{border-bottom:0}
+  .stages li::before{
+    counter-increment:st;content:counter(st,upper-roman);
+    font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;color:var(--ink-3);
+    padding-top:.32rem;
+  }
+  .stages .t{display:flex;flex-wrap:wrap;align-items:baseline;gap:.6rem;margin-bottom:.2rem}
+  .stages .t b{font-weight:600}
+  .stages p{font-size:.94rem;color:var(--ink-2);margin:0}
+  .stages li.human{background:var(--madder-soft);border-radius:3px;padding-inline:1rem;border-bottom-color:transparent}
+  .stages li.human::before{color:var(--madder)}
+  .stages li.human p{color:var(--ink)}
+
+  /* ── deliverables ───────────────────────────────────────────────────────── */
+  .deliv{display:grid;grid-template-columns:repeat(auto-fit,minmax(15.5rem,1fr));gap:1rem}
+  .card{
+    background:var(--leaf);border:1px solid var(--rule);border-radius:3px;
+    padding:1.1rem 1.2rem;display:flex;flex-direction:column;gap:.5rem;
+  }
+  .card h3{font-family:var(--serif);font-size:1.02rem;color:var(--ink)}
+  .card p{font-size:.9rem;color:var(--ink-2)}
+  .card .fmt{font-family:var(--mono);font-size:.66rem;letter-spacing:.09em;color:var(--ink-3);text-transform:uppercase}
+
+  /* ── tiers: the division of labour, sized by share of the work ──────────── */
+  .tiers{display:flex;flex-direction:column;gap:.9rem}
+  .tier{
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.35rem 1.25rem;
+    align-items:baseline;padding:1rem 1.15rem;border-radius:3px;
+    background:var(--leaf);border:1px solid var(--rule);
+  }
+  .tier .who{font-size:1.02rem;font-weight:600}
+  .tier .share{
+    font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink-3);white-space:nowrap;text-align:right;
+  }
+  .tier .what{grid-column:1/-1;font-size:.93rem;color:var(--ink-2);margin:0;max-width:var(--measure)}
+  .tier .bar{grid-column:1/-1;height:3px;border-radius:2px;background:var(--rule-soft);overflow:hidden;margin-top:.35rem}
+  .tier .bar i{display:block;height:100%;border-radius:2px}
+  .tier.jr .bar i{background:var(--indigo)}
+  .tier.sr{background:var(--madder-soft);border-color:var(--madder)}
+  .tier.sr .bar i{background:var(--madder)}
+
+  .triggers{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(13.5rem,1fr));gap:.5rem;
+    margin:0;padding:0;list-style:none;
+  }
+  .triggers li{
+    font-family:var(--mono);font-size:.74rem;line-height:1.5;color:var(--ink-2);
+    background:var(--leaf-2);border-radius:3px;padding:.6rem .75rem;
+    border-left:2px solid var(--madder);
+  }
+
+  blockquote{
+    margin:0;padding:.15rem 0 .15rem 1.25rem;border-left:2px solid var(--madder);
+    color:var(--ink-2);font-style:italic;max-width:var(--measure);
+  }
+  .note{
+    font-family:var(--mono);font-size:.74rem;line-height:1.65;color:var(--ink-3);
+    background:var(--leaf-2);border-radius:3px;padding:.85rem 1rem;max-width:var(--measure);
+  }
+  ul.plain{margin:0;padding-left:1.15rem;display:flex;flex-direction:column;gap:.5rem;max-width:var(--measure)}
+  ul.plain li{padding-left:.2rem}
+  ul.plain li::marker{color:var(--madder)}
+
+  footer{
+    display:grid;grid-template-columns:var(--rail) minmax(0,1fr);column-gap:2.5rem;
+    padding-block:2.5rem;border-top:1px solid var(--rule);
+  }
+  @media (max-width:760px){footer{grid-template-columns:1fr;row-gap:1rem}}
+  footer p{font-family:var(--mono);font-size:.72rem;color:var(--ink-3);line-height:1.7}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header class="mast">
+    <div class="marg">
+      <span class="num">PROPOSAL</span>
+      <p>Indian Knowledge<br>Systems Division</p>
+    </div>
+    <div class="body">
+      <div class="sanskrit">पुराण&#8203;श्रवणकोशः</div>
+      <h1>Purāṇa Audio Project</h1>
+      <p class="subtitle">Commissioning recitation of the Purāṇas that is addressable at the verse from the moment it is recorded — and the working proof, on two texts already, that a recording so made becomes a reference work rather than a file.</p>
+
+      <div class="asym">
+        <div class="side have">
+          <span class="k">Aligned and playable today</span>
+          <span class="n">3,116</span>
+          <span class="s">verses of two texts, each tied to the second it is chanted — extracted from recordings made without any of this in mind</span>
+        </div>
+        <span class="vs">against</span>
+        <div class="side want">
+          <span class="k">The eighteen Mahāpurāṇas</span>
+          <span class="n">351,225</span>
+          <span class="s">verses whose printed text we hold in full, and of which not one is reachable by ear at its own address</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="marg"><span class="num">I</span><p>The proof</p></div>
+    <div class="body">
+      <h2>Two texts are already verse-addressable by ear</h2>
+      <p>Both atlases below are live. Click a verse and the recording plays from that verse; the half-verse being chanted lights as it is chanted. Nothing in them was timed by hand.</p>
+      <div class="tw">
+        <table>
+          <caption>Figures are measurements from the published data, not projections. “Reached” means the verse has a measured onset in at least one recording.</caption>
+          <thead><tr><th>&nbsp;</th><th><a href="../virata-atlas.html">Virāṭa Parva</a></th><th><a href="../kartika-atlas.html">Kārtika Māsa Māhātmya</a></th></tr></thead>
+          <tbody>
+            <tr><td>source</td><td>Mahābhārata, book 4</td><td>Skanda Purāṇa</td></tr>
+            <tr><td>verses</td><td class="n">2,262 in 72 adhyāyas</td><td class="n">1,817 in 36 adhyāyas</td></tr>
+            <tr><td><strong>reached by a recording</strong></td><td class="n"><strong>2,000 — 88.4%</strong></td><td class="n"><strong>1,116 — 61.4%</strong></td></tr>
+            <tr><td>reciters</td><td class="n">one</td><td class="n">two, independently</td></tr>
+            <tr><td>recordings aligned</td><td class="n">22 parts</td><td class="n">35 parts</td></tr>
+            <tr><td>translation layer</td><td>M. N. Dutt, 1897</td><td>none exists</td></tr>
+            <tr><td>entity layer</td><td class="n">2,195 cards · 2,039 annotations</td><td>none exists — see the companion proposal</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <blockquote>An upanyāsam is currently a file with a duration. What is proposed is that it become a text with an address.</blockquote>
+    </div>
+  </section>
+
+  <section>
+    <div class="marg"><span class="num">II</span><p>Method</p></div>
+    <div class="body">
+      <h2>Four stages, and the one the machine must not be trusted with</h2>
+      <ol class="stages">
+        <li>
+          <div>
+            <div class="t"><b>Transcribe the recording</b> <span class="tag m">automated</span></div>
+            <p>Speech recognition over the whole session, in the reciter's own language, chant and exposition alike.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div class="t"><b>Match against the printed text</b> <span class="tag m">automated</span></div>
+            <p>Every transcribed passage is matched against a machine-readable edition. This is the load-bearing precondition of the whole method: if the text being expounded is not in the index, nothing downstream can recover it. Section IV returns to this.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <div class="t"><b>Force-align to the waveform</b> <span class="tag m">automated</span></div>
+            <p>Each matched verse — and each half-verse within it — is aligned by CTC forced alignment, so its start and end are properties of the audio rather than an editor's judgement. This is what makes the result a measurement and not an annotation.</p>
+          </div>
+        </li>
+        <li class="human">
+          <div>
+            <div class="t"><b>Listen, and rule</b> <span class="tag s">the step that cannot be automated</span></div>
+            <p>A verse with a confident match and a clean alignment can still be the wrong verse: a shared pāda elsewhere in the corpus will pass every machine gate at full confidence when the chanted verse lies outside the index. Only an ear settles that. <strong>Every finding in this proposal that survived came from listening; several that did not survive were machine certainties.</strong></p>
+          </div>
+        </li>
+      </ol>
+      <div class="note">Where a verse carries no timing, that is a claim too, and the atlas keeps the two reasons apart: <em>the reciter did not chant it</em> is not the same as <em>we could not find it</em>. Refusing to blur those is most of what makes the output a reference rather than a demonstration.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="marg"><span class="num">III</span><p>What retrofitting taught</p></div>
+    <div class="body">
+      <h2>The ceiling is set by how the recording was made, not by the software</h2>
+      <p>Everything in section I was extracted from recordings made with none of this in view. That works, and the limit is visible in the numbers rather than argued for.</p>
+
+      <h3 style="margin-top:.6rem">Coverage stops well short of the text, and no amount of engineering moves it</h3>
+      <p>Virāṭa reaches <span class="fig">88.4%</span> because one reciter, expounding at his own pace over a year, does not chant every verse. Kārtika reaches <span class="fig">61.4%</span> for the same reason. A recording made <em>for</em> this purpose — in which each verse is chanted before it is expounded — would approach the whole text. <strong>That gap, twelve to thirty-nine points, is precisely what commissioning buys, and it is the only way to buy it.</strong> It cannot be recovered afterwards by better matching, because the words were never said.</p>
+
+      <h3 style="margin-top:.6rem">Two reciters of one text barely overlap, so a second voice is coverage rather than duplication</h3>
+      <div class="tw">
+        <table>
+          <caption>Two independent Tamil renditions of the same 1,817-verse work, seated and force-aligned separately. Reciter A works through the book in order; reciter B follows the ritual calendar, taking each day's verses from wherever the text supports them.</caption>
+          <thead><tr><th>Rendition</th><th class="n">Verses reached</th><th class="n">Share of the text</th></tr></thead>
+          <tbody>
+            <tr><td>Reciter A alone</td><td class="n">974</td><td class="n">53.6%</td></tr>
+            <tr><td>Reciter B alone</td><td class="n">320</td><td class="n">17.6%</td></tr>
+            <tr><td>Both</td><td class="n">178</td><td class="n">9.8%</td></tr>
+            <tr><td><strong>Union</strong></td><td class="n"><strong>1,116</strong></td><td class="n"><strong>61.4%</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The whole middle of the book belongs to A alone; three complete chapters belong to B alone. Only <span class="fig">178</span> verses are heard from both — and those, being the same words in two voices independently measured, are a controlled comparison of two living traditions that nothing else in the corpus provides.</p>
+
+      <h3 style="margin-top:.6rem">If the printed text is not in the index, the output is citations, not captions</h3>
+      <p>One series in the archive — twenty-six recordings, fourteen and a half hours — produced <span class="fig">1,370</span> passages of chanted Sanskrit matching nothing we hold. Three candidate source texts were tested against it, two of them scraped in full for the purpose; the best explained <span class="fig">1%</span>. The recordings are sound and the reciter is exact. The book being expounded is simply not one we have.</p>
+      <div class="note">So the first question about any commission is not the language, and not the reciter. It is whether a machine-readable edition of that text exists. Section IV answers it for the texts proposed here.</div>
+
+      <h3 style="margin-top:.6rem">The unit is the half-verse</h3>
+      <p>Reciters re-chant a hemistich before glossing it, which is invisible to anything hunting whole verses — a re-chant lands ten to sixteen seconds from where a verse-level search puts it. This was learned three times by measurement and can now simply be written into a recording brief.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="marg"><span class="num">IV</span><p>The precondition</p></div>
+    <div class="body">
+      <h2>The texts are already machine-readable — every one of them</h2>
+      <p>The Sringeri Śāradā Pīṭham corpus supplies all eighteen Mahāpurāṇas as structured, verse-addressed text: <span class="fig">351,225</span> verses across <span class="fig">97</span> sections. Stage II above consumes exactly this. For the five texts proposed:</p>
+      <div class="tw">
+        <table>
+          <caption>Verse counts measured from the corpus files. No text acquisition sits on the critical path of this proposal.</caption>
+          <thead><tr><th>Text</th><th class="n">Verses held</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>Viṣṇu Purāṇa</td><td class="n">6,258</td><td>complete</td></tr>
+            <tr><td>Bhāgavata Purāṇa</td><td class="n">14,488</td><td>complete</td></tr>
+            <tr><td>Padma Purāṇa</td><td class="n">49,326</td><td>complete</td></tr>
+            <tr><td>Varāha Purāṇa</td><td class="n">10,258</td><td>complete</td></tr>
+            <tr><td>Gāruḍa / Mārkaṇḍeya</td><td class="n">11,990 / 6,198</td><td>complete</td></tr>
+            <tr><td><em>Skanda, for reference</em></td><td class="n">94,483</td><td><em>the Kārtika atlas is one 1,817-verse section of it</em></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="marg"><span class="num">V</span><p>What to commission</p></div>
+    <div class="body">
+      <h2>Five texts, five traditions, and a recording brief</h2>
+      <p>The pairings are chosen by living tradition rather than by convenience — each text where it is actually expounded, in the language it is actually expounded in.</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Purāṇa</th><th>Language</th><th>Tradition</th><th class="n">Est. hours</th></tr></thead>
+          <tbody>
+            <tr><td>Viṣṇu</td><td>Tamil</td><td>Śrī Vaiṣṇava</td><td class="n">80–100</td></tr>
+            <tr><td>Bhāgavata</td><td>Telugu</td><td>Andhra</td><td class="n">120–150</td></tr>
+            <tr><td>Padma</td><td>Kannada</td><td>Karnataka</td><td class="n">100–120</td></tr>
+            <tr><td>Varāha</td><td>Hindi</td><td>North Indian</td><td class="n">60–80</td></tr>
+            <tr><td>Gāruḍa / Mārkaṇḍeya</td><td>Bengali</td><td>Bengal</td><td class="n">80–100</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 style="margin-top:.6rem">The recording brief — the actual new deliverable of this proposal</h3>
+      <ul class="plain">
+        <li><strong>Chant each verse in full before expounding it</strong>, and chant each half-verse before glossing it. This single instruction is what moves coverage from ~60–88% toward the whole text.</li>
+        <li><strong>Name the adhyāya and verse aloud</strong> at the start of each session, and wherever the reading resumes.</li>
+        <li><strong>One clean channel, no music bed under the chant.</strong> Anything mixed under the recitation is subtracted from the alignment.</li>
+        <li><strong>Keep sessions in order</strong> and note where one stops mid-adhyāya.</li>
+      </ul>
+      <p>None of this constrains the reciter's manner of exposition, which is the part of the tradition worth recording in the first place. All of it costs nothing at recording time — and cannot be bought at any price afterwards.</p>
+      <div class="note">A second reciter of the same text, in a different tradition, is worth commissioning on the evidence of section III: two renditions of the Kārtika māhātmya overlapped on only 178 of 1,116 verses. Two voices are not a luxury; they are most of the coverage.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="marg"><span class="num">VI</span><p>Cost</p></div>
+    <div class="body">
+      <h2>Two numbers that must not be run together</h2>
+      <div class="tiers">
+        <div class="tier jr">
+          <span class="who">Turning a recording into a verse-addressable edition</span>
+          <span class="share">≈ ₹49 per hour of audio</span>
+          <p class="what">Measured, not estimated: the archive behind the Kārtika atlas is 167 recordings and 93 hours, and processing the whole of it costs on the order of ₹4,600. The binding constraint is compute time — roughly 176 CPU-hours — on hardware already owned.</p>
+          <div class="bar"><i style="width:3%"></i></div>
+        </div>
+        <div class="tier sr">
+          <span class="who">Commissioning the recording itself</span>
+          <span class="share">the whole of the budget</span>
+          <p class="what">Five hundred hours of senior <em>upanyāsakars</em>' time across five languages, with the honorarium that properly attends it. That figure belongs to whoever sets the honorarium; it is not something this pipeline can estimate, and the earlier draft of this proposal was weakest exactly where it pretended otherwise.</p>
+          <div class="bar"><i style="width:97%"></i></div>
+        </div>
+      </div>
+      <p>The ratio is the argument. <strong>Once a recording exists, making it verse-addressable is a rounding error against the cost of making the recording.</strong> Which means the decision worth taking care over is not whether to tag recordings, but whether the recordings being made now are made in a form that can be tagged at all.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="marg"><span class="num">VII</span><p>Limits</p></div>
+    <div class="body">
+      <h2>Stated plainly, because they bear on what is being asked</h2>
+      <ul class="plain">
+        <li><strong>There is no entity layer for a Purāṇa.</strong> The Virāṭa atlas's 2,195 character cards derive from two Mahābhārata name indexes — Sorensen's and the Gītā Press <em>nāmānukramaṇikā</em> — and neither covers the Purāṇas. No quantity of further audio supplies them. The Kārtika atlas says so on its own face rather than showing an empty column. <a href="purana-nama-kosa.html">The companion proposal, <em>Purāṇa Nāma-Kośa</em></a>, is addressed to precisely that gap; the two projects share a corpus and each is more useful with the other.</li>
+        <li><strong>Coverage figures are not quality figures.</strong> 61.4% means a verse has a measured onset, not that a listener has confirmed it. Spot-checking by ear is part of the work and has overturned machine certainties more than once.</li>
+        <li><strong>Multi-language delivery is not yet demonstrated.</strong> The Virāṭa atlas can display four lanes, but only the Tamil one is a real recording; the other three were invented timings, built so the interface could be judged before such recordings existed, and they are switched off in this published site because a public page should not show fabricated timings beside real ones. <strong>Commissioning is what would make that interface honest</strong> — which is this whole proposal in one sentence.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="marg"><span class="num">VIII</span><p>The ask</p></div>
+    <div class="body">
+      <h2>One adhyāya, recorded to the brief, before anything larger</h2>
+      <p>The pipeline is built, measured, and public. What is requested is the thing it cannot supply itself.</p>
+      <ul class="plain">
+        <li><strong>Choose one pairing</strong> — one Purāṇa, one language, one reciter of standing.</li>
+        <li><strong>Agree the brief in section V</strong> with that reciter, and record a single adhyāya to it.</li>
+        <li><strong>Measure that adhyāya's coverage</strong> against the 61–88% retrofit baseline established here. If a purpose-made recording does not beat it substantially, the premise of this proposal is wrong — and it is far better to learn that from one adhyāya than from a hundred hours.</li>
+        <li><strong>Then, and only then, the honorarium</strong> for the full series, against a coverage figure that has been observed rather than promised.</li>
+      </ul>
+      <blockquote>We would rather report a measured result on one adhyāya than an estimated result on five hundred hours.</blockquote>
+    </div>
+  </section>
+
+  <footer>
+    <div class="marg"><span class="num">NOTES</span></div>
+    <div class="body">
+      <p>Coverage, verse counts and cost figures are measurements taken from completed runs over the published corpora, not projections; they are regenerated with the atlases and shown live on the <a href="../index.html">site's landing page</a>. Text from the Sringeri Śāradā Pīṭham Purāṇa corpus (351,225 verses, eighteen Mahāpurāṇas) and the Mahābhārata critical edition, with M. N. Dutt's 1897 translation on the Virāṭa side. Timings by CTC forced alignment over the waveform. Recordings by the reciters named in each atlas. Companion proposal: <a href="purana-nama-kosa.html"><em>Purāṇa Nāma-Kośa</em></a>. Investigator, institution and budget to be completed before submission.</p>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

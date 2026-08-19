@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Without this the Devanagari renders as mojibake on any server that does
+     not append charset=utf-8 to text/html. GitHub Pages does; not every host
+     does, and a page about Sanskrit must not depend on the server for it. -->
+<meta charset="utf-8">
+<title>Purāṇa Atlas</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Two Sanskrit texts, each verse aligned to the second in a recorded upanyāsam.">
+<style>
+:root{
+  --bg:#f7f4ee;--panel:#fffdf9;--sunk:#f1ece2;--line:#e2dace;
+  --ink:#282320;--ink2:#4a423b;--muted:#857a6e;--faint:#a99e90;
+  --accent:#8b3a2e;--s1:#a8362b;--s2:#2e6b8b;
+  --shadow:0 1px 2px rgba(40,35,32,.06),0 8px 26px rgba(40,35,32,.10);
+  --serif:"Noto Serif Devanagari","Sanskrit 2003",Georgia,serif;
+  --ui:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#16140f;--panel:#1e1b16;--sunk:#242019;--line:#332d24;
+  --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
+  --accent:#d98a72;--s1:#e08878;--s2:#6fa8cc;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 26px rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --bg:#16140f;--panel:#1e1b16;--sunk:#242019;--line:#332d24;
+  --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
+  --accent:#d98a72;--s1:#e08878;--s2:#6fa8cc;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 26px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);
+     line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:56rem;margin:0 auto;padding:3.5rem 1.25rem 5rem}
+header{border-bottom:1px solid var(--line);padding-bottom:1.75rem;margin-bottom:2.25rem}
+h1{font-family:var(--serif);font-size:2.1rem;line-height:1.2;margin:0 0 .5rem;
+   font-weight:600;letter-spacing:-.01em}
+.sub{color:var(--ink2);font-size:1.02rem;max-width:44rem;margin:0}
+.lede{color:var(--ink2);font-size:.97rem;max-width:44rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));
+       gap:1.25rem;margin:2rem 0 2.5rem}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+      padding:1.4rem 1.4rem 1.15rem;box-shadow:var(--shadow);
+      display:flex;flex-direction:column;text-decoration:none;color:inherit;
+      transition:transform .12s ease,box-shadow .12s ease}
+.card:hover{transform:translateY(-2px);
+            box-shadow:0 2px 4px rgba(40,35,32,.08),0 14px 34px rgba(40,35,32,.14)}
+.card h2{font-family:var(--serif);font-size:1.35rem;margin:0 0 .15rem;font-weight:600}
+.card .rom{color:var(--muted);font-size:.83rem;letter-spacing:.02em;margin:0 0 .9rem}
+.card p{margin:0 0 1rem;color:var(--ink2);font-size:.93rem}
+.stats{display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;margin-top:auto;
+       padding-top:.9rem;border-top:1px solid var(--line)}
+.stat{font-size:.8rem;color:var(--muted);white-space:nowrap}
+.stat b{display:block;font-family:var(--mono);font-size:1.05rem;color:var(--ink);
+        font-weight:600;letter-spacing:-.02em}
+.go{color:var(--accent);font-weight:600;font-size:.88rem;margin-top:.9rem}
+section{margin:2.5rem 0}
+h3{font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+   margin:0 0 .7rem;font-weight:600}
+p{font-size:.95rem;color:var(--ink2)}
+.note{background:var(--sunk);border:1px solid var(--line);border-left:3px solid var(--accent);
+      border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:.9rem;color:var(--ink2)}
+.note p{margin:0;font-size:.9rem}
+.note p+p{margin-top:.6rem}
+a{color:var(--accent)}
+code{font-family:var(--mono);font-size:.86em;background:var(--sunk);
+     padding:.1em .35em;border-radius:3px}
+footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
+       color:var(--faint);font-size:.82rem;display:flex;flex-wrap:wrap;
+       gap:.4rem 1.2rem;justify-content:space-between}
+.s1{color:var(--s1)}.s2{color:var(--s2)}
+/* the proposal pair: same card, but titled in the UI face rather than the
+   serif, so a proposal never reads as one of the texts themselves */
+.cards.two{margin:1.25rem 0 0}
+.card h2.pitch{font-family:var(--ui);font-size:1.08rem;letter-spacing:-.01em}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <h1>Purāṇa Atlas</h1>
+  <p class="sub">Two Sanskrit texts, each verse tied to the second it is chanted
+  in a recorded <i>upanyāsam</i>. Click a verse, hear it.</p>
+</header>
+
+<div class="cards" id="cards"></div>
+
+<section>
+  <h3>How the timings were made</h3>
+  <p>Nobody typed these timestamps. Each recording was transcribed, the
+  transcript matched against the printed text, and every matched verse then
+  <b>force-aligned</b> to the waveform — so an onset is a measurement of the
+  audio, not an editorial guess. Where a verse is not marked, that is a claim
+  too: the speaker did not chant it, or the pass could not find it. The atlas
+  distinguishes those cases rather than smoothing them into one.</p>
+</section>
+
+<section>
+  <h3>Reading the lanes</h3>
+  <p>A lane is one reciter's traversal of the text. The Kārtika atlas has two,
+  and they barely overlap: <span class="s1">Speaker 1</span> reads the book
+  straight through, while <span class="s2">Speaker 2</span> follows the
+  calendar, taking each day's verses from wherever the text supports them.
+  Together they reach more of the work than either alone, and the
+  <span id="both">verses</span> both chant are the same words in two voices.</p>
+</section>
+
+<section>
+  <h3>What you need to use it</h3>
+  <div class="note">
+    <p>Playback is a YouTube embed, so the page needs the network and a browser
+    that will run <code>youtube.com/iframe_api</code>. Everything else — the
+    text, the divisions, the measured timings — is served from this site and
+    works offline once loaded.</p>
+    <p>The Sanskrit is set in Noto Serif Devanagari if your system has it.
+    Without a Devanagari font installed you will see boxes where the verses
+    should be.</p>
+  </div>
+</section>
+
+<section>
+  <h3>Why this exists</h3>
+  <p>These two atlases are the working proof behind two proposals. They share a
+  corpus, and each is worth more with the other: one would make the Purāṇas
+  <i>audible</i> at the verse, the other would make them <i>searchable</i> by
+  name.</p>
+  <div class="cards two">
+    <a class="card" href="docs/purana-audio.html">
+      <h2 class="pitch">Purāṇa Audio Project</h2>
+      <p class="rom">Proposal · recording</p>
+      <p>Commission recitation that is addressable at the verse from the moment
+      it is recorded. Retrofitting reaches 61–88% of a text because a reciter
+      does not chant every verse; that gap is what commissioning buys.</p>
+      <div class="go">Read the proposal →</div>
+    </a>
+    <a class="card" href="docs/purana-nama-kosa.html">
+      <h2 class="pitch">Purāṇa Nāma-Kośa</h2>
+      <p class="rom">Proposal · index of names</p>
+      <p>A scholar-verified index of the names, peoples and places of the
+      Paurāṇic corpus — what Sorensen did for the Mahābhārata, beginning with
+      the Harivaṃśa, the largest unindexed book in Sanskrit literature.</p>
+      <div class="go">Read the proposal →</div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <span>Built from the Sringeri Śāradā Pīṭham purāṇa corpus and the Mahābhārata
+  critical text.</span>
+  <span id="built"></span>
+</footer>
+</div>
+
+<script>
+// The numbers are NOT written into this page. refresh.py emits data/stats.json
+// from the same JSON the atlases load, so a rebuild that changes coverage
+// changes this page too -- a hand-typed "61%" would be wrong the first time
+// another episode is seated and nobody would notice.
+const CARDS = {
+  virata: {
+    href: 'virata-atlas.html',
+    title: 'विराटपर्व',
+    rom: 'Virāṭa Parva · Mahābhārata, book 4',
+    blurb: 'The year of concealment at Virāṭa\'s court, with M. N. Dutt\'s 1897 '
+         + 'translation, the named cast of every adhyāya, and a Tamil upanyāsam '
+         + 'aligned verse by verse.'
+  },
+  kartika: {
+    href: 'kartika-atlas.html',
+    title: 'कार्तिकमासमाहात्म्यम्',
+    rom: 'Kārtika Māsa Māhātmya · Skanda Purāṇa',
+    blurb: 'The glory of the month of Kārtika, in two independent Tamil '
+         + 'renditions — one reading the book straight through, one following '
+         + 'the calendar.'
+  }
+};
+const n = x => x.toLocaleString('en-IN');
+
+fetch('data/stats.json').then(r => r.json()).then(S => {
+  const box = document.getElementById('cards');
+  for (const key of ['virata', 'kartika']) {
+    const c = CARDS[key], s = S.atlases[key];
+    if (!s) continue;
+    const a = document.createElement('a');
+    a.className = 'card'; a.href = c.href;
+    a.innerHTML =
+      '<h2>' + c.title + '</h2>'
+      + '<p class="rom">' + c.rom + '</p>'
+      + '<p>' + c.blurb + '</p>'
+      + '<div class="stats">'
+      +   '<span class="stat"><b>' + n(s.verses) + '</b>verses</span>'
+      +   '<span class="stat"><b>' + s.reached_pct + '%</b>heard aloud</span>'
+      +   '<span class="stat"><b>' + s.chapters + '</b>adhyāyas</span>'
+      +   '<span class="stat"><b>' + s.recordings + '</b>recordings</span>'
+      + '</div>'
+      + '<div class="go">Open the atlas →</div>';
+    box.appendChild(a);
+  }
+  const k = S.atlases.kartika;
+  if (k && k.both_lanes) {
+    document.getElementById('both').textContent = n(k.both_lanes) + ' verses';
+  }
+  document.getElementById('built').textContent = 'Refreshed ' + S.built;
+}).catch(e => {
+  document.getElementById('cards').innerHTML =
+    '<div class="note"><p>The site data did not load, so the atlases below may '
+    + 'not open either. Run <code>./refresh.py --check</code>.</p></div>'
+    + '<a class="card" href="virata-atlas.html"><h2>विराटपर्व</h2>'
+    + '<div class="go">Open the atlas →</div></a>'
+    + '<a class="card" href="kartika-atlas.html"><h2>कार्तिकमासमाहात्म्यम्</h2>'
+    + '<div class="go">Open the atlas →</div></a>';
+});
+</script>
+</body>
+</html>

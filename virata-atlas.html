@@ -1,0 +1,1178 @@
+<!doctype html>
+<html lang="sa">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>विराटपर्व · Atlas</title>
+<style>
+:root{
+  --bg:#f7f4ee;--panel:#fffdf9;--sunk:#f1ece2;--line:#e2dace;--line2:#efe9dd;
+  --ink:#282320;--ink2:#4a423b;--muted:#857a6e;--faint:#a99e90;
+  --accent:#8b3a2e;--accent-bg:#f7ebe6;
+  --sa:#7a4a1e;--en:#2e5a8b;--bd:#4a6b32;
+  --ta:#a8362b;--kn:#3b5ba5;--te:#2e7d6b;--bn:#7a4e9e;
+  --person:#8b3a2e;--person-bg:#f7ebe6;--place:#2e6b5a;--place-bg:#e6f2ee;
+  --people:#8a6d1f;--people-bg:#f5efdd;--divine:#54509b;--divine-bg:#ebeaf6;
+  --unknown:#8b8178;--unknown-bg:#efebe6;
+  --shadow:0 1px 2px rgba(40,35,32,.06),0 8px 26px rgba(40,35,32,.10);
+  --serif:"Noto Serif Devanagari","Sanskrit 2003",Georgia,serif;
+  --ui:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#16140f;--panel:#1e1b16;--sunk:#242019;--line:#332d24;--line2:#2a251d;
+  --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
+  --accent:#d98a72;--accent-bg:#2c211c;
+  --sa:#d4a574;--en:#7fb0dd;--bd:#9ec87a;
+  --ta:#e08878;--kn:#8fa9e8;--te:#6cc4ae;--bn:#b98fdb;
+  --person:#e0a08e;--person-bg:#33201c;--place:#6cc4ae;--place-bg:#12302a;
+  --people:#d3b562;--people-bg:#302816;--divine:#a6a2e8;--divine-bg:#232140;
+  --unknown:#9a9088;--unknown-bg:#2a2724;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 26px rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --bg:#16140f;--panel:#1e1b16;--sunk:#242019;--line:#332d24;--line2:#2a251d;
+  --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
+  --accent:#d98a72;--accent-bg:#2c211c;
+  --sa:#d4a574;--en:#7fb0dd;--bd:#9ec87a;
+  --ta:#e08878;--kn:#8fa9e8;--te:#6cc4ae;--bn:#b98fdb;
+  --person:#e0a08e;--person-bg:#33201c;--place:#6cc4ae;--place-bg:#12302a;
+  --people:#d3b562;--people-bg:#302816;--divine:#a6a2e8;--divine-bg:#232140;
+  --unknown:#9a9088;--unknown-bg:#2a2724;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 26px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
+  height:100vh;display:grid;grid-template-rows:auto 1fr auto;overflow:hidden;-webkit-font-smoothing:antialiased}
+
+.top{display:flex;align-items:center;gap:15px;padding:9px 18px;background:var(--panel);
+  border-bottom:1px solid var(--line);flex-wrap:wrap}
+.brand{font-family:var(--serif);font-size:18px;font-weight:600}
+.brand small{font-family:var(--ui);font-size:10px;color:var(--muted);margin-left:8px;
+  letter-spacing:.09em;text-transform:uppercase}
+.spacer{flex:1}
+.tog{display:flex;gap:2px;background:var(--sunk);padding:2px;border-radius:7px}
+.tog button{font:inherit;font-size:12px;padding:5px 11px;border:0;border-radius:5px;
+  background:none;color:var(--muted);cursor:pointer}
+.tog button.on{background:var(--panel);color:var(--ink);box-shadow:var(--shadow);font-weight:500}
+/* Nothing of this kind in the adhyāya on screen. A control that cannot change
+   anything must say so, or it reads as broken. */
+.tog button.none{opacity:.35;cursor:default}
+.jump{font:inherit;font-size:13px;font-family:var(--mono);width:92px;padding:5px 9px;
+  border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.iconbtn{font:inherit;font-size:14px;padding:5px 9px;border:1px solid var(--line);
+  border-radius:6px;background:var(--bg);color:var(--muted);cursor:pointer}
+
+.main{display:grid;grid-template-columns:230px minmax(0,1fr) 300px;overflow:hidden}
+.rail,.ctx{background:var(--panel);overflow-y:auto}
+.rail{border-right:1px solid var(--line)}
+.ctx{border-left:1px solid var(--line)}
+.stage{overflow-y:auto;padding-bottom:40px}
+@media (max-width:1180px){.main{grid-template-columns:210px minmax(0,1fr)}.ctx{display:none}}
+@media (max-width:820px){.main{grid-template-columns:1fr}.rail{display:none}}
+
+.railhead,.ctxhead{position:sticky;top:0;z-index:2;background:var(--panel);
+  border-bottom:1px solid var(--line);padding:8px 13px 7px;font-size:10px;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--faint);font-weight:600}
+.upa{font-family:var(--serif);font-size:12.5px;color:var(--muted);padding:10px 13px 3px;
+  border-top:1px solid var(--line2)}
+.chap{display:grid;grid-template-columns:24px 1fr auto;gap:7px;align-items:center;
+  padding:5px 13px;cursor:pointer;border-left:3px solid transparent}
+.chap:hover{background:var(--sunk)}
+.chap.on{background:var(--accent-bg);border-left-color:var(--accent)}
+.chap .n{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right}
+.chap.on .n{color:var(--accent);font-weight:600}
+.chap .nm{font-family:var(--serif);font-size:12px;color:var(--ink2);overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap}
+.chap .cnt{font-family:var(--mono);font-size:9.5px;color:var(--faint)}
+
+.chaphead{padding:20px 30px 14px;border-bottom:1px solid var(--line);background:var(--panel);
+  position:sticky;top:0;z-index:1}
+.chaphead h2{margin:0;font-family:var(--serif);font-size:21px;font-weight:600}
+.chaphead .sub{font-size:12px;color:var(--muted);margin-top:5px;display:flex;gap:14px;flex-wrap:wrap}
+.chaphead .sub b{font-weight:500;color:var(--ink2)}
+.storytag{display:inline-flex;align-items:center;gap:7px;margin-top:11px;padding:5px 11px;
+  border-radius:14px;background:var(--sunk);font-size:12px;color:var(--ink2)}
+.storytag b{font-family:var(--serif);font-weight:600}
+
+.verses{max-width:900px;margin:0 auto;padding:0 30px}
+.v{border-bottom:1px solid var(--line2);padding:18px 0 14px;scroll-margin-top:120px}
+.v.on{background:linear-gradient(90deg,var(--accent-bg),transparent 72%);margin:0 -16px;
+  padding:18px 16px 14px;border-radius:5px}
+.vnum{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.05em;margin-bottom:8px;
+  display:flex;align-items:center;gap:8px}
+/* Two-way with the audio. `.on` is where the READER is; `.cue` is where the
+   AUDIO is, and they are the same verse only while following is on. */
+.v.cue{box-shadow:inset 3px 0 0 var(--accent)}
+.v.cue .vnum{color:var(--accent)}
+/* the chant is over, the expounder is still on this verse: same verse, quieter
+   claim, because nothing is being aligned second-by-second any more */
+.v.cue.exp{box-shadow:inset 3px 0 0 var(--line)}
+.vplay{font:inherit;font-family:var(--mono);font-size:9px;letter-spacing:.06em;line-height:1;
+  padding:3px 7px;border-radius:9px;border:1px solid var(--line);background:var(--bg);
+  color:var(--faint);cursor:pointer;opacity:0;transition:opacity .12s}
+.v:hover .vplay,.v.cue .vplay,.vplay:focus{opacity:1}
+.vplay:hover{border-color:var(--accent);color:var(--accent)}
+.layer{margin:0 0 11px;padding-left:13px;border-left:2px solid var(--line)}
+.layer.sa{border-left-color:var(--sa)}.layer.en{border-left-color:var(--en)}
+.layer.bd{border-left-color:var(--bd)}
+.layer .lbl{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);
+  margin-bottom:4px;font-weight:600}
+.layer.sa .txt{font-family:var(--serif);font-size:17px;line-height:1.9}
+.layer.en .txt{font-size:14.5px;color:var(--ink2);line-height:1.72}
+.layer.bd .txt{font-family:var(--serif);font-size:14.5px;color:var(--ink2);line-height:1.8}
+.absent{font-size:12px;color:var(--faint);font-style:italic;padding-left:13px;
+  border-left:2px dashed var(--line);margin:0 0 11px}
+
+/* the annotation itself: a name in the text you can pull on */
+.ent{cursor:pointer;border-bottom:1.5px solid;border-radius:2px;padding:0 1px;
+  transition:background .12s}
+.ent.person{color:var(--person);border-color:var(--person)}
+.ent.person:hover,.ent.person.lit{background:var(--person-bg)}
+.ent.place{color:var(--place);border-color:var(--place);border-bottom-style:dashed}
+.ent.place:hover,.ent.place.lit{background:var(--place-bg)}
+.ent.people{color:var(--people);border-color:var(--people);border-bottom-style:dotted}
+.ent.people:hover{background:var(--people-bg)}
+.ent.divine{color:var(--divine);border-color:var(--divine)}
+.ent.divine:hover{background:var(--divine-bg)}
+/* B23: the substrate derived no type for these. NOT a sixth category -- the
+   absence of one. Drawn as the quietest of the set so it cannot be mistaken
+   for an assertion; they used to be filed under Characters on no evidence. */
+.ent.unknown{color:var(--unknown);border-color:var(--unknown);
+  border-bottom-style:dotted;opacity:.85}
+.ent.unknown:hover,.ent.unknown.lit{background:var(--unknown-bg)}
+/* a name that resolves to more than one entry: Droṇa is a preceptor and a
+   mountain, Matsya a people, a kingdom and the king of it */
+.ent.amb::after{content:"\00b0";font-size:.72em;vertical-align:super;opacity:.75}
+.ent.place:hover,.ent.place.lit{background:var(--place-bg)}
+
+.band{margin-top:12px;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.bandhead{display:flex;justify-content:space-between;padding:6px 12px;background:var(--sunk);
+  font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:600}
+.bandhead span{letter-spacing:.02em;text-transform:none;font-size:11px;font-weight:400;color:var(--muted)}
+.lane{display:grid;grid-template-columns:88px minmax(0,1fr) 52px auto;gap:10px;align-items:center;
+  padding:5px 12px;border-top:1px solid var(--line2)}
+.marks{display:flex;gap:4px;flex-wrap:wrap}
+.mk{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:11px;
+  border:1px solid var(--line);background:var(--bg);color:var(--ink2);cursor:pointer}
+.mk:hover{border-color:var(--accent);color:var(--accent)}
+.mk.playing{background:var(--accent);border-color:var(--accent);color:#fff}
+.mk.sim{border-style:dashed;color:var(--faint);cursor:help}
+/* Measured onset, unmeasured extent. It plays -- the second is real -- so it
+   must not be dimmed like `sim`, which does not. The dotted underline says the
+   chip is qualified without saying it is worthless. */
+.mk.part{border-style:dotted;text-decoration:underline dotted;
+  text-underline-offset:2px}
+.mk.part.playing{color:#fff}
+/* Contested: another verse is aligned to these seconds. Same ° the text layer
+   uses for a name with more than one claimant. */
+.mk.cf::after{content:"\00b0";font-size:.85em;vertical-align:super;opacity:.8;
+  margin-left:1px}
+/* Reached, but nobody measured how long he stayed -- distinct from `.none`,
+   which means the language never got here at all. */
+.dwell.onset{background:repeating-linear-gradient(90deg,var(--line) 0 2px,
+  transparent 2px 6px)}
+.hemi{border-radius:3px;padding:1px 0}
+.hemi.lit{background:var(--accent-bg);box-shadow:0 0 0 3px var(--accent-bg)}
+.layer.sa .txt[title]{cursor:pointer}
+.lane:first-of-type{border-top:0}
+.lane .who{display:flex;align-items:center;gap:6px;font-size:12px;white-space:nowrap}
+.lane .who .sw{width:6px;height:6px;border-radius:50%}
+.lane .who em{font-style:normal;font-family:var(--mono);font-size:7.5px;letter-spacing:.08em;
+  padding:1px 3px;border-radius:3px;background:var(--sunk);color:var(--faint)}
+.dwell{height:12px;border-radius:3px;background:var(--sunk);overflow:hidden}
+.dwell i{display:block;height:100%;border-radius:3px}
+.dwell.none{background:repeating-linear-gradient(45deg,transparent,transparent 4px,var(--line2) 4px,var(--line2) 8px)}
+.lane .t{font-family:var(--mono);font-size:11px;text-align:right;color:var(--ink2);
+  font-variant-numeric:tabular-nums}
+
+/* context panel */
+.ctxsec{padding:12px 14px;border-bottom:1px solid var(--line2)}
+.ctxsec h4{margin:0 0 9px;font-size:10px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--faint);font-weight:600}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:4px 10px;
+  border-radius:13px;margin:0 5px 5px 0;cursor:pointer;border:1px solid transparent}
+.pill.person{background:var(--person-bg);color:var(--person)}
+.pill.place{background:var(--place-bg);color:var(--place)}
+.pill.people{background:var(--people-bg);color:var(--people)}
+.pill.divine{background:var(--divine-bg);color:var(--divine)}
+.pill:hover{border-color:currentColor}
+.pill b{font-family:var(--mono);font-size:9.5px;opacity:.65;font-weight:400}
+
+/* entity popup */
+.scrim{position:fixed;inset:0;background:rgba(20,17,14,.42);opacity:0;pointer-events:none;
+  transition:opacity .16s;z-index:40}
+.scrim.show{opacity:1;pointer-events:auto}
+.card{position:fixed;z-index:41;width:min(560px,94vw);max-height:82vh;overflow-y:auto;
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);
+  left:50%;top:50%;transform:translate(-50%,-48%) scale(.98);opacity:0;pointer-events:none;
+  transition:opacity .16s,transform .16s}
+.card.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.cardhead{padding:16px 18px 13px;border-bottom:1px solid var(--line);position:sticky;top:0;
+  background:var(--panel);display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.cardhead h3{margin:0;font-size:19px;font-weight:600}
+.cardhead .dv{font-family:var(--serif);font-size:15px;color:var(--muted);margin-top:3px}
+.cardhead .role{font-size:11.5px;color:var(--muted);margin-top:4px}
+.kindtag{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;
+  padding:3px 8px;border-radius:4px;white-space:nowrap}
+.kindtag.person{background:var(--person-bg);color:var(--person)}
+.kindtag.place{background:var(--place-bg);color:var(--place)}
+.kindtag.people{background:var(--people-bg);color:var(--people)}
+.kindtag.divine{background:var(--divine-bg);color:var(--divine)}
+.cardbody{padding:15px 18px 18px}
+.cardbody p{margin:0 0 12px;font-size:13.5px;line-height:1.65;color:var(--ink2)}
+.cardbody h5{margin:16px 0 8px;font-size:10px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--faint);font-weight:600}
+/* Sorensen's entry, verbatim. Set smaller and tighter than the definition
+   above it -- it is a concordance entry dense with citations, not prose to be
+   read straight through. */
+.entrylen{float:right;font-weight:400;letter-spacing:0;text-transform:none;opacity:.7}
+.entry{font-size:12.5px;line-height:1.7;color:var(--ink2);white-space:pre-wrap;
+  background:var(--sunk);border-radius:6px;padding:10px 12px;
+  overflow-wrap:break-word}
+.entry.clip{max-height:11em;overflow:hidden;
+  -webkit-mask-image:linear-gradient(#000 72%,transparent);
+  mask-image:linear-gradient(#000 72%,transparent)}
+.entrytoggle{margin-top:7px;font:inherit;font-size:11.5px;padding:4px 10px;
+  border:1px solid var(--line);border-radius:6px;background:var(--panel);
+  color:var(--muted);cursor:pointer}
+.entrytoggle:hover{color:var(--ink);border-color:var(--muted)}
+.rel{display:flex;flex-wrap:wrap;gap:5px}
+.rel span{font-size:11.5px;padding:3px 9px;border-radius:11px;background:var(--sunk);color:var(--ink2)}
+.rel span i{font-style:normal;color:var(--faint);font-family:var(--mono);font-size:9.5px}
+.closebtn{font:inherit;font-size:17px;background:none;border:0;color:var(--muted);cursor:pointer;
+  line-height:1;padding:2px 4px}
+.seein{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+.seein button{font:inherit;font-family:var(--mono);font-size:11px;padding:6px 11px;border-radius:6px;
+  border:1px solid var(--line);background:var(--bg);color:var(--ink2);cursor:pointer}
+.seein button:hover{border-color:var(--accent);color:var(--accent)}
+
+/* genealogy */
+.tree{margin-top:6px;background:var(--bg);border:1px solid var(--line2);border-radius:8px;
+  padding:12px;overflow-x:auto}
+.tree svg{display:block;min-width:440px}
+.tnode rect{rx:6;stroke-width:1.2}
+.tnode text{font-family:var(--ui);font-size:11px;dominant-baseline:middle;text-anchor:middle}
+.tnode.focus rect{stroke-width:2.4}
+.tnode{cursor:pointer}
+.tedge{fill:none;stroke-width:1.4}
+.tedge.spec{stroke-dasharray:4 3}
+.treekey{display:flex;gap:14px;margin-top:9px;font-size:10.5px;color:var(--faint);flex-wrap:wrap}
+.treekey span{display:inline-flex;align-items:center;gap:5px}
+.treekey i{display:block;width:16px;height:0;border-top:1.4px solid var(--muted)}
+.treekey i.d{border-top-style:dashed}
+.transport{display:grid;grid-template-columns:auto 1fr auto auto;gap:14px;align-items:center;
+  padding:8px 16px;background:var(--panel);border-top:1px solid var(--line);
+  box-shadow:0 -3px 14px rgba(0,0,0,.05)}
+#ytwrap{width:112px;height:64px;border-radius:6px;overflow:hidden;background:#000}
+#ytwrap.hide{display:none}
+.tinfo{min-width:0}
+.tinfo .now{font-family:var(--mono);font-size:11.5px;color:var(--accent);font-weight:600;
+  display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.tinfo .now .state{font-weight:400;color:var(--muted);letter-spacing:.03em}
+.tinfo .now .state.exp{font-style:italic}
+/* the caption is the chanted line now, hemistich by hemistich, so it needs two
+   lines rather than one ellipsised one */
+.tinfo .line{font-family:var(--serif);font-size:14px;line-height:1.5;margin-top:2px;color:var(--ink2);
+  overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2}
+.tinfo .line .chemi{border-radius:3px;padding:1px 2px;transition:background .1s}
+.tinfo .line .chemi.lit{background:var(--accent-bg);color:var(--ink)}
+.tinfo .meta{font-size:10.5px;color:var(--muted);margin-top:2px}
+.tswitch{display:flex;gap:4px}
+.tswitch button{font:inherit;font-family:var(--mono);font-size:11px;padding:5px 9px;border-radius:6px;
+  border:1px solid var(--line);background:var(--bg);cursor:pointer;color:var(--muted)}
+.tswitch button.cur{border-color:currentColor;font-weight:700}
+.tswitch button:disabled{opacity:.35;cursor:not-allowed}
+.tctl{display:flex;align-items:center;gap:9px}
+.tctl button{font:inherit;font-size:15px;width:36px;height:36px;border-radius:50%;
+  border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.tctl #tfollow{font-size:13px;color:var(--faint)}
+.tctl #tfollow.on{border-color:var(--accent);color:var(--accent)}
+.tctl .t{font-family:var(--mono);font-size:11px;color:var(--muted);min-width:78px;text-align:right;
+  font-variant-numeric:tabular-nums}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);
+  color:var(--bg);font-size:12.5px;padding:9px 16px;border-radius:8px;box-shadow:var(--shadow);
+  opacity:0;pointer-events:none;transition:opacity .18s;z-index:50;max-width:min(520px,88vw)}
+.toast.show{opacity:1}
+.loading{padding:60px 30px;text-align:center;color:var(--muted)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.card,.scrim{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="brand">विराटपर्व <small>atlas</small></div>
+  <div class="tog" id="showtog">
+    <button data-k="person" class="on">Characters</button>
+    <button data-k="people" class="on">Peoples</button>
+    <button data-k="place" class="on">Places</button>
+    <button data-k="divine" class="on">Divine</button>
+    <button data-k="unknown" class="on" title="The substrate derived no type for these -- shown so the gap is visible, not filled">Unclassified</button>
+    <button data-k="band" class="on">Exposition</button>
+  </div>
+  <!-- Evidence grade. An annotation is only as good as what put it there, and
+       the substrate emits all of it: `scan` is a string match with no index
+       behind it, so it is off by default. Turning it on is a deliberate act. -->
+  <div class="tog" id="gradetog" title="Evidence behind each annotation">
+    <button data-g="index-verse" class="on">Indexed</button>
+    <button data-g="translation" class="on">Translated</button>
+    <button data-g="scan">Scanned</button>
+  </div>
+  <div class="tog" id="ambtog" title="Mark names that could denote more than one entity">
+    <button data-k="amb" class="on">Ambiguity</button>
+  </div>
+  <div class="spacer"></div>
+  <input class="jump" id="jump" placeholder="1.12">
+  <button class="iconbtn" id="theme" title="Toggle theme">◐</button>
+</div>
+
+<div class="main">
+  <div class="rail" id="rail"></div>
+  <div class="stage" id="stage"><div class="loading">Loading…</div></div>
+  <div class="ctx" id="ctx"></div>
+</div>
+
+<div class="transport">
+  <div id="ytwrap" class="hide"><div id="yt"></div></div>
+  <div class="tinfo">
+    <div class="now"><span id="tnow">nothing playing</span><span class="state" id="tstate"></span></div>
+    <div class="line" id="tline">Click any verse — or a timestamp in the Tamil lane — to hear it.</div>
+    <div class="meta" id="tmeta"></div>
+  </div>
+  <div class="tswitch" id="tswitch"></div>
+  <div class="tctl"><span class="t" id="ttime">–:– / –:–</span>
+    <button id="tfollow" class="on" title="Follow the recitation: as the audio reaches each verse, scroll to it and switch adhyāya">⇅</button>
+    <button id="tplay" title="Play / pause">▶</button></div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="scrim" id="scrim"></div>
+<div class="card" id="card" role="dialog" aria-modal="true"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const el=(t,c,h)=>{const n=document.createElement(t);if(c)n.className=c;if(h!=null)n.innerHTML=h;return n;};
+const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const mmss=t=>{t=Math.max(0,Math.floor(t||0));const m=Math.floor(t/60),s=t%60;
+  return m+':'+String(s).padStart(2,'0');};
+const cmpRef=(a,b)=>{const x=a.split('.'),y=b.split('.');return x[0]-y[0]||x[1]-y[1];};
+const rxEsc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+// How much an annotation is worth, for deciding between rival claimants on the
+// same letters. A verse citation in an index beats a name Dutt happened to
+// print, which beats an unindexed string match.
+const GRANK={'index-verse':0,'index-chapter':1,'translation':2,'structural':3,'scan':4};
+// ONE ranking, used by both the text and the card. When they had separate
+// notions of which claimant won, a card could report itself as appearing in a
+// verse whose word the page had already given to somebody else.
+//
+// A comparator, NOT an array to compare with `<`: JS compares arrays as
+// strings, so [2,-9] < [2,-91] is decided by "-9" vs "-91" and nine indexed
+// rows would beat ninety-one.
+//
+// `res` FIRST, above every measured key: 1 where a source or a scholar read
+// this form as this entity at this verse, -1 where one read it as NOT this
+// entity, 0 unread. A reading is recorded precisely where counting is known to
+// be wrong, so a reading that loses to the count is decoration -- which is what
+// it was, read only to compute `alt` and never to decide.
+//
+// It is what puts the Kīcaka of कीचकवधपर्व back: two entries with identical
+// surfaces and grades, 50 indexed rows against 49, and the extra row belongs to
+// "pl., a tribe or family".
+//
+// Negative = a wins. Then grade, indexed evidence here, then corpus-wide.
+const cmpHit=(a,b)=>(b.res|0)-(a.res|0)
+                  ||(GRANK[a.grade]??9)-(GRANK[b.grade]??9)
+                  ||(b.ix|0)-(a.ix|0)||(b.ixAll|0)-(a.ixAll|0);
+
+let V=null,A=null,curChap=1,
+    show={person:true,people:true,place:true,divine:true,band:true,
+          unknown:true},
+  // `scan` has no index behind it -- 8,593 of the annotations here, and
+  // the source of most of the ambiguity markers. Off until asked for.
+  showAmb=true,
+  grade={'index-verse':true,'translation':true,'scan':false,
+         'index-chapter':true,'structural':true};
+
+$('#theme').onclick=()=>{const c=document.documentElement.getAttribute('data-theme');
+  const d=c?c==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+  document.documentElement.setAttribute('data-theme',d?'light':'dark');};
+
+Promise.all([fetch('data/virata_4lang.json').then(r=>r.json()),
+             fetch('data/virata_atlas_substrate.json').then(r=>r.json())])
+ .then(([v,a])=>{V=v;A=a;
+   // **4lang is an AUDIO-ONLY file.** It is unmaintained, and the substrate is
+   // the sole authority for which verses and chapters exist and what they say.
+   // 4lang contributes the language lanes and their timings, keyed by ref, and
+   // nothing else.
+   //
+   // It used to be the other way round -- start from 4lang, overwrite the text
+   // from the atlas -- which left any verse the substrate does NOT have still
+   // standing, rendered from unmaintained text. 51.13 is one: Dutt has it, the
+   // canonical XML does not, so the substrate drops it deliberately. On screen
+   // it appeared with working audio and zero annotations, which reads as a
+   // broken annotation layer rather than as two sources disagreeing about
+   // whether the verse exists.
+   const audio=V.verses||{};
+   V.verses={};
+   for(const r in (A.text||{})){
+     const t=A.text[r],p=r.split('.');
+     V.verses[r]={ch:+p[0],v:+p[1],sa:t.sa,en:t.en,lang:(audio[r]||{}).lang||{}};
+   }
+   if(A.chapters)V.chapters=A.chapters;
+   // An audio lane for a verse the text does not contain is a mismatch to
+   // report, never a verse to render.
+   const orphan=Object.keys(audio).filter(r=>!V.verses[r]);
+   if(orphan.length)
+     console.warn('4lang has audio for %d verse(s) absent from the text:',
+                  orphan.length,orphan);
+   buildTimelines();
+   buildRail();
+   const h=location.hash.replace('#','');
+   if(h&&V.verses[h]){showChapter(+h.split('.')[0]);focus(h);}else showChapter(1);})
+ .catch(e=>{$('#stage').innerHTML='<div class="loading">Could not load data.<br>'
+   +'Serve with <code>python3 -m http.server 8137</code><br><small>'+esc(e.message)+'</small></div>';});
+
+document.querySelectorAll('#showtog button').forEach(b=>b.onclick=()=>{
+  show[b.dataset.k]=!show[b.dataset.k];b.classList.toggle('on',show[b.dataset.k]);
+  showChapter(curChap);});
+
+document.querySelectorAll('#ambtog button').forEach(b=>b.onclick=()=>{
+  showAmb=!showAmb;b.classList.toggle('on',showAmb);showChapter(curChap);});
+
+document.querySelectorAll('#gradetog button').forEach(b=>b.onclick=()=>{
+  grade[b.dataset.g]=!grade[b.dataset.g];b.classList.toggle('on',grade[b.dataset.g]);
+  showChapter(curChap);});
+
+function buildRail(){
+  const rail=$('#rail');
+  rail.appendChild(el('div','railhead','72 adhyāyas'));
+  let last=null;
+  Object.keys(V.chapters).map(Number).sort((a,b)=>a-b).forEach(ch=>{
+    const c=V.chapters[ch];
+    if(c.upaparva!==last){rail.appendChild(el('div','upa',esc(c.upaparva)));last=c.upaparva;}
+    const n=Object.keys(V.verses).filter(r=>V.verses[r].ch===ch)
+      .reduce((a,r)=>a+((A.ann[r]||[]).length?1:0),0);
+    const row=el('div','chap');row.dataset.ch=ch;
+    row.innerHTML='<div class="n">'+ch+'</div><div class="nm" title="'+esc(c.name)+'">'+esc(c.name)
+      +'</div><div class="cnt">'+n+'</div>';
+    row.onclick=()=>showChapter(ch);
+    rail.appendChild(row);
+  });
+}
+
+function showChapter(ch){
+  curChap=ch;
+  document.querySelectorAll('.chap').forEach(r=>r.classList.toggle('on',+r.dataset.ch===ch));
+  const c=V.chapters[ch],stage=$('#stage');stage.innerHTML='';
+  const refs=Object.keys(V.verses).filter(r=>V.verses[r].ch===ch).sort(cmpRef);
+
+  const ev=(A.events||[]).filter(e=>e.chapter_start<=ch);
+  const cur=ev.length?ev[ev.length-1]:null;
+  const head=el('div','chaphead');
+  head.innerHTML='<h2>'+esc(c.name)+'</h2><div class="sub"><span>अध्याय <b>'+ch+'</b></span>'
+    +'<span>'+esc(c.upaparva)+'</span><span><b>'+refs.length+'</b> verses</span></div>'
+    +(cur?'<div class="storytag">📖 <b>'+esc(cur.name_dev)+'</b> — '+esc(cur.summary)+'</div>':'');
+  stage.appendChild(head);
+  const box=el('div','verses');
+  refs.forEach(r=>box.appendChild(verse(r)));
+  stage.appendChild(box);
+  buildCtx(ch,refs);
+  const rr=document.querySelector('.chap.on');if(rr)rr.scrollIntoView({block:'nearest'});
+  // a re-render (filter toggle, chapter click) throws away the marks the audio
+  // put on the page; the audio has not stopped, so put them back
+  markCue();
+}
+
+// A Devanagari syllable is several code points -- ल plus the mātrā ा is one
+// cluster -- and a name stem ends inside one far more often than not:
+// पाञ्चाल|ाश्, मत्स्य|ाश्च, शूरसेन|ाः. Wrapping the stem alone put the consonant and
+// its mātrā in different elements, which shatters the glyph even though the
+// text is intact. Snapping every span outward to cluster boundaries is what
+// keeps the verse readable.
+const segmenter = (typeof Intl!=='undefined' && Intl.Segmenter)
+  ? new Intl.Segmenter('sa',{granularity:'grapheme'}) : null;
+const boundsCache = new Map();
+function bounds(text){
+  if(boundsCache.has(text)) return boundsCache.get(text);
+  let b;
+  if(segmenter){
+    b=new Set([0]);
+    for(const g of segmenter.segment(text)) b.add(g.index+g.segment.length);
+  } else {
+    // no Segmenter: keep the base consonant with any following combining mark
+    b=new Set([0]);
+    for(let i=0;i<text.length;i++){
+      const nx=text[i+1];
+      if(nx===undefined||!/[ऀ-ःऺ-ॏ॑-ॗॢॣ]/.test(nx)) b.add(i+1);
+    }
+  }
+  boundsCache.set(text,b);
+  return b;
+}
+const snapEnd=(text,i)=>{const b=bounds(text);while(i<text.length&&!b.has(i))i++;return i;};
+const snapStart=(text,i)=>{const b=bounds(text);while(i>0&&!b.has(i))i--;return i;};
+
+// Wrap every matched name. The build recorded the literal forms it matched, so
+// this is an exact substring scan -- no pattern, nothing to escape, and the two
+// passes cannot disagree about what was found.
+//
+// Overlaps are resolved against EVERY hit, before any filter is applied. They
+// used to be resolved among the visible ones only, which made a filter change
+// what a word DENOTES rather than whether it is shown: turning Characters off
+// dropped Kuntī and promoted the Kuntis (inm:6199, a people) onto the same
+// letters. A filter may hide a reading. It may never substitute one.
+function mark(text,hits,surface){
+  if(!text)return '';
+  const spans=[];
+  hits.forEach(hit=>{
+    const card=A.cards[hit.id];
+    if(!card)return;
+    (hit.m&&hit.m[surface]||[]).forEach(form=>{
+      let i=text.indexOf(form);
+      while(i!==-1){
+        spans.push([snapStart(text,i),snapEnd(text,i+form.length),hit.id,
+                    showAmb?hit.alt:null,hit.grade,hit.ix|0,hit.ixAll|0,
+                    hit.res|0]);
+        i=text.indexOf(form,i+form.length);
+      }
+    });
+  });
+  if(!spans.length)return esc(text);
+  // Several claimants on the SAME letters -- "Kunti" in 1.9 is four Sorensen
+  // entries, three persons, a people and a place -- are a homonym, not an
+  // overlap. Which one the word denotes is settled by the EVIDENCE, once, and
+  // never by the filters: the strongest grade wins, ties by index order.
+  // Deciding it among the visible claimants instead made Characters-off turn
+  // Kuntī into the Kuntis, i.e. a display control silently rewriting a reading.
+  const same=new Map();
+  for(const sp of spans){
+    const k=sp[0]+':'+sp[1];
+    if(same.has(k))same.get(k).push(sp); else same.set(k,[sp]);
+  }
+  const uniq=[...same.values()].sort((a,b)=>a[0][0]-b[0][0]||b[0][1]-a[0][1]);
+  let out='',at=0;
+  for(const cands of uniq){
+    const [s,e]=cands[0];
+    if(s<at)continue;                       // overlapping names: longest wins
+    // Grade first, then EVIDENCE. Grade alone leaves ties, and a tie fell back
+    // to array order -- `Draupadi` ("son of Drupada", one citation in the whole
+    // epic) and `Draupadī` are both `translation` on the same letters, and the
+    // son sorted first, so every English mention of her linked to her brother.
+    // Indexed support in this parva decides, then corpus-wide.
+    cands.sort((a,b)=>cmpHit({grade:a[4],ix:a[5],ixAll:a[6],res:a[7]},
+                             {grade:b[4],ix:b[5],ixAll:b[6],res:b[7]}));
+    const [,,id,alt,g]=cands[0],card=A.cards[id];
+    // The reading is filtered out: emit the word as plain text and consume the
+    // span, so neither a rival claimant nor a shorter name can take its place.
+    if(!show[card.kind]||(g&&grade[g]===false)){
+      out+=esc(text.slice(at,e));at=e;continue;
+    }
+    out+=esc(text.slice(at,s))
+      +'<span class="ent '+card.kind+(alt&&alt.length?' amb':'')+'" data-id="'+id+'"'
+      +(alt&&alt.length?' data-alt="'+alt.join(',')+'"':'')
+      +' tabindex="0" title="'+esc(card.iast)
+      +(alt&&alt.length?' — '+(alt.length+1)+' entries share this name':'')+'">'
+      +esc(text.slice(s,e))+'</span>';
+    at=e;
+  }
+  return out+esc(text.slice(at));
+}
+
+function verse(ref){
+  const v=V.verses[ref],hits=A.ann[ref]||[],node=el('div','v');
+  node.id='v-'+ref;node.dataset.ref=ref;
+  const num=el('div','vnum','<span>4.'+v.ch+'.'+v.v+'</span>');
+  // Only offer to play a verse somebody actually chanted. A `sim` lane is an
+  // invented second and must not look like a recording from the verse either.
+  const heard=V.langs.some(l=>!l.sim&&((v.lang[l.id]||{}).occ||[]).some(o=>!o.sim));
+  if(heard){
+    const pb=el('button','vplay','▶ hear');
+    pb.title='Play the recitation from this verse';
+    pb.onclick=e=>{e.stopPropagation();playRef(ref);};
+    num.appendChild(pb);
+  }
+  node.appendChild(num);
+  const sa=el('div','layer sa');
+  sa.innerHTML='<div class="lbl">मूल</div><div class="txt" id="sa-'+ref+'">'+mark(v.sa,hits,'sa')+'</div>';
+  // The other half of the two-way link: the line itself is a play control. A
+  // name inside it still opens its card -- `.ent` stops the click before here.
+  if(heard){
+    const txt=sa.querySelector('.txt');
+    txt.title='Click to hear this verse chanted';
+    txt.onclick=()=>{if(!String(getSelection()))playRef(ref);};
+  }
+  node.appendChild(sa);
+  if(v.en){const e=el('div','layer en');
+    e.innerHTML='<div class="lbl">M. N. Dutt · 1897</div><div class="txt">'+mark(v.en,hits,'en')+'</div>';
+    node.appendChild(e);}
+  else node.appendChild(el('div','absent','no English translation for this verse'));
+  if(v.bd) node.appendChild(el('div','layer bd',
+    '<div class="lbl">भावदीप · नीलकण्ठ</div><div class="txt">'+esc(v.bd)+'</div>'));
+  if(show.band) node.appendChild(band(v,ref));
+  bindEnts(node);
+  return node;
+}
+
+function bindEnts(root){
+  root.querySelectorAll('.ent').forEach(s=>{
+    const alt=s.dataset.alt?s.dataset.alt.split(','):null;
+    s.onclick=e=>{e.stopPropagation();openCard(s.dataset.id,alt);};
+    s.onkeydown=e=>{if(e.key==='Enter')openCard(s.dataset.id,alt);};
+  });
+}
+const DMAX=900,dw=s=>Math.max(2,Math.min(100,100*Math.sqrt(Math.min(s,DMAX)/DMAX)));
+// Why a chip is not simply a chip. Three things can be true of a measured
+// onset, and flattening them is what put 84 verses on screen as blanks:
+//
+//   part  the onset is measured, the EXTENT is not. The span the detector
+//         returned is shorter than the verse's own syllable count allows, so
+//         something was chanted at that second but it was not this whole
+//         verse -- most often a pāda quoted in passing. `need` against `span`
+//         is the finding and the tooltip states it rather than rounding it to
+//         a shrug.
+//   zw    the same, with no measured duration at all.
+//   cf    forced alignment gave these seconds to a different verse. At most
+//         one of the two claims is right and the aligner is the path checked
+//         by ear, so the chip is marked ° -- the same mark the text layer uses
+//         for a name more than one entry claims, and for the same reason.
+//
+// None of them is `sim`, which is a timing nobody measured at all.
+const partTitle=o=>o.zw
+  ? '\nonset measured; no duration was measured at all'
+  : (o.akshara!=null&&o.span!=null&&o.need!=null
+      ? '\nonset measured; extent is not: '+o.akshara+' aksharas need '
+        +o.need+'s, '+o.span+'s was measured'
+      : '\nonset measured; extent is not');
+function band(v,ref){
+  const b=el('div','band'),langs=V.langs;
+  const tot=langs.reduce((a,l)=>a+((v.lang[l.id]||{}).dwell||0),0);
+  // A verse reached only by a partial detection has no dwell to total, and
+  // "not expounded" would be a false negative about the one thing this band
+  // exists to report.
+  const reached=langs.some(l=>(v.lang[l.id]||{}).occ);
+  b.appendChild(el('div','bandhead','<div>Exposition</div><span>'
+    +(tot?mmss(tot)+' across '+langs.filter(l=>v.lang[l.id]).length
+        :reached?'reached — how long was not measured':'not expounded')+'</span>'));
+  langs.forEach(l=>{
+    const rec=v.lang[l.id],lane=el('div','lane');
+    const nodw=rec&&rec.dwell==null;
+    lane.innerHTML='<div class="who" style="color:var(--'+l.id+')"><span class="sw" style="background:var(--'
+      +l.id+')"></span>'+l.native+(l.sim?' <em>sim</em>':'')+'</div>'
+      +(!rec?'<div class="dwell none"></div><div class="t">—</div>'
+        :nodw?'<div class="dwell onset" title="He was heard here. How long he stayed was not measured."></div>'
+              +'<div class="t">–</div>'
+        :'<div class="dwell"><i style="width:'+dw(rec.dwell)+'%;background:var(--'+l.id+')"></i></div>'
+         +'<div class="t">'+mmss(rec.dwell)+'</div>');
+    if(rec){
+      const marks=el('div','marks');
+      rec.occ.forEach((o,i)=>{
+        const m=el('button','mk'+(o.sim?' sim':'')+(o.part?' part':'')+(o.cf?' cf':''));
+        m.dataset.ref=ref;m.dataset.l=l.id;m.dataset.i=i;
+        m.textContent=o.ep.replace(/^[a-z]+-/,'')+' · '+mmss(o.s);
+        if(o.sim){m.title=l.name+' is simulated — no recording exists, this timing is invented.';
+          m.onclick=()=>toast(l.name+' is simulated: there is no audio to play.');}
+        else{m.title='Part '+o.ep.replace('vp-','')+' at '+mmss(o.s)
+          +(o.conf!=null?'\nconf '+o.conf:'')
+          +(o.part?partTitle(o):'')
+          +(o.cf?'\n° another verse is aligned to these seconds — at most one is right':'');
+          m.onclick=()=>play(ref,l.id,i);}
+        marks.appendChild(m);
+      });
+      lane.appendChild(marks);
+    }
+    b.appendChild(lane);
+  });
+  return b;
+}
+
+function buildCtx(ch,refs){
+  const ctx=$('#ctx');ctx.innerHTML='';
+  ctx.appendChild(el('div','ctxhead','In this adhyāya'));
+  // Both filters, the same way the verses apply them. This column honoured the
+  // grade toggles but not the kind toggles, so Characters-off left all 85 pills
+  // standing and the control looked dead.
+  const count={},present={};
+  refs.forEach(r=>(A.ann[r]||[]).forEach(h=>{
+    const card=A.cards[h.id];
+    if(!card)return;
+    if(h.grade&&grade[h.grade]===false)return;
+    present[card.kind]=true;                // for the disabled-button state
+    if(!show[card.kind])return;
+    count[h.id]=(count[h.id]||0)+1;}));
+  // A kind with nothing in this adhyāya gets a dimmed button rather than one
+  // that silently does nothing when clicked.
+  document.querySelectorAll('#showtog button').forEach(b=>b.classList.toggle(
+    'none',b.dataset.k!=='band'&&!present[b.dataset.k]));
+  const ids=Object.keys(count).sort((a,b)=>count[b]-count[a]);
+  [['person','Characters'],['people','Peoples'],['place','Places'],
+   ['divine','Divine'],['unknown','Unclassified']].forEach(([kind,label])=>{
+    const mine=ids.filter(i=>A.cards[i].kind===kind);
+    if(!mine.length)return;
+    const sec=el('div','ctxsec');
+    sec.appendChild(el('h4',null,label+' <span style="float:right;opacity:.7">'+mine.length+'</span>'));
+    mine.forEach(i=>{
+      // Seven Sorensen entries are spelled "Matsya" — a forest, a king, a
+      // region, an epithet and three peoples. Without the subtype they render
+      // as identical pills and read as duplicates rather than homonyms.
+      const cd=A.cards[i],sub=cd.subtype&&cd.subtype!==kind?' <i>'+esc(cd.subtype)+'</i>':'';
+      const p=el('span','pill '+kind,esc(cd.iast||cd.dev)+sub+' <b>'+count[i]+'</b>');
+      p.onclick=()=>openCard(i);
+      sec.appendChild(p);
+    });
+    ctx.appendChild(sec);
+  });
+  const ev=(A.events||[]).filter(e=>e.chapter_start<=ch);
+  if(ev.length){
+    const e=ev[ev.length-1],sec=el('div','ctxsec');
+    sec.appendChild(el('h4',null,'Story unit'));
+    sec.appendChild(el('div',null,'<div style="font-family:var(--serif);font-size:14px">'
+      +esc(e.name_dev)+'</div><div style="font-size:11.5px;color:var(--muted);margin-top:4px">'
+      +esc(e.name_iast)+' · '+esc(e.type)+'</div>'
+      +'<p style="font-size:12.5px;color:var(--ink2);line-height:1.6;margin:8px 0 0">'+esc(e.summary)+'</p>'));
+    ctx.appendChild(sec);
+  }
+}
+
+/* ---------------- entity card + genealogy ---------------- */
+function castKeyFor(cid){
+  for(const k in A.cast) if(A.cast[k].card===cid) return k;
+  return null;
+}
+function openCard(cid,alt){
+  const c=A.cards[cid];if(!c)return;
+  const key=castKeyFor(cid);
+  const box=$('#card');
+  box.innerHTML='<div class="cardhead"><div><h3>'+esc(c.iast)+'</h3>'
+    +(c.dev?'<div class="dv">'+esc(c.dev)+'</div>':'')
+    +(key?'<div class="role">'+esc(A.cast[key].role)+'</div>':'')
+    +'</div><div style="display:flex;gap:8px;align-items:center">'
+    +'<span class="kindtag '+c.kind+'">'+c.kind+(c.subtype?' · '+esc(c.subtype):'')+'</span>'
+    +'<button class="closebtn" aria-label="Close">✕</button></div></div>'
+    +'<div class="cardbody"></div>';
+  const body=box.querySelector('.cardbody');
+  if(c.summary) body.appendChild(el('p',null,esc(c.summary)));
+  // Sorensen's ENTRY, whole. The card used to show his one-line definition and
+  // stop: Matsya¹ read "a king, son of Vasu Uparicara" and the 914 characters
+  // that follow -- Girikā, the hawk, the Apsaras Adrikā who swallowed the semen
+  // in the Yamunā -- were not on the page at all. The definition is a label;
+  // the entry is the source, and this is a concordance.
+  if(c.entry&&c.entry!==c.summary){
+    const h=el('h5',null,'Sorensen’s entry <span class="entrylen">'
+      +c.entry.length.toLocaleString()+' chars</span>');
+    const pre=el('div','entry',esc(c.entry));
+    // Long entries (Arjuna is 148,120 characters) open collapsed, because a
+    // card is not a reading surface for one. Nothing is truncated -- the
+    // reader decides, which is what the 300-char clip took away.
+    if(c.entry.length>700){
+      pre.classList.add('clip');
+      const t=el('button','entrytoggle','Show the whole entry');
+      t.onclick=()=>{const on=pre.classList.toggle('clip');
+        t.textContent=on?'Show the whole entry':'Collapse';};
+      body.appendChild(h);body.appendChild(pre);body.appendChild(t);
+    }else{body.appendChild(h);body.appendChild(pre);}
+  }
+  // The name alone cannot say which entry the verse means. Show the reading
+  // taken and offer the others rather than deciding silently.
+  if(alt&&alt.length){
+    body.appendChild(el('h5',null,'This name also names'));
+    const box=el('div','seein');
+    alt.forEach(id=>{
+      const o=A.cards[id];if(!o)return;
+      const b=el('button',null,esc(o.iast)+' · '+o.kind
+        +(o.subtype?' · '+esc(String(o.subtype)):''));
+      b.title=(o.summary||'').slice(0,180);
+      b.onclick=()=>openCard(id,[cid].concat(alt.filter(x=>x!==id)));
+      box.appendChild(b);
+    });
+    body.appendChild(box);
+    body.appendChild(el('p',null,'<span style="font-size:12px;color:var(--faint)">'
+      +'The most specific entry is shown first; the text itself does not say which is meant.</span>'));
+  }
+  if(key){
+    body.appendChild(el('h5',null,'Kinship'));
+    body.appendChild(treeFor(key));
+  }
+  if(c.rel&&c.rel.length){
+    body.appendChild(el('h5',null,'Recorded relations'));
+    body.appendChild(el('div','rel',c.rel.slice(0,12)
+      .map(r=>'<span><i>'+esc(r.p)+'</i> '+esc(r.t)+'</span>').join('')));
+  }
+  // Being a CLAIMANT on a verse is not appearing in it. `मत्स्य` in this parva
+  // is the Matsya people, their country and their king, and Sorensen has seven
+  // entries under that one headword -- so Matsya¹, an ancient king born of a
+  // fish, was a claimant on all 97 occurrences, the reading taken in NONE, and
+  // his card said "Appears in this parva - 97 verses". Sorensen's own index
+  // never places him in book IV.
+  //
+  // Split the two. The contested verses still show -- hiding them would hide
+  // the ambiguity, which is the opposite of the point -- but they are not
+  // counted as appearances.
+  const taken=[],shared=[];
+  Object.keys(A.ann).forEach(r=>{
+    const hits=A.ann[r]||[],mine=hits.filter(h=>h.id===cid);
+    if(!mine.length)return;
+    const won=mine.some(m=>{
+      const f=new Set([].concat(m.m.sa||[],m.m.en||[]));
+      return hits.every(h=>h.id===cid
+        || ![].concat(h.m.sa||[],h.m.en||[]).some(x=>f.has(x))
+        || cmpHit(m,h)<=0);
+    });
+    (won?taken:shared).push(r);
+  });
+  taken.sort(cmpRef);shared.sort(cmpRef);
+  body.appendChild(el('h5',null,'Appears in this parva'));
+  const seen=el('div','seein');
+  seen.appendChild(el('span',null,'<span style="font-size:12.5px;color:var(--muted)">'
+    +(taken.length?taken.length+' verses':'not the reading taken anywhere here')
+    +'</span>'));
+  taken.slice(0,6).forEach(r=>{
+    const b=el('button',null,'4.'+r);
+    b.onclick=()=>{closeCard();showChapter(+r.split('.')[0]);focus(r);};
+    seen.appendChild(b);
+  });
+  body.appendChild(seen);
+  if(shared.length){
+    body.appendChild(el('h5',null,'Name shared with another entry'));
+    const sh=el('div','seein');
+    sh.appendChild(el('span',null,'<span style="font-size:12.5px;color:var(--muted)">'
+      +shared.length+' verse'+(shared.length>1?'s':'')+' carry a name this entry '
+      +'shares, where the evidence favours a different one</span>'));
+    shared.slice(0,6).forEach(r=>{
+      const b=el('button',null,'4.'+r);
+      b.onclick=()=>{closeCard();showChapter(+r.split('.')[0]);focus(r);};
+      sh.appendChild(b);
+    });
+    body.appendChild(sh);
+  }
+  box.querySelector('.closebtn').onclick=closeCard;
+  box.classList.add('show');$('#scrim').classList.add('show');
+  box.querySelector('.closebtn').focus();
+}
+function closeCard(){$('#card').classList.remove('show');$('#scrim').classList.remove('show');}
+$('#scrim').onclick=closeCard;
+addEventListener('keydown',e=>{if(e.key==='Escape')closeCard();});
+
+// Three generations around the focus: parents above, focus and spouse in the
+// middle, children below. Dashed edges are pinned by spec rather than asserted
+// by the extracted data, and the key says so.
+function treeFor(key){
+  const par=A.kin.filter(k=>k.b===key), kids=A.kin.filter(k=>k.a===key);
+  const sp=A.spouse.filter(s=>s.a===key||s.b===key).map(s=>({k:s.a===key?s.b:s.a,src:s.src}));
+  const rows=[
+    par.map(k=>({k:k.a,src:k.src})),
+    [{k:key,src:'focus'}].concat(sp),
+    kids.map(k=>({k:k.b,src:k.src}))
+  ];
+  const W=460,BW=98,BH=30,VG=52;
+  const H=rows.filter(r=>r.length).length*VG+18;
+  let svg='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'">';
+  const pos={};let y=16;
+  const drawn=rows.filter(r=>r.length);
+  drawn.forEach(row=>{
+    const gap=W/(row.length+1);
+    row.forEach((n,i)=>{pos[n.k]={x:gap*(i+1),y:y+BH/2,src:n.src};});
+    y+=VG;
+  });
+  // edges first so nodes sit on top
+  A.kin.forEach(k=>{
+    if(!pos[k.a]||!pos[k.b])return;
+    if(!(k.a===key||k.b===key))return;
+    svg+='<path class="tedge'+(k.src==='spec'?' spec':'')+'" stroke="var(--muted)" d="M'
+      +pos[k.a].x+' '+(pos[k.a].y+BH/2)+' C'+pos[k.a].x+' '+(pos[k.a].y+BH/2+18)+','
+      +pos[k.b].x+' '+(pos[k.b].y-BH/2-18)+','+pos[k.b].x+' '+(pos[k.b].y-BH/2)+'"/>';
+  });
+  sp.forEach(s=>{
+    if(!pos[s.k])return;
+    svg+='<path class="tedge'+(s.src==='spec'?' spec':'')+'" stroke="var(--accent)" d="M'
+      +(pos[key].x+BW/2)+' '+pos[key].y+' L'+(pos[s.k].x-BW/2)+' '+pos[s.k].y+'"/>';
+  });
+  Object.keys(pos).forEach(k=>{
+    const m=A.cast[k];if(!m)return;
+    const p=pos[k],isF=k===key;
+    svg+='<g class="tnode'+(isF?' focus':'')+'" data-k="'+k+'">'
+      +'<rect x="'+(p.x-BW/2)+'" y="'+(p.y-BH/2)+'" width="'+BW+'" height="'+BH+'" '
+      +'fill="'+(isF?'var(--accent-bg)':'var(--sunk)')+'" stroke="'+(isF?'var(--accent)':'var(--line)')+'"/>'
+      +'<text x="'+p.x+'" y="'+p.y+'" fill="'+(isF?'var(--accent)':'var(--ink2)')+'">'
+      +esc(m.iast)+'</text></g>';
+  });
+  svg+='</svg>';
+  const wrap=el('div','tree',svg);
+  wrap.appendChild(el('div','treekey',
+    '<span><i></i> from the index</span><span><i class="d"></i> pinned by hand</span>'
+    +'<span style="color:var(--accent)">— marriage</span>'));
+  wrap.querySelectorAll('.tnode').forEach(g=>{
+    const k=g.dataset.k,cid=A.cast[k]&&A.cast[k].card;
+    g.onclick=()=>{if(cid)openCard(cid);};
+    if(!cid)g.style.opacity=.6;
+  });
+  return wrap;
+}
+
+let player=null,playing=null,ticker=null,toastT,followAudio=true;
+
+// --------------------------------------------------------------- timelines
+// A chip knows one (verse, second). Following a recitation needs the inverse:
+// for ONE episode, the ordered seconds at which each verse is taken up. Both
+// are built from the same occurrences, so the lane and the transport cannot
+// disagree about which verse is being chanted.
+//
+// A cue runs from its onset to the NEXT onset -- not to the end of the chant.
+// The seconds between them are the expounder talking about the verse just
+// chanted, which is what the recording is for. `chantEnd` exists only where
+// forced alignment measured it, so the page can distinguish "chanting" from
+// "expounding on" instead of asserting one and meaning the other.
+const TL={};
+const episode=id=>(V.ta_episodes||[]).find(e=>e.id===id);
+function buildTimelines(){
+  for(const ref in V.verses){
+    const lang=V.verses[ref].lang||{};
+    for(const lid in lang){
+      const rec=lang[lid];if(!rec||!rec.occ)continue;
+      rec.occ.forEach((o,i)=>{
+        if(o.sim)return;                  // an invented second is not a cue
+        const byEp=TL[lid]||(TL[lid]={});
+        (byEp[o.ep]||(byEp[o.ep]=[])).push({s:o.s,ref,i,o,
+          chantEnd:(o.hs&&o.hs.length)?o.hs[o.hs.length-1][1]:null});
+      });
+    }
+  }
+  for(const lid in TL)for(const epId in TL[lid]){
+    const cs=TL[lid][epId].sort((a,b)=>a.s-b.s||cmpRef(a.ref,b.ref));
+    const ep=episode(epId),end=(ep&&ep.duration)||(cs[cs.length-1].s+600);
+    cs.forEach((c,j)=>{
+      c.e=j+1<cs.length?Math.max(c.s,cs[j+1].s):end;
+      // measured extents overlap the next onset here and there; the next onset
+      // wins, so no cue claims seconds the following verse already owns
+      if(c.chantEnd!=null)c.chantEnd=Math.min(c.chantEnd,c.e);
+    });
+  }
+}
+// Last cue whose onset has passed; -1 before the part chants anything.
+//
+// LEAD matches the pre-roll `play` starts with. Without it, starting a verse at
+// s-0.4 puts the clock a fraction BEFORE the cue it was asked for, and the
+// first tick "advances" back to the previous verse -- every click flickering to
+// the wrong verse for a third of a second before landing on the right one.
+const LEAD=0.8;
+function cueAt(cs,t){
+  let lo=0,hi=cs.length-1,at=-1;
+  while(lo<=hi){const m=(lo+hi)>>1;if(cs[m].s-LEAD<=t){at=m;lo=m+1;}else hi=m-1;}
+  return at;
+}
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2800);}
+
+window.onYouTubeIframeAPIReady=()=>{
+  player=new YT.Player('yt',{height:'64',width:'112',
+    playerVars:{controls:0,disablekb:1,modestbranding:1,rel:0,playsinline:1},
+    events:{onStateChange:e=>{$('#tplay').textContent=e.data===YT.PlayerState.PLAYING?'❚❚':'▶';}}});
+};
+(function(){const t=document.createElement('script');
+  t.src='https://www.youtube.com/iframe_api';document.head.appendChild(t);})();
+
+function play(ref,lid,i){
+  const v=V.verses[ref],rec=v&&v.lang[lid];if(!rec||!rec.occ)return;
+  const o=rec.occ[i];if(!o)return;
+  if(o.sim){toast(V.langs.find(l=>l.id===lid).name+' is simulated — no audio.');return;}
+  const ep=episode(o.ep),cs=(TL[lid]||{})[o.ep];
+  if(!ep||!ep.yt||!cs||!player||!player.loadVideoById){toast('Player not ready yet.');return;}
+  const idx=cs.findIndex(c=>c.ref===ref&&c.i===i);
+  const same=playing&&playing.ep.id===ep.id;
+  restoreMula();
+  playing={lid,ep,cues:cs,idx:-2,ref:null,o:null,state:null};
+  const at=Math.max(0,o.s-0.4);
+  // Seeking inside the part already loaded is instant; loadVideoById rebuffers
+  // the whole 80-minute file to land three verses further down.
+  if(same){player.seekTo(at,true);player.playVideo();}
+  else player.loadVideoById({videoId:ep.yt,startSeconds:at});
+  $('#ytwrap').classList.remove('hide');
+  showCue(idx<0?0:idx,{hard:true});
+  clearInterval(ticker);ticker=setInterval(tick,120);
+}
+// Click the verse, hear it. Picks the occurrence the reader most likely means:
+// one in the part already playing (so it seeks rather than reloads), else one
+// forced alignment measured end to end, else the first real onset.
+function playRef(ref){
+  const v=V.verses[ref];if(!v)return;
+  const has=lid=>((v.lang[lid]||{}).occ||[]).some(o=>!o.sim);
+  const lid=(playing&&has(playing.lid))?playing.lid
+           :(V.langs.find(l=>!l.sim&&has(l.id))||{}).id;
+  if(!lid){
+    const simOnly=V.langs.some(l=>(v.lang[l.id]||{}).occ);
+    toast(simOnly?'Only simulated lanes reach 4.'+ref+' — those seconds are invented, not recorded.'
+                 :'No recording reaches 4.'+ref+' yet.');
+    return;
+  }
+  const occ=v.lang[lid].occ;
+  let i=playing?occ.findIndex(o=>!o.sim&&o.ep===playing.ep.id):-1;
+  if(i<0)i=occ.findIndex(o=>!o.sim&&o.hs);
+  if(i<0)i=occ.findIndex(o=>!o.sim);
+  play(ref,lid,i);
+}
+function buildSwitch(ref,cur){
+  const box=$('#tswitch');box.innerHTML='';
+  const v=V.verses[ref];
+  V.langs.forEach(l=>{
+    const rec=v.lang[l.id],b=el('button',l.id===cur?'cur':'');
+    b.textContent=l.native;b.style.color='var(--'+l.id+')';
+    if(!rec){b.disabled=true;b.title=l.native+' does not reach this verse';}
+    else if(l.sim){b.disabled=true;b.title=l.name+' is simulated — no audio to switch to';}
+    else b.onclick=()=>play(ref,l.id,0);
+    box.appendChild(b);
+  });
+}
+// Everything that changes when the recitation arrives at a different verse --
+// whether a click sent it there or the audio simply moved on.
+function showCue(idx,opt){
+  opt=opt||{};
+  const P=playing;if(!P||idx===P.idx)return;
+  P.idx=idx;P.state=null;
+  restoreMula();
+  document.querySelectorAll('.mk.playing').forEach(n=>n.classList.remove('playing'));
+  document.querySelectorAll('.v.cue').forEach(n=>n.classList.remove('cue','exp'));
+  const L=V.langs.find(l=>l.id===P.lid);
+  if(idx<0){                       // the part opens before it chants anything
+    P.ref=null;P.o=null;
+    $('#tnow').textContent=L.native+'  ·  part '+P.ep.n;
+    $('#tstate').textContent='';$('#tstate').className='state';
+    $('#tline').textContent='before the first verse this part chants';
+    $('#tmeta').textContent='';
+    return;
+  }
+  const c=P.cues[idx],v=V.verses[c.ref];
+  P.ref=c.ref;P.o=c.o;
+  $('#tnow').textContent='4.'+c.ref+'  ·  '+L.native+'  ·  part '+P.ep.n+'  ·  '+mmss(c.s);
+  // The caption is the chanted line, hemistich by hemistich, so `tick` has
+  // something to light. Where no extent was measured there are no hemistichs
+  // and the verse's own text stands in.
+  $('#tline').innerHTML=c.o.hs
+    ? c.o.hs.map((h,j)=>'<span class="chemi" data-h="'+j+'">'+esc(h[2])+'</span>').join(' ')
+    : esc(v.sa);
+  $('#tmeta').innerHTML=(c.o.kind||'seated')+(c.o.conf!=null?' · conf '+c.o.conf:'')
+    +((v.lang[P.lid]||{}).dwell?' · stays '+mmss(v.lang[P.lid].dwell)+' on this verse':'');
+  buildSwitch(c.ref,P.lid);
+  // A click always goes to its verse. Auto-advance only moves the page when the
+  // reader asked to be followed, and never writes a history entry per verse.
+  //
+  // A quotation is not a place in the text. vp-02 quotes one pāda of 4.7.12 for
+  // 2.4 seconds while expounding adhyāya 1: following it would throw the reader
+  // into another adhyāya and back before they could read a line. The caption
+  // and the chip still report it -- the page just does not chase it.
+  if(opt.hard)focus(c.ref,{});
+  else if(followAudio)focus(c.ref,passing(c)
+      ? {hash:false,chapter:false,scroll:false}
+      : {hash:false,scroll:'ifneeded'});
+  markCue();
+}
+// An onset measured for something said in passing -- a quoted pāda -- rather
+// than a verse the recording settles on. `part`/`zw` are the chips' own words
+// for "onset measured, extent is not".
+const passing=c=>!!(c.o.part||c.o.zw||c.o.kind==='quotation');
+// The marks the audio owns, applied to whatever is currently rendered.
+function markCue(){
+  const P=playing;if(!P||!P.ref||P.idx<0)return;
+  document.querySelectorAll('.mk.playing').forEach(n=>n.classList.remove('playing'));
+  document.querySelectorAll('.v.cue').forEach(n=>n.classList.remove('cue','exp'));
+  const c=P.cues[P.idx];
+  const chip=document.querySelector('.mk[data-ref="'+P.ref+'"][data-l="'+P.lid+'"][data-i="'+c.i+'"]');
+  if(chip)chip.classList.add('playing');
+  const n=document.getElementById('v-'+P.ref);
+  if(n){n.classList.add('cue');n.classList.toggle('exp',P.state==='exp');}
+}
+function tick(){
+  if(!playing||!player||!player.getCurrentTime)return;
+  const P=playing,t=player.getCurrentTime();
+  $('#ttime').textContent=mmss(t)+' / '+mmss(P.ep.duration);
+  const idx=cueAt(P.cues,t);
+  if(idx!==P.idx)showCue(idx,{});      // the audio moved on, or the user scrubbed
+  if(P.idx<0||!P.o)return;
+  const c=P.cues[P.idx],o=c.o;
+  // Chanting, or expounding on the verse just chanted. Claimed only where the
+  // chant's end was measured; an unmeasured extent says neither.
+  const state=o.hs?(t<=c.chantEnd+0.3?'chant':'exp'):'open';
+  if(state!==P.state){
+    P.state=state;
+    const n=document.getElementById('v-'+P.ref);
+    if(n)n.classList.toggle('exp',state==='exp');
+    const st=$('#tstate');
+    st.textContent=state==='chant'?'chanting'
+      :state==='exp'?'expounding on 4.'+P.ref
+      :passing(c)?'quoted here — extent not measured'
+      :'reached — extent not measured';
+    st.className='state'+(state==='chant'?'':' exp');
+  }
+  if(!o.hs)return;
+  const at=o.hs.findIndex(h=>t>=h[0]&&t<=h[1]);
+  const box=document.getElementById('sa-'+P.ref);
+  // The mūla stands as chanted only WHILE it is being chanted: the hemistichs
+  // are aligned text, so they carry no annotations. The moment the expounder
+  // takes over, the annotated verse is what the listener wants in front of
+  // them -- the names clickable while they are being talked about.
+  if(state!=='chant')restoreMula();
+  else if(box){
+    if(box.dataset.split!=='1'){
+      box.dataset.mula=box.innerHTML;box.dataset.split='1';
+      box.innerHTML=o.hs.map((h,j)=>'<span class="hemi" data-h="'+j+'">'+esc(h[2])+'</span>').join(' ');
+      const lbl=box.previousElementSibling;
+      if(lbl&&lbl.className==='lbl'){lbl.dataset.was=lbl.textContent;lbl.textContent='मूल · as chanted';}
+    }
+    box.querySelectorAll('.hemi').forEach((n,j)=>n.classList.toggle('lit',j===at));
+  }
+  $('#tline').querySelectorAll('.chemi').forEach((n,j)=>n.classList.toggle('lit',j===at));
+}
+// Restoring the mula puts back the annotated markup, and innerHTML assignment
+// drops every listener with it -- so the names must be re-bound or they go dead
+// for the rest of the session after one playback.
+function restoreMula(){
+  document.querySelectorAll('[data-split="1"]').forEach(box=>{
+    box.innerHTML=box.dataset.mula||box.innerHTML;
+    delete box.dataset.split;delete box.dataset.mula;
+    const lbl=box.previousElementSibling;
+    if(lbl&&lbl.dataset.was){lbl.textContent=lbl.dataset.was;delete lbl.dataset.was;}
+    bindEnts(box);
+  });
+}
+$('#tfollow').onclick=()=>{
+  followAudio=!followAudio;
+  $('#tfollow').classList.toggle('on',followAudio);
+  toast(followAudio
+    ? 'Following the recitation — the page moves to each verse as it is reached.'
+    : 'Not following — the audio plays on, the page stays where you put it.');
+  if(followAudio&&playing&&playing.ref)focus(playing.ref,{hash:false,scroll:'ifneeded'});
+};
+$('#tplay').onclick=()=>{
+  if(!player||!playing)return;
+  if(player.getPlayerState()===YT.PlayerState.PLAYING){player.pauseVideo();clearInterval(ticker);ticker=null;}
+  else{player.playVideo();if(!ticker)ticker=setInterval(tick,120);}
+};
+
+// `opt.chapter:false` stays in the adhyāya on screen; `opt.hash:false` replaces
+// the fragment instead of pushing one (auto-advance would otherwise put one
+// history entry per verse behind the back button); `opt.scroll:'ifneeded'`
+// leaves a verse alone that is already in view, which is what makes following
+// the audio calm rather than a page that jerks every few seconds.
+function focus(ref,opt){
+  opt=opt||{};
+  const v=V.verses[ref];
+  if(v&&v.ch!==curChap&&opt.chapter!==false)showChapter(v.ch);
+  if(opt.hash===false)history.replaceState(null,'','#'+ref);else location.hash=ref;
+  document.querySelectorAll('.v.on').forEach(n=>n.classList.remove('on'));
+  const n=document.getElementById('v-'+ref);if(!n)return;
+  n.classList.add('on');
+  if(opt.scroll===false)return;
+  if(opt.scroll==='ifneeded'){
+    const r=n.getBoundingClientRect();
+    if(r.top>=88&&r.bottom<=innerHeight-112)return;
+  }
+  n.scrollIntoView({behavior:'smooth',block:'center'});
+}
+$('#jump').onkeydown=e=>{
+  if(e.key!=='Enter')return;
+  const q=e.target.value.trim();
+  if(/^\d+\.\d+$/.test(q)&&V.verses[q]){showChapter(+q.split('.')[0]);focus(q);e.target.value='';}
+  else if(/^\d+$/.test(q)&&V.chapters[q]){showChapter(+q);e.target.value='';}
+  else e.target.select();
+};
+</script>
+</body>
+</html>

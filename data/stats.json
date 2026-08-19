@@ -1,0 +1,28 @@
+{
+ "built": "2026-08-20",
+ "simulated_lanes": false,
+ "atlases": {
+  "virata": {
+   "verses": 2262,
+   "chapters": 72,
+   "reached": 2000,
+   "reached_pct": 88.4,
+   "lanes": 1,
+   "real_lanes": 1,
+   "recordings": 22,
+   "parts": 22,
+   "both_lanes": 0
+  },
+  "kartika": {
+   "verses": 1817,
+   "chapters": 36,
+   "reached": 1116,
+   "reached_pct": 61.4,
+   "lanes": 2,
+   "real_lanes": 2,
+   "recordings": 35,
+   "parts": 41,
+   "both_lanes": 178
+  }
+ }
+}
