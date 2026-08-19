@@ -17,7 +17,7 @@ now exists, so this is a proposal for what to do next.
 Two texts, each verse tied to the second it is chanted in a recorded
 *upanyāsam*. Click a verse and the recording plays from that verse.
 
-| | [Virāṭa Parva](SITE_URL/virata-atlas.html) | [Kārtika Māsa Māhātmya](SITE_URL/kartika-atlas.html) |
+| | [Virāṭa Parva](https://hvram1.github.io/purana-atlas/virata-atlas.html) | [Kārtika Māsa Māhātmya](https://hvram1.github.io/purana-atlas/kartika-atlas.html) |
 |---|---|---|
 | source | Mahābhārata, book 4 | Skanda Purāṇa |
 | verses | 2,262 in 72 adhyāyas | 1,817 in 36 adhyāyas |
