@@ -91,6 +91,15 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
 /* the proposal pair: same card, but titled in the UI face rather than the
    serif, so a proposal never reads as one of the texts themselves */
 .cards.two{margin:1.25rem 0 0}
+/* Forthcoming works. Deliberately NOT .card: a card on this page opens an
+   atlas, and none of these opens anything yet. */
+.soon{list-style:none;padding:0;margin:1rem 0 0;display:grid;gap:.85rem}
+.soon li{background:var(--panel);border:1px solid var(--line);
+  border-left:3px solid var(--line);border-radius:8px;padding:.85rem 1rem;
+  font-size:.92rem;color:var(--ink2)}
+.soon b{color:var(--ink);font-weight:600}
+.soon .who{display:block;color:var(--muted);font-size:.8rem;
+  letter-spacing:.02em;margin-top:.3rem}
 .card h2.pitch{font-family:var(--ui);font-size:1.08rem;letter-spacing:-.01em}
 </style>
 </head>
@@ -100,7 +109,8 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
 <header>
   <h1>Purāṇa Atlas</h1>
   <p class="sub">Two Sanskrit texts, each verse tied to the second it is chanted
-  in a recorded <i>upanyāsam</i>. Click a verse, hear it.</p>
+  in a recorded <i>upanyāsam</i>. Click a verse, hear it. <a href="#soon">Five
+  more are in hand.</a></p>
 </header>
 
 <div class="cards" id="cards"></div>
@@ -135,6 +145,38 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
     <p>The Sanskrit is set in Noto Serif Devanagari, which the site serves
     itself — you do not need a Devanagari font installed, and the page asks
     no third party for one.</p>
+  </div>
+</section>
+
+<section id="soon">
+  <h3>What is coming</h3>
+  <p>Five more recordings are in hand. None has been through the alignment pass
+  yet, so nothing below is an atlas — each is a recording and a printed text
+  that have not been put against each other. They are listed because the method
+  above is what they are waiting for, not because a date has been set.</p>
+  <ul class="soon">
+    <li><b>Varāha</b>, <b>Viṣṇu</b> and <b>Garuḍa Purāṇas</b> — whole Purāṇas
+    rather than a single māhātmya, so each will divide by <i>aṃśa</i> or
+    <i>kāṇḍa</i> the way Virāṭa divides by <i>upaparva</i>, and each will reach
+    a smaller share of its text than a month's māhātmya does.
+    <span class="who">Expounded by Musiri Yagnarama Somayaji Dīkṣitar</span></li>
+    <li><b>Vaiśākha Māsa Māhātmya</b> — Skanda Purāṇa, and the near twin of the
+    Kārtika atlas already here: a month's māhātmya of comparable length, in the
+    same corpus. Expounded by <i>both</i> reciters, so it should carry two lanes
+    as Kārtika does.
+    <span class="who">Musiri Yagnarama Somayaji Dīkṣitar · Pondicherry
+    Vaisampayanar</span></li>
+    <li><b>Māgha Māsa Māhātmya</b> — Padma Purāṇa, not Skanda, and a run of
+    chapters inside a far larger <i>khaṇḍa</i> rather than a section of its own.
+    That is a shape this site does not yet have. Also expounded by both.
+    <span class="who">Musiri Yagnarama Somayaji Dīkṣitar · Pondicherry
+    Vaisampayanar</span></li>
+  </ul>
+  <div class="note">
+    <p>A <i>Tulā Kāverī</i> māhātmya is not on that list, and the reason is
+    worth stating rather than leaving as a silence: the verses it turns on
+    already stand in the Kārtika atlas, at adhyāya 4. It may prove to be a
+    reading of what is published here rather than a text of its own.</p>
   </div>
 </section>
 
