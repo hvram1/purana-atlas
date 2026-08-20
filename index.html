@@ -55,6 +55,10 @@ header{border-bottom:1px solid var(--line);padding-bottom:1.75rem;margin-bottom:
 h1{font-family:var(--serif);font-size:2.1rem;line-height:1.2;margin:0 0 .5rem;
    font-weight:600;letter-spacing:-.01em}
 .sub{color:var(--ink2);font-size:1.02rem;max-width:44rem;margin:0}
+.sub.why{margin-top:.7rem;font-size:.95rem;color:var(--muted)}
+.sub a{font-weight:600;text-decoration:none;
+  border-bottom:1px solid color-mix(in srgb,var(--accent) 35%, transparent)}
+.sub a:hover{border-bottom-color:var(--accent)}
 .lede{color:var(--ink2);font-size:.97rem;max-width:44rem}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));
        gap:1.25rem;margin:2rem 0 2.5rem}
@@ -111,6 +115,9 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
   <p class="sub">Two Sanskrit texts, each verse tied to the second it is chanted
   in a recorded <i>upanyāsam</i>. Click a verse, hear it. <a href="#soon">Five
   more are in hand.</a></p>
+  <p class="sub why">They are built to argue for two things the Purāṇas still
+  lack: recitation that is <i>addressable</i> at the verse, and an <i>index of
+  names</i> across the corpus. <a href="#why">Read the two proposals →</a></p>
 </header>
 
 <div class="cards" id="cards"></div>
@@ -180,7 +187,7 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
   </div>
 </section>
 
-<section>
+<section id="why">
   <h3>Why this exists</h3>
   <p>These two atlases are the working proof behind two proposals. They share a
   corpus, and each is worth more with the other: one would make the Purāṇas
