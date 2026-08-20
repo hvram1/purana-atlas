@@ -238,6 +238,44 @@ def sizes(path):
     return raw, gz
 
 
+# The Sanskrit is self-hosted, not asked of the visitor's machine and not
+# fetched from Google. Every page declares @font-face against these files by a
+# RELATIVE path -- `fonts/` from the root, `../fonts/` from docs/ -- so the
+# site keeps working from any subdirectory and keeps making exactly one
+# off-site request, the YouTube iframe API.
+FONTS = ("NotoSerifDevanagari.woff2", "OFL.txt")
+
+
+def copy_fonts(src, check):
+    """Ship the webfont, and refuse to ship a page that cannot reach it.
+
+    A missing font file does not fail loudly at runtime -- it silently falls
+    back to whatever the visitor has, which is the boxes this replaced. So the
+    absence is checked here, where it is still cheap to fix.
+    """
+    dst_dir = os.path.join(HERE, "fonts")
+    os.makedirs(dst_dir, exist_ok=True)
+    bad = 0
+    print("\nfonts")
+    for name in FONTS:
+        dst = os.path.join(dst_dir, name)
+        if not check:
+            s = os.path.join(src, "fonts", name)
+            if not os.path.exists(s):
+                bad += fail("missing in the workbench: %s" % s)
+                continue
+            shutil.copyfile(s, dst)
+        if not os.path.exists(dst):
+            bad += fail("fonts/%s is not here" % name)
+            continue
+        print("    %-36s %6.2f MB" % (name, os.path.getsize(dst) / 1e6))
+    if os.path.exists(os.path.join(dst_dir, FONTS[0])):
+        with open(os.path.join(dst_dir, FONTS[0]), "rb") as fh:
+            if fh.read(4) != b"wOF2":
+                bad += fail("fonts/%s is not a woff2 file" % FONTS[0])
+    return bad
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--check", action="store_true",
@@ -258,6 +296,7 @@ def main():
     os.makedirs(data_dir, exist_ok=True)
     bad, total_raw, total_gz = bad_url, 0, 0
     stats = {}
+    bad += copy_fonts(a.src, a.check)
 
     for page, four_name, sub_name in ATLASES:
         key = page.split("-")[0]

@@ -5,6 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kārtika Māsa Māhātmya atlas</title>
 <style>
+/* Noto Serif Devanagari, SELF-HOSTED. The Sanskrit must not depend on a
+   font the visitor happens to have installed, and it must not depend on a
+   third party either: this site's only off-site request is the YouTube iframe
+   API, and a fonts.googleapis.com <link> would have made it two.
+   One variable file covers every weight. SIL OFL 1.1 -- see fonts/OFL.txt.
+   unicode-range is Devanagari only, so Latin still falls through to the rest
+   of the stack, which is what the page has always shown. */
+@font-face{
+  font-family:"Noto Serif Devanagari";
+  src:url("fonts/NotoSerifDevanagari.woff2") format("woff2");
+  font-weight:100 900;
+  font-style:normal;
+  font-display:swap;
+  unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,
+                U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09;
+}
+
 :root{
   --miss:#a8562b;--miss-bg:#fbf1ea;
   --bg:#f7f4ee;--panel:#fffdf9;--sunk:#f1ece2;--line:#e2dace;--line2:#efe9dd;
@@ -485,7 +502,32 @@ const playable = l => !l.sim && !l.nourl;
 // are not, "can this be played" is a question about the episode behind THIS
 // occurrence, not about the lane as a whole.
 const hasUrl = epId => { const e=episode(epId); return !!(e&&e.yt); };
-const occPlayable = (l,o) => !l.sim && !o.sim && hasUrl(o.ep);
+// WHY a mark cannot be played, or null if it can. Three reasons that used to
+// collapse into one "not uploaded yet" message, which was wrong for the third.
+//
+// `zw` is a ZERO-WIDTH detection: detected_span was [t, t] -- an onset with no
+// extent measured at all. It is a boundary, not a recitation. Seeking to it
+// drops the listener wherever the episode happened to be at that instant: for
+// 1.12 that was 356.31s of kmm-11, in the middle of adhyaya 13's exposition,
+// so playing it landed you in 13.22's `श्रीकृष्ण उवाच` and ran on into 13.23.
+// The onset is real and stays on screen; it is not somewhere to send a player.
+//
+// This hides no measured recitation. All 28 verses it makes unplayable were
+// reached ONLY by such markers -- not one was ever seated by either speaker,
+// and two of them (4.1 `ब्रह्मोवाच`, 4.56 `गङ्गोवाच`) are the sandhi'd speaker
+// forms matcher.py's own SPEAKER filter documents itself as missing.
+const whyUnplayable = (l,o) =>
+  (l.sim||o.sim) ? 'sim' : !hasUrl(o.ep) ? 'nourl' : o.zw ? 'zw' : null;
+const occPlayable = (l,o) => !whyUnplayable(l,o);
+const unplayableNote = (l,o) => {
+  const w=whyUnplayable(l,o);
+  if(w==='sim') return laneNote(l);
+  if(w==='zw') return l.name+' — the onset here was detected, but no duration '
+    +'was measured. This marks a boundary, not a recitation, so there is '
+    +'nothing to play from it.';
+  return l.name+' chanted this — part '+o.ep.replace(/^[a-z]+-0*/,'')
+    +' is not uploaded yet.';
+};
 const laneOcc = (v,l) => ((v.lang[l.id]||{}).occ)||[];
 const anyPlayable = v => V.langs.some(l=>laneOcc(v,l).some(o=>occPlayable(l,o)));
 const laneNote = l => l.nourl
@@ -745,14 +787,16 @@ function band(v,ref){
         const m=el('button','mk'+(o.sim?' sim':'')+(o.part?' part':'')+(o.cf?' cf':''));
         m.dataset.ref=ref;m.dataset.l=l.id;m.dataset.i=i;
         m.textContent=o.ep.replace(/^[a-z]+-/,'')+' · '+mmss(o.s);
-        if(!occPlayable(l,o)){m.title=(l.sim?laneNote(l)
+        if(!occPlayable(l,o)){const w=whyUnplayable(l,o);
+          m.title=(w==='sim'?laneNote(l)
+              :w==='zw'?l.name+' — '+(l.speaker||'')+'. Part '
+               +o.ep.replace(/^[a-z]+-0*/,'')+partTitle(o)
               :l.name+' — '+(l.speaker||'')+'. Part '
                +o.ep.replace(/^[a-z]+-0*/,'')+' is not uploaded yet.')
             +(o.conf!=null?'\nconf '+o.conf:'')
-            +(l.nourl?'\nThe onset is measured; only the upload is missing.':'');
-          m.onclick=()=>toast(l.sim?laneNote(l)
-              :l.name+' chanted this — part '+o.ep.replace(/^[a-z]+-0*/,'')
-               +' is not uploaded yet.');}
+            +(w==='nourl'&&l.nourl
+                ?'\nThe onset is measured; only the upload is missing.':'');
+          m.onclick=()=>toast(unplayableNote(l,o));}
         else{m.title='Part '+o.ep.replace('vp-','')+' at '+mmss(o.s)
           +(o.conf!=null?'\nconf '+o.conf:'')
           +(o.part?partTitle(o):'')
@@ -1078,9 +1122,7 @@ function play(ref,lid,i){
   const v=V.verses[ref],rec=v&&v.lang[lid];if(!rec||!rec.occ)return;
   const o=rec.occ[i];if(!o)return;
   const L0=V.langs.find(l=>l.id===lid)||{};
-  if(!occPlayable(L0,o)){toast(L0.sim?laneNote(L0)
-      :L0.name+' chanted this — part '+o.ep.replace(/^[a-z]+-0*/,'')
-       +' is not uploaded yet.');return;}
+  if(!occPlayable(L0,o)){toast(unplayableNote(L0,o));return;}
   const ep=episode(o.ep),cs=(TL[lid]||{})[o.ep];
   // 'Player not ready yet' was the message for a missing URL too, which is a
   // different fact and not one waiting will fix.
@@ -1139,8 +1181,8 @@ function buildSwitch(ref,cur){
     b.textContent=l.native;b.style.color='var(--'+l.id+')';
     if(!rec){b.disabled=true;b.title=l.native+' does not reach this verse';}
     else if(!rec.occ.some(o=>occPlayable(l,o))){
-      b.disabled=true;b.title=laneNote(l)||(l.name+' reaches this verse, but '
-        +'that part is not uploaded yet.');}
+      b.disabled=true;
+      b.title=laneNote(l)||unplayableNote(l,rec.occ[0]);}
     else b.onclick=()=>play(ref,l.id,rec.occ.findIndex(o=>occPlayable(l,o)));
     box.appendChild(b);
   });

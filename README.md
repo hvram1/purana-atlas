@@ -117,10 +117,14 @@ than live on the page.
 - **The video ids are in the JSON in plain text.** Publishing the atlas makes
   unlisted uploads effectively findable. That is usually what you want here, but
   it should be a decision rather than a surprise.
-- **Devanagari needs a font on the visitor's machine.** The pages ask for Noto
-  Serif Devanagari and fall back to whatever is installed; a machine with
-  nothing suitable shows boxes. Adding a webfont is a one-line change to each
-  page if that matters.
+- **Devanagari is self-hosted.** `fonts/NotoSerifDevanagari.woff2` (127 KB, one
+  variable file, SIL OFL 1.1) is shipped with the site and declared `@font-face`
+  in each page by a relative path. Nothing is asked of the visitor's machine and
+  nothing of Google Fonts, so the site still makes exactly one off-site request:
+  the YouTube iframe API. The file is copied in from the workbench by
+  `refresh.py`, which refuses to publish if it is missing or not a woff2.
+  `unicode-range` covers Devanagari only, so Latin still uses the rest of the
+  stack.
 
 ## The two proposals
 

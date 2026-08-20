@@ -9,6 +9,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Two Sanskrit texts, each verse aligned to the second in a recorded upanyāsam.">
 <style>
+/* Noto Serif Devanagari, SELF-HOSTED. The Sanskrit must not depend on a
+   font the visitor happens to have installed, and it must not depend on a
+   third party either: this site's only off-site request is the YouTube iframe
+   API, and a fonts.googleapis.com <link> would have made it two.
+   One variable file covers every weight. SIL OFL 1.1 -- see fonts/OFL.txt.
+   unicode-range is Devanagari only, so Latin still falls through to the rest
+   of the stack, which is what the page has always shown. */
+@font-face{
+  font-family:"Noto Serif Devanagari";
+  src:url("fonts/NotoSerifDevanagari.woff2") format("woff2");
+  font-weight:100 900;
+  font-style:normal;
+  font-display:swap;
+  unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,
+                U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09;
+}
+
 :root{
   --bg:#f7f4ee;--panel:#fffdf9;--sunk:#f1ece2;--line:#e2dace;
   --ink:#282320;--ink2:#4a423b;--muted:#857a6e;--faint:#a99e90;
@@ -115,9 +132,9 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
     that will run <code>youtube.com/iframe_api</code>. Everything else — the
     text, the divisions, the measured timings — is served from this site and
     works offline once loaded.</p>
-    <p>The Sanskrit is set in Noto Serif Devanagari if your system has it.
-    Without a Devanagari font installed you will see boxes where the verses
-    should be.</p>
+    <p>The Sanskrit is set in Noto Serif Devanagari, which the site serves
+    itself — you do not need a Devanagari font installed, and the page asks
+    no third party for one.</p>
   </div>
 </section>
 

@@ -6,6 +6,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Commissioning recitation of the Purāṇas that is addressable at the verse from the moment it is recorded.">
 <style>
+/* Noto Serif Devanagari, SELF-HOSTED. The Sanskrit must not depend on a
+   font the visitor happens to have installed, and it must not depend on a
+   third party either: this site's only off-site request is the YouTube iframe
+   API, and a fonts.googleapis.com <link> would have made it two.
+   One variable file covers every weight. SIL OFL 1.1 -- see ../fonts/OFL.txt.
+   unicode-range is Devanagari only, so Latin still falls through to the rest
+   of the stack, which is what the page has always shown. */
+@font-face{
+  font-family:"Noto Serif Devanagari";
+  src:url("../fonts/NotoSerifDevanagari.woff2") format("woff2");
+  font-weight:100 900;
+  font-style:normal;
+  font-display:swap;
+  unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,
+                U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09;
+}
+
   /* ── tokens: light is the base, both dark states redefine only these ───── */
   :root{
     --paper:#ECEFEF;
@@ -22,7 +39,7 @@
     --madder-soft:#F0E0DC;
     --shadow:0 1px 2px rgba(21,32,42,.06), 0 8px 24px -12px rgba(21,32,42,.18);
 
-    --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua","URW Palladio L",Georgia,serif;
+    --serif:"Noto Serif Devanagari","Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua","URW Palladio L",Georgia,serif;
     --mono:ui-monospace,"SF Mono","Cascadia Mono","JetBrains Mono",Menlo,Consolas,"Liberation Mono",monospace;
 
     --measure:68ch;
