@@ -776,10 +776,18 @@ function quoteLayer(qs){
     // Show the epic address too when the display name replaced it, so the
     // citation a reader knows and the one that resolves are both on screen.
     if(q.as&&q.as!==q.cit) r.appendChild(el('span','qalso',q.cit));
-    const at=el('button','qat',q.ep.replace(/^[a-z]+-0*/,'')+' · '+mmss(q.s));
-    at.title='Play from '+mmss(q.s)+' in part '+q.ep.replace(/^[a-z]+-0*/,'');
-    at.onclick=e=>{e.stopPropagation();playQuote(q);};
-    r.appendChild(at);
+    // One chip per onset. A quotation record is a hemistich, so a two-line
+    // verse arrives twice and the reciter may re-chant it besides; the builder
+    // folds those into one entry and keeps every onset, because each is a real
+    // second to listen from. The first is the verse; the rest are `punaḥ`.
+    const part=q.ep.replace(/^[a-z]+-0*/,'');
+    (q.at||[q.s]).forEach((t,j)=>{
+      const at=el('button','qat',j?mmss(t):part+' · '+mmss(t));
+      at.title=j?'Chanted again at '+mmss(t)+' — punaḥ'
+               :'Play from '+mmss(t)+' in part '+part;
+      at.onclick=e=>{e.stopPropagation();playQuote({ep:q.ep,s:t});};
+      r.appendChild(at);
+    });
     if(q.txt) r.appendChild(el('p','qtxt',esc(q.txt)));
     n.appendChild(r);
   });
