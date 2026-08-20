@@ -136,6 +136,22 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
 .layer{margin:0 0 11px;padding-left:13px;border-left:2px solid var(--line)}
 .layer.sa{border-left-color:var(--sa)}.layer.en{border-left-color:var(--en)}
 .layer.bd{border-left-color:var(--bd)}
+/* Quoted from OUTSIDE this grantha. Dashed, because unlike the three layers
+   above it is not this verse -- it is what the speaker reached for while
+   expounding it. */
+.layer.q{border-left:2px dashed var(--muted)}
+.q .qr{display:flex;flex-wrap:wrap;align-items:baseline;gap:.35rem .6rem;
+  margin:0 0 5px;font-size:13px}
+.q .qcit{font-weight:600;color:var(--ink)}
+.q .qcit a{color:inherit;text-decoration:none;border-bottom:1px solid var(--line)}
+.q .qcit a:hover{border-bottom-color:var(--accent);color:var(--accent)}
+.q .qalso{color:var(--faint);font-size:11px;font-family:var(--mono)}
+.q .qtxt{font-family:var(--serif);font-size:14.5px;color:var(--ink2);
+  line-height:1.75;flex:1 1 100%;margin:0}
+.q .qat{font-family:var(--mono);font-size:11px;color:var(--muted);
+  background:var(--sunk);border:1px solid var(--line);border-radius:4px;
+  padding:1px 5px;cursor:pointer}
+.q .qat:hover{border-color:var(--accent);color:var(--accent)}
 .layer .lbl{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);
   margin-bottom:4px;font-weight:600}
 .layer.sa .txt{font-family:var(--serif);font-size:17px;line-height:1.9}
@@ -457,7 +473,12 @@ Promise.all([fetch('data/kartika_4lang.json').then(r=>r.json()),
    V.verses={};
    for(const r in (A.text||{})){
      const t=A.text[r],p=r.split('.');
-     V.verses[r]={ch:+p[0],v:+p[1],sa:t.sa,en:t.en,lang:(audio[r]||{}).lang||{}};
+     // Take `lang` AND `q` off the audio record. A fixed key list here is the
+     // same trap the builder's five-key projection was: anything 4lang starts
+     // carrying is dropped on arrival, and nothing errors when it is.
+     const a=audio[r]||{};
+     V.verses[r]={ch:+p[0],v:+p[1],sa:t.sa,en:t.en,lang:a.lang||{},
+                  ...(a.q?{q:a.q}:{})};
    }
    if(A.chapters)V.chapters=A.chapters;
    // An audio lane for a verse the text does not contain is a mismatch to
@@ -726,9 +747,66 @@ function verse(ref){
   // The banner says it once instead.
   if(v.bd) node.appendChild(el('div','layer bd',
     '<div class="lbl">भावदीप · नीलकण्ठ</div><div class="txt">'+esc(v.bd)+'</div>'));
+  if(v.q&&v.q.length) node.appendChild(quoteLayer(v.q));
   if(show.band) node.appendChild(band(v,ref));
   bindEnts(node);
   return node;
+}
+
+// What the speaker quoted from OUTSIDE this grantha while expounding a verse.
+//
+// Deliberately NOT a lane mark. A mark asserts `this text was chanted at this
+// second`; a Gītā verse in the middle of Kārtika 13.39 is the opposite claim.
+// So it gets its own dashed layer, below the text and above the lanes.
+//
+// The citation carries two names where the index's address is not the one a
+// reader knows: the Gītā is inside the Mahābhārata, so it is indexed as
+// Bhīṣmaparva and shown as both. The link goes to the source the identifier
+// matched against.
+function quoteLayer(qs){
+  const n=el('div','layer q');
+  n.appendChild(el('div','lbl','quoted here · '+qs.length
+    +(qs.length===1?' passage':' passages')));
+  qs.forEach((q,i)=>{
+    const r=el('div','qr');
+    const name=q.as||q.cit;
+    r.appendChild(el('span','qcit', q.url
+      ? '<a href="'+esc(q.url)+'" target="_blank" rel="noopener">'+esc(name)+'</a>'
+      : esc(name)));
+    // Show the epic address too when the display name replaced it, so the
+    // citation a reader knows and the one that resolves are both on screen.
+    if(q.as&&q.as!==q.cit) r.appendChild(el('span','qalso',q.cit));
+    const at=el('button','qat',q.ep.replace(/^[a-z]+-0*/,'')+' · '+mmss(q.s));
+    at.title='Play from '+mmss(q.s)+' in part '+q.ep.replace(/^[a-z]+-0*/,'');
+    at.onclick=e=>{e.stopPropagation();playQuote(q);};
+    r.appendChild(at);
+    if(q.txt) r.appendChild(el('p','qtxt',esc(q.txt)));
+    n.appendChild(r);
+  });
+  return n;
+}
+
+// A quotation is played on whichever lane owns that episode -- an episode
+// belongs to exactly one speaker, and TL is keyed that way. Unlike play() there
+// is no cue INDEX to jump to: the quotation is not one of this text's verses.
+// cueAt() gives the verse whose exposition it fell in, which is what the
+// transport should be showing while it plays.
+function playQuote(q){
+  const ep=episode(q.ep);
+  if(!ep||!ep.yt){toast('Part '+(ep?ep.n:q.ep.replace(/^[a-z]+-0*/,''))
+    +' is not uploaded yet, so this quotation cannot be played.');return;}
+  const lid=(V.langs.find(l=>(TL[l.id]||{})[q.ep])||{}).id;
+  const cs=lid?(TL[lid]||{})[q.ep]:null;
+  if(!cs||!player||!player.loadVideoById){toast('Player not ready yet.');return;}
+  const same=playing&&playing.ep.id===ep.id;
+  restoreMula();
+  playing={lid,ep,cues:cs,idx:-2,ref:null,o:null,state:null};
+  const at=Math.max(0,q.s-0.4);
+  if(same){player.seekTo(at,true);player.playVideo();}
+  else player.loadVideoById({videoId:ep.yt,startSeconds:at});
+  $('#ytwrap').classList.remove('hide');
+  showCue(Math.max(0,cueAt(cs,q.s)),{hard:true});
+  clearInterval(ticker);ticker=setInterval(tick,120);
 }
 
 function bindEnts(root){
