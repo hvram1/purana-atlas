@@ -143,14 +143,101 @@ footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem
     <p>The question everyone asks first</p></div>
   <div class="body">
     <h2>Why not simply a wiki?</h2>
-    <p>Dharmawiki, Hindupedia, and the Sanskrit-topic pages of the general
-    encyclopaedias already carry a great deal of Paurāṇic material, some of it
-    written with real care. The difference proposed here is not diligence. It is
-    <strong>checkability</strong>.</p>
-    <p>On a wiki a page is a document and a citation is a string typed into that
-    document by hand. <span class="fig">Skanda Purāṇa, Kārtika Māhātmya 13.4</span>
-    <em>looks</em> like an address, but nothing dereferences it, nothing tests
-    it, and nothing fails when it is wrong. There is no build that can go red.</p>
+    <p>Hindupedia, Dharmawiki and the Sanskrit-topic pages of the general
+    encyclopaedias already carry a great deal of Paurāṇic material, much of it
+    written with real care by serious scholars. The difference proposed here is
+    not diligence. It is <strong>checkability</strong>, and it is worth
+    demonstrating on a real page rather than asserting.</p>
+    <p>Hindupedia's article on Satyabhāmā, by Swami Harshananda, tells the
+    story of her previous birth — that she was Guṇavatī, daughter of the
+    brāhmaṇa Devaśarman, and was reborn as Kṛṣṇa's queen through her devotion.
+    The article is accurate. Its References section, in full, reads:</p>
+    <div class="panel">
+      <div class="hd"><span class="hw">References</span>
+        <span class="tag m">quoted in full</span></div>
+      <p class="fig">1. Pārijāta means night jasmine.</p>
+      <p class="s" style="color:var(--ink-3);font-size:.88rem">The only source
+      given for the article is a secondary work — the author's own
+      <em>Concise Encyclopaedia of Hinduism</em>.</p>
+    </div>
+    <p>That source is followable: its publisher hosts the book online. Follow
+    it, and the entry is four paragraphs of the same prose.
+    <strong>No Purāṇa is named. No chapter. No verse.</strong> The chain runs
+    from a wiki to a reference work and stops there, one step short of the text
+    it is describing.</p>
+    <p>Two details of that copy are worth a moment, because they are the kind of
+    thing this project exists to make visible. The printed entry reads
+    <em>“the pārijāta (night jasmine) tree”</em> — so the wiki's entire
+    scholarly apparatus turns out to be <strong>a parenthesis from its source,
+    promoted to a numbered footnote</strong>. And the transcription is verbatim
+    down to a misprint the two share, <span class="fig">Kṛṣna</span> for
+    <span class="fig">Kṛṣṇa</span>. A common error is exactly how a copy is
+    detected — it is how the descent of manuscripts is traced — and here it is
+    doing that work between a wiki and a book, in public, with nobody
+    watching.</p>
+    <p>None of which is a failure by Swami Harshananda. A concise encyclopaedia
+    is not a critical apparatus and was never offered as one; omitting citations
+    is the genre working as intended. It becomes a problem only when the genre
+    is <em>all there is</em> — when the compression is the last surviving step,
+    and the address it dropped was never recorded anywhere a reader can reach.</p>
+    <p>Meanwhile the passage itself is not lost at all. It stands at Kārtika
+    Māsa Māhātmya 13, in Sanskrit, verse by verse, and in this corpus it has a
+    measured onset in a recording.</p>
+    <p>Set the two side by side and something worse than a missing citation
+    appears. The encyclopaedia gives the cause of her rebirth as
+    <em>“her purity of life, austerities and devotion to Viṣṇu.”</em> The
+    chapter's own Sanskrit heading gives it as
+    <span class="dv">कार्तिकव्रतपुण्येन</span> — <strong>by the merit of the
+    Kārtika observance</strong> — and the verse itself says she performed that
+    vrata, <span class="dv">पुण्यव्रतं कृतवती</span>. In a work whose entire
+    purpose is to glorify one observance, the retelling has dissolved that
+    observance into general piety. The operative fact is the casualty.</p>
+    <p><strong>And without the address, nobody can see that this happened.</strong>
+    That is the case for citing to the verse, made by a single example rather
+    than by argument. The story survived the retelling; its address did not; and
+    because the address did not, neither did the claim.</p>
+    <p>And the sources that do give an address disagree: chapter-by-chapter
+    translations place the episode at Skanda Purāṇa, Kārtika Māhātmya 13, other
+    retellings say 21, and some attribute it to the Padma Purāṇa's Uttara
+    Khaṇḍa instead. <strong>That disagreement cannot be settled without a verse
+    address</strong>, and no amount of prose supplies one.</p>
+    <p>This is the structural difference, not a failure of care. On a wiki a
+    page is a document and a citation is a string typed into it by hand.
+    <span class="fig">Skanda Purāṇa, Kārtika Māhātmya 13.4</span> <em>looks</em>
+    like an address, but nothing dereferences it, nothing tests it, and nothing
+    fails when it is wrong. There is no build that can go red.</p>
+
+    <h3>Which suggests something to give back</h3>
+    <p>A corpus that is addressed at the verse can settle other people's
+    citations, and that is worth more to the field than another set of pages.
+    The disagreement above took one lookup to resolve: a chapter-by-chapter
+    translation's verses 1, 2–3 and 4–6 correspond exactly to this corpus's
+    13.1, 13.2 and 13.4, so chapter 13 is right and the rival attribution is
+    not.</p>
+    <p>Note the shape of that correspondence, because it is the whole method.
+    The chapter numbers agree but the <strong>segmentation does not</strong> —
+    a translation prints as one unit what the text divides into three. Joining
+    verse <em>n</em> to verse <em>n</em> therefore drifts silently at every
+    merge, which is a defect this project has already shipped once, with a
+    different translation, and had to fix by matching on the text instead. So
+    the join is <strong>content-addressed</strong>: two passages are the same
+    passage when the Sanskrit says so, never when the numbering does.</p>
+    <p>What that yields is a <em>resolver</em> — give it a loose citation or a
+    quoted half-verse, and it returns the address, the Sanskrit standing there,
+    and, where a recording exists, the second at which it is chanted. The same
+    machinery makes the expounders' cross-references in
+    <span class="fig">VII</span> followable, since those are loose citations
+    too. It is a by-product of having built the index, not a second project.</p>
+    <p>Three limits keep it honest. A resolver links to another site's
+    <em>text</em> pages, where a chapter and a translator are named; it must
+    never take that site's aggregated name-pages as an index, for the reason
+    set out in <span class="fig">IV</span>. Translations in copyright cannot be
+    absorbed, only <strong>linked</strong> — which is the correct relationship anyway, and
+    it means a Purāṇa this site carries no translation for can still hand a
+    reader one, verse by verse, without holding a word of it. And a mapping to
+    somebody else's page numbers has to be stored with the text that justified
+    it, so that when their site is reorganised the link can be rebuilt rather
+    than merely lost.</p>
     <div class="split">
       <div class="side them">
         <span class="k">on a wiki</span>
@@ -273,16 +360,37 @@ footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem
     <p>An index that never decides is a concordance. Sorensen's worth is that he
     <em>did</em> decide — four Parikṣits, seven Ugrasenas, divided and glossed —
     and that a century later you can see what he decided and on what evidence.</p>
+
+    <h3>The difference is visible in public, at scale</h3>
+    <p>This is not a hypothetical distinction, and it can be checked in about
+    ten seconds. <a href="https://www.wisdomlib.org/definition/vishnu">Wisdom
+    Library's page for <i>Viṣṇu</i></a> assembles some fifty-nine definitions
+    drawn from many texts and dictionaries across eight traditions — Vaiṣṇava,
+    Purāṇic, Śaiva, Jain, Buddhist, and six language lexicons — each snippet
+    carefully attributed to where it came from. It is substantial, genuinely
+    useful work over a corpus far larger than this one, and it is free.</p>
+    <p>And it lists the god, the author of a dharmaśāstra, and <em>fire</em> in
+    one undivided run, because separating them is not a thing aggregation can
+    do. <strong>That is a concordance, and an excellent one.</strong> The step
+    it does not take is the step this proposal is entirely about.</p>
+    <p>Read the right way round, that is the strongest available argument for
+    funding the reading. The automated half of this work has already been
+    demonstrated at scale, publicly and for free, by someone else. It did not
+    produce an index — because sense-division is a judgement, and judgements are
+    made by people who have read the passage. Sorensen made those judgements for
+    one text, a hundred years ago, and no one has made them since for
+    anything larger.</p>
   </div>
 </section>
 
 <section>
   <div class="marg"><span class="num">V</span>
-    <p>Two figures everyone knows, in two stories almost nobody does</p></div>
+    <p>Retold everywhere, addressed almost nowhere</p></div>
   <div class="body">
     <h2>What a scholar is handed</h2>
     <p>Take two of the best-known figures in the tradition, and two passages
-    about them that are not part of what anybody knows.</p>
+    about them that are told again and again without anyone saying where they
+    are told.</p>
     <div class="panel">
       <div class="hd">
         <span class="hw">Satyabhāmā</span>
@@ -294,6 +402,11 @@ footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem
       answers by telling her of her former birth. The chapter's own Sanskrit
       heading says so outright: that she obtained the standing of Kṛṣṇa's wife
       <em>through the merit of the Kārtika observance in a previous life</em>.</p>
+      <p>The story itself is not obscure; it is retold in reference works and
+      across the web. <strong>What is almost never given is where it stands.</strong>
+      Here it is a verse, in Sanskrit, with a number — and, in the atlas, a
+      second in a recording. That is the whole of what this project adds to a
+      story the tradition already knew.</p>
       <p class="s" style="color:var(--ink-3);font-size:.88rem">In the recording,
       the verse where he begins — <span class="dv">शृणुष्वैकमनाः कान्ते</span>,
       <em>listen with a single mind, beloved</em> — is seated in the waveform to
@@ -386,25 +499,50 @@ footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem
     <div class="panel">
       <div class="hd">
         <span class="hw">Scenario one</span>
-        <span class="tag m">undergraduate · one week · no Sanskrit required</span>
+        <span class="tag m">undergraduate · one term · no Sanskrit required</span>
       </div>
-      <p><strong>The assignment.</strong> <em>Write two pages on Uttarā, and
-      cite every claim to a verse.</em></p>
-      <p><strong>What the student meets.</strong> Seven different entries claim
-      the string she is named by. One is her brother. One is an epithet of
-      Viṣṇu. <strong>One is the direction north.</strong> Before writing a
-      sentence the student has learnt something no lecture conveys as well: a
-      name in Sanskrit is a set, not a label — and the tool refuses to choose
-      for them.</p>
-      <p><strong>Where it leads.</strong> Uttarā's own entry reads
-      <em>daughter of Virāṭa, wife of Abhimanyu, mother of Parikṣit</em>. Follow
-      that and the student walks from a dancing lesson in a disguised court to
-      the child revived in the womb, to Parikṣit, to Janamejaya — to the man the
-      whole epic is being recited to. The frame of the Mahābhārata, arrived at
-      from one minor character, by following citations rather than being told.</p>
-      <p><strong>What the corpus gets.</strong> A set of bookmarked verses with
-      a student's reading attached to each, and — where the student was sure —
-      a proposed identification of which Uttara stands where.</p>
+      <p><strong>The assignment.</strong> <em>Choose a figure nobody has
+      written up yet, and write a note on them in which every claim is cited to
+      a verse.</em></p>
+      <p><strong>Why the constraint is the point.</strong> Left to themselves,
+      students choose Arjuna, Bhīma, Draupadī — and those are precisely the
+      entries an index already handles well. The value is in the tail. So the
+      pool is not a list the teacher keeps; it is a
+      <strong>state of the data</strong>: a headword attested in the text with
+      no written entry behind it, and no ruling yet on who stands where. What is
+      taken shows as taken, and the same query that assigns the coursework
+      measures the coverage.</p>
+      <p><strong>How large the pool is.</strong> Counting only persons cited
+      between five and a hundred times in the epic — small enough to finish in a
+      term, large enough to have a story — and only those appearing in three or
+      more parvans, so the note is a thread rather than a mention:
+      <span class="fig">1,256</span> figures. It is not a shortage that has to
+      be rationed. It is a queue that coursework is capable of draining.</p>
+      <p><strong>What a good pick looks like.</strong> Not <em>Arjuna</em>, but
+      <em>Arjuna and Ulūpī</em>. The Nāga king Kauravya's daughter takes him to
+      her father's palace during his year of exile in the first book; twelve
+      books later she incites his own son Babhruvāhana to fight him, and when
+      Arjuna falls she revives him with the <em>saṃjīvana</em> gem and explains
+      the curse that had to be worked out that way; and she is still present at
+      the very end, in the book of the great departure. Twenty-eight verses,
+      twenty-three of them already cited by a philologist, spread across four
+      parvans out of eighteen. The references exist. <strong>The synthesis does
+      not.</strong> That is a term's work with a real result at the end of it.</p>
+      <p><strong>A different lesson, from a different pick.</strong> A student
+      who takes Uttarā — Virāṭa's daughter — finds instead that seven separate
+      entries claim the name she goes by. One is her brother. One is an epithet
+      of Viṣṇu. <strong>One is the direction north.</strong> Before writing a
+      sentence they have learnt what no lecture conveys as well: a name in
+      Sanskrit is a set, not a label, and the tool refuses to choose for them.
+      Following her own entry — <em>wife of Abhimanyu, mother of Parikṣit</em> —
+      carries them from a dancing lesson in a disguised court to the man the
+      whole epic is being recited to.</p>
+      <p><strong>What the corpus gets.</strong> A headword that had no entry now
+      has a drafted one, with every claim addressed to a verse; a set of
+      bookmarked passages with a reading attached to each; and, where the
+      student was sure, a proposed identification. A senior scholar is then
+      editing a draft rather than starting from nothing — which is the whole
+      difference between an index that gets built and one that stays proposed.</p>
     </div>
 
     <div class="panel">
@@ -474,11 +612,36 @@ footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem
     the verse genuinely does not say.</p>
 
     <h3>Why this is a fair exchange rather than free labour</h3>
-    <p>The student gets a corpus that answers back, a supervisor's correction on
-    real textual judgement, and a named credit in a published scholarly
-    apparatus — a route from study into research authorship that presently
-    barely exists. The project gets reading time it could not otherwise afford,
-    from readers who are already doing the reading.</p>
+    <p>The arrangement needs no defending on novel grounds, because it is not
+    novel. <strong>In this tradition, teaching and transmission were never
+    separate activities.</strong> A student who chanted the text was the
+    mechanism by which it survived; a student who copied a manuscript learned it
+    by copying, and the copy outlived them both. Nobody described that as
+    extracting labour from students, because the thing the student gained and
+    the thing the tradition gained were produced by one act. What is proposed
+    here is the same arrangement with the addresses made checkable.</p>
+    <p>Its nearest modern ancestor is the reference work this one is modelled
+    on. The <em>Oxford English Dictionary</em> was built by an appeal to
+    ordinary readers to send in quotation slips, and its most prolific readers
+    were named in its prefaces. Sorensen's index belongs to the same century and
+    the same method. This is not a technology company's model imported into
+    Sanskrit scholarship; it is how the great reference works of Sanskrit
+    scholarship's own period were actually made.</p>
+    <p>Its nearest modern <em>institution</em> is the teaching hospital, and
+    that is the comparison to hold the design to. Residents learn by treating
+    patients and patients are treated; the institution exists because the two
+    coincide. It also carries its safeguards with it — supervision, sign-off,
+    and nobody practising unsupervised — which are exactly the rules set out
+    above. <strong>The comparison you choose is the standard you are held
+    to</strong>, and this one demands the quarantine and the signature rather
+    than excusing them.</p>
+    <p>So: the student gets a corpus that answers back, a supervisor's
+    correction on real textual judgement, and a named credit in a published
+    scholarly apparatus — a route from study into research authorship that
+    presently barely exists. The project gets reading time it could not
+    otherwise afford, from readers who were going to do the reading anyway.
+    Where a contributor is a minor, the credit and the consent are a guardian's
+    to give, and the senior scholar's name stands on anything published.</p>
     <p>Neither side is doing the other a favour. That is the only arrangement of
     this kind that lasts more than one term.</p>
   </div>

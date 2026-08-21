@@ -60,6 +60,7 @@ import json
 import os
 import re
 import shutil
+from html.parser import HTMLParser
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -109,21 +110,70 @@ def check_fetches(page_path, expect):
     return bad
 
 
+# `url(...)` and `@import` inside CSS, which carry no `=` and so are invisible
+# to any check written against tag attributes alone.
+CSS_URL = re.compile(r'''(?:url\(|@import\s+)\s*['"]?\s*(https?://[^)'"\s]+)''')
+
+
 def check_selfcontained(path):
-    """No page may depend on a host we do not control, bar the YouTube API.
+    """No page may *load* from a host we do not control, bar the YouTube API.
 
     A webfont or stylesheet pulled from a CDN turns a page that works into a
     page that works until someone else's certificate expires -- and on a
     proposal being read by a reviewer offline, into a page that never worked.
+
+    A hyperlink in prose is not that, and the distinction is the whole point of
+    this site: a citation SHOULD point at the thing it cites. An <a href> to
+    another site loads nothing, breaks nothing offline, and is the one outbound
+    reference a document about checkable citations is obliged to make. So the
+    rule is by kind, not by string -- `src` anywhere and `href` on anything that
+    is not an anchor must be local; an anchor may point where it likes.
+
+    Outbound links are printed rather than passed over in silence, because a
+    page quietly acquiring them is worth seeing on every run.
     """
-    html = open(path, encoding="utf-8").read()
-    outside = {u for u in re.findall(r'(?:src|href)\s*=\s*["\'](https?://[^"\']+)',
-                                     html)
-               if "youtube.com/iframe_api" not in u}
+    class Scan(HTMLParser):
+        def __init__(self):
+            HTMLParser.__init__(self)
+            self.loads = set()
+            self.links = set()
+            self.in_style = False
+
+        def handle_starttag(self, tag, attrs):
+            if tag == "style":
+                self.in_style = True
+            for k, v in attrs:
+                if v and k == "style":
+                    self.loads.update(CSS_URL.findall(v))
+                if not v or not v.lower().startswith(("http://", "https://")):
+                    continue
+                if k == "href" and tag == "a":
+                    self.links.add(v)
+                elif k in ("src", "href", "data", "poster"):
+                    self.loads.add(v)
+
+        def handle_endtag(self, tag):
+            if tag == "style":
+                self.in_style = False
+
+        def handle_data(self, data):
+            # A @font-face `src:url(https://fonts.gstatic.com/...)` lives in CSS
+            # text, not in a tag attribute, so the tag walk above cannot see it.
+            # That is the exact failure this whole check exists to prevent -- the
+            # README promises the Devanagari is self-hosted -- and it went
+            # uncaught for as long as the check matched `src=` with an equals
+            # sign. Verified by breaking it.
+            if self.in_style:
+                self.loads.update(CSS_URL.findall(data))
+
+    scan = Scan()
+    scan.feed(open(path, encoding="utf-8").read())
+    outside = {u for u in scan.loads if "youtube.com/iframe_api" not in u}
     if outside:
-        return fail("%s loads from outside this site: %s"
-                    % (os.path.basename(path), sorted(outside)[:2]))
-    return 0
+        return (fail("%s loads from outside this site: %s"
+                     % (os.path.basename(path), sorted(outside)[:2])),
+                [])
+    return 0, sorted(scan.links)
 
 
 def check_4lang(path):
@@ -415,11 +465,13 @@ def main():
                                  if n.endswith(".html")]:
         path = os.path.join(HERE, rel)
         bad += check_fetches(path, ())
-        bad += check_selfcontained(path)
+        b, cites = check_selfcontained(path); bad += b
         bad += check_deeplinks(path, four_by_page)
         raw, gz = sizes(path)
         total_raw += raw; total_gz += gz
         print("    %-34s %7.2f MB raw  %6.2f MB gzip" % (rel, raw/1e6, gz/1e6))
+        for u in cites:
+            print("      %-32s cites %s" % ("", u))
 
     print("\nsite total  %.2f MB raw   %.2f MB over the wire (gzip)"
           % (total_raw / 1e6, total_gz / 1e6))
