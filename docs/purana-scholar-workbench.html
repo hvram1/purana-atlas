@@ -121,11 +121,81 @@ tr:last-child td{border-bottom:0}
 footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem;
        display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;font-family:var(--mono);
        font-size:.7rem;letter-spacing:.03em;color:var(--ink-3)}
+
+  /* ── added in the readability pass ──────────────────────────────────────
+     The note reached ~4,900 words with no way in. Four devices fix that:
+     a brief for the reader who will not read it, a contents for the one who
+     will read part of it, part dividers so twelve sections read as four
+     movements, and a claim line so the load-bearing sentence of a part is
+     visible while skimming. */
+  .brief{
+    background:var(--leaf);border:1px solid var(--rule);border-radius:3px;
+    padding:1.3rem 1.5rem;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;gap:.7rem;
+  }
+  .brief .eyebrow{margin-bottom:.15rem}
+  .brief ol{margin:0;padding-left:1.3rem;max-width:var(--measure)}
+  .brief li{margin:.42rem 0;font-size:.97rem;color:var(--ink-2)}
+  .brief li b{color:var(--ink);font-weight:600}
+
+  .contents{display:grid;gap:0;margin-top:.4rem}
+  .contents .grp{
+    font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--madder);
+    padding:.85rem 0 .3rem;border-bottom:1px solid var(--rule-soft);
+  }
+  .contents a{
+    display:grid;grid-template-columns:2.1rem minmax(0,1fr);
+    gap:.6rem;padding:.42rem 0;text-decoration:none;color:var(--ink-2);
+    border-bottom:1px solid var(--rule-soft);font-size:.95rem;
+  }
+  .contents a:hover{color:var(--indigo)}
+  .contents a span{
+    font-family:var(--mono);font-size:.78rem;color:var(--ink-3);
+    font-variant-numeric:tabular-nums;padding-top:.12rem;
+  }
+
+  .part{
+    display:grid;grid-template-columns:var(--rail) minmax(0,1fr);
+    column-gap:2.5rem;padding-block:3.2rem .4rem;
+    border-top:2px solid var(--madder);margin-top:1.2rem;
+  }
+  @media (max-width:760px){.part{grid-template-columns:1fr;row-gap:.5rem}}
+  .part .pn{
+    font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--madder);padding-top:.5rem;
+  }
+  .part h2{font-size:1.62rem;letter-spacing:-.01em}
+  .part p{color:var(--ink-2);font-size:1.02rem;margin-top:.45rem}
+
+  /* the sentence a skimmer must not miss */
+  .claim{
+    margin:.4rem 0 0;padding:1.15rem 0 0;border-top:1px solid var(--rule);
+    font-size:1.16rem;line-height:1.5;color:var(--ink);max-width:60ch;
+  }
+  .claim b{color:var(--madder);font-weight:600}
+
+  /* Scenario briefs are descriptions, not evidence. The .panel treatment is
+     reserved for quoted sources and worked headwords; if everything is a panel
+     then nothing is. */
+  .brief-card{
+    border:1px solid var(--rule);border-left:3px solid var(--indigo);
+    border-radius:0 3px 3px 0;background:var(--leaf-2);
+    padding:1.05rem 1.25rem;display:flex;flex-direction:column;gap:.6rem;
+  }
+  .brief-card .hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:.55rem}
+  .brief-card .hw{font-size:1.05rem;font-weight:600}
+  .brief-card p{font-size:.94rem}
+  .back{
+    font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-3);text-decoration:none;
+  }
+  .back:hover{color:var(--indigo)}
 </style>
 
 <div class="sheet">
 
-<header class="mast">
+<header class="mast" id="top">
   <div class="marg"><span class="num">NOTE</span></div>
   <div class="body">
     <p class="eyebrow">Working note · companion to the two proposals</p>
@@ -135,13 +205,59 @@ footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem
     to it, what it refuses to do, and why it is not a wiki.</p>
     <p class="lede">It is not itself a proposal. The instrument has to exist
     whether or not either proposal is funded, and most of it already does.</p>
+
+    <div class="brief">
+      <p class="eyebrow">The argument in five lines</p>
+      <ol>
+        <li>A story can be retold accurately for a century and still lose the
+        one thing that makes it checkable — <b>its address in the text</b>.</li>
+        <li>Machine aggregation supplies addresses at enormous scale and
+        <b>cannot divide senses</b>, which is what makes an index an index.</li>
+        <li>So the missing step is neither software nor scholarship in general.
+        It is <b>trained reading, recorded as signed decisions</b> over an
+        append-only log.</li>
+        <li>That reading can be <b>coursework</b>: reading a verse closely
+        enough to write about a figure is the same act as ruling on it.</li>
+        <li>Where a recording exists, the finished citation <b>plays</b> — which
+        nothing else in this field can offer.</li>
+      </ol>
+    </div>
+
+    <nav class="contents">
+      <div class="grp">One · Why the existing answers are not answers</div>
+      <a href="#s1"><span>1</span>A citation that leads nowhere</a>
+      <a href="#s2"><span>2</span>An aggregation that decides nothing</a>
+      <div class="grp">Two · What is made instead</div>
+      <a href="#s3"><span>3</span>An entry is a judgement with an address</a>
+      <a href="#s4"><span>4</span>What a scholar is handed</a>
+      <a href="#s5"><span>5</span>The upanyāsam is itself apparatus</a>
+      <div class="grp">Three · Who makes it</div>
+      <a href="#s6"><span>6</span>A wiki inward, an index outward</a>
+      <a href="#s7"><span>7</span>The classroom is the workshop</a>
+      <a href="#s8"><span>8</span>The chain of review, and where it stops</a>
+      <a href="#s9"><span>9</span>Why this is a fair exchange</a>
+      <div class="grp">Four · What it yields</div>
+      <a href="#s10"><span>10</span>Settling other people's citations</a>
+      <a href="#s11"><span>11</span>Watching it take shape</a>
+      <a href="#s12"><span>12</span>What exists, and what does not</a>
+    </nav>
   </div>
 </header>
 
-<section>
-  <div class="marg"><span class="num">I</span>
-    <p>The question everyone asks first</p></div>
+<div class="part">
+  <div class="pn">Part one</div>
+  <div>
+    <h2>Why the existing answers are not answers</h2>
+    <p>Both halves of the work already exist in public and have done for years. Neither half, alone, produces an index — and the reason is visible in two pages anyone can open.</p>
+  </div>
+</div>
+
+<section id="s1">
+  <div class="marg"><span class="num">1</span>
+    <p>Following one story to its source, and finding where it stops</p>
+    <a class="back" href="#top">↑ contents</a></div>
   <div class="body">
+    <h2>A citation that leads nowhere</h2>
     <h2>Why not simply a wiki?</h2>
     <p>Hindupedia, Dharmawiki and the Sanskrit-topic pages of the general
     encyclopaedias already carry a great deal of Paurāṇic material, much of it
@@ -206,126 +322,58 @@ footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem
     <span class="fig">Skanda Purāṇa, Kārtika Māhātmya 13.4</span> <em>looks</em>
     like an address, but nothing dereferences it, nothing tests it, and nothing
     fails when it is wrong. There is no build that can go red.</p>
-
-    <h3>Which suggests something to give back</h3>
-    <p>A corpus that is addressed at the verse can settle other people's
-    citations, and that is worth more to the field than another set of pages.
-    The disagreement above took one lookup to resolve: a chapter-by-chapter
-    translation's verses 1, 2–3 and 4–6 correspond exactly to this corpus's
-    13.1, 13.2 and 13.4, so chapter 13 is right and the rival attribution is
-    not.</p>
-    <p>Note the shape of that correspondence, because it is the whole method.
-    The chapter numbers agree but the <strong>segmentation does not</strong> —
-    a translation prints as one unit what the text divides into three. Joining
-    verse <em>n</em> to verse <em>n</em> therefore drifts silently at every
-    merge, which is a defect this project has already shipped once, with a
-    different translation, and had to fix by matching on the text instead. So
-    the join is <strong>content-addressed</strong>: two passages are the same
-    passage when the Sanskrit says so, never when the numbering does.</p>
-    <p>What that yields is a <em>resolver</em> — give it a loose citation or a
-    quoted half-verse, and it returns the address, the Sanskrit standing there,
-    and, where a recording exists, the second at which it is chanted. The same
-    machinery makes the expounders' cross-references in
-    <span class="fig">VII</span> followable, since those are loose citations
-    too. It is a by-product of having built the index, not a second project.</p>
-    <p>Three limits keep it honest. A resolver links to another site's
-    <em>text</em> pages, where a chapter and a translator are named; it must
-    never take that site's aggregated name-pages as an index, for the reason
-    set out in <span class="fig">IV</span>. Translations in copyright cannot be
-    absorbed, only <strong>linked</strong> — which is the correct relationship anyway, and
-    it means a Purāṇa this site carries no translation for can still hand a
-    reader one, verse by verse, without holding a word of it. And a mapping to
-    somebody else's page numbers has to be stored with the text that justified
-    it, so that when their site is reorganised the link can be rebuilt rather
-    than merely lost.</p>
-    <div class="split">
-      <div class="side them">
-        <span class="k">on a wiki</span>
-        <p class="s">A citation is text in a paragraph, verified by whichever
-        reader happens to check. A page is authored and edited; provenance means
-        knowing who last changed the wording. Where two traditions disagree, the
-        last editor decides.</p>
-      </div>
-      <div class="vs">against</div>
-      <div class="side us">
-        <span class="k">here</span>
-        <p class="s">A citation is an address into a machine-readable edition,
-        and the build refuses to publish one that does not resolve. A page is
-        <strong>derived</strong> — rebuilt nightly from evidence. Provenance
-        means knowing which decisions produced a claim, by whom, on what
-        grounds. Disagreement is recorded with both readings standing.</p>
-      </div>
-    </div>
-    <p>And one thing no wiki can offer at all: where a recording exists,
-    <strong>the citation plays</strong>. Kārtika 13.2 is not only a verse whose
-    Sanskrit can be printed. It is a named reciter, at a measured second, in a
-    recording anyone can open — which is what the
-    <a href="../kartika-atlas.html">atlases</a> on this site already do.</p>
   </div>
 </section>
 
-<section>
-  <div class="marg"><span class="num">II</span>
-    <p>Two audiences, one store</p></div>
+<section id="s2">
+  <div class="marg"><span class="num">2</span>
+    <p>The machine half, done at scale, in public</p>
+    <a class="back" href="#top">↑ contents</a></div>
   <div class="body">
-    <h2>A wiki inward, an index outward</h2>
-    <p>The wiki feeling belongs to the people <em>making</em> the index. Among
-    themselves they want exactly what a wiki gives: a page for each name, links
-    between them, somewhere to argue, and the sense of a thing taking shape.</p>
-    <p>Readers of the finished work get none of that model. They get an index —
-    typed headwords, sense divisions, glosses, verse-addressed citations, and
-    audio where it exists. Nobody outside sees a work queue or an undecided
-    span, except where the index deliberately publishes its own frontier.</p>
+    <h2>An aggregation that decides nothing</h2>
+    <p>This is not a hypothetical distinction, and it can be checked in about
+    ten seconds. <a href="https://www.wisdomlib.org/definition/vishnu">Wisdom
+    Library's page for <i>Viṣṇu</i></a> assembles some fifty-nine definitions
+    drawn from many texts and dictionaries across eight traditions — Vaiṣṇava,
+    Purāṇic, Śaiva, Jain, Buddhist, and six language lexicons — each snippet
+    carefully attributed to where it came from. It is substantial, genuinely
+    useful work over a corpus far larger than this one, and it is free.</p>
+    <p>And it lists the god, the author of a dharmaśāstra, and <em>fire</em> in
+    one undivided run, because separating them is not a thing aggregation can
+    do. <strong>That is a concordance, and an excellent one.</strong> The step
+    it does not take is the step this proposal is entirely about.</p>
+    <p>Read the right way round, that is the strongest available argument for
+    funding the reading. The automated half of this work has already been
+    demonstrated at scale, publicly and for free, by someone else. It did not
+    produce an index — because sense-division is a judgement, and judgements are
+    made by people who have read the passage. Sorensen made those judgements for
+    one text, a hundred years ago, and no one has made them since for
+    anything larger.</p>
+    <p>Put the two together and the shape of the problem is exact. A reference
+    work carries the judgement and drops the address. An aggregation carries the
+    address and declines the judgement. <strong>Neither is an entry, and each is
+    missing precisely what the other has.</strong></p>
+    <p class="claim">An index entry is the two joined: <b>a claim with an
+    address attached</b>. Sorensen settled that form in 1904. Nobody has redone
+    it since — for any corpus larger than the one he read.</p>
+
   </div>
 </section>
 
-<section>
-  <div class="marg"><span class="num">III</span>
-    <p>The cohort, and how it is picked</p></div>
-  <div class="body">
-    <h2>Who does the reading</h2>
-    <p>Three roles, and they are not three job descriptions so much as three
-    different substances being contributed.</p>
-    <div class="tw"><table>
-      <tr><th>role</th><th>contributes</th><th>working conditions</th></tr>
-      <tr><td>First-pass reader</td><td>Judgements — is this name standing in
-        this verse?</td><td>Phone, twenty minutes between classes, unreliable
-        data. One decision at a time.</td></tr>
-      <tr><td>Technical intern</td><td>Apparatus — extractors, guards, the
-        generated pages</td><td>Laptop, version control, review.</td></tr>
-      <tr><td>Senior scholar</td><td>Rulings and the written entry</td>
-        <td>Sees only what the system has already marked hard.</td></tr>
-    </table></div>
-    <p>The Śāradā Pīṭham runs educational institutions at Kalady, New Delhi and
-    Bangalore alongside its Veda Pāṭhaśālas. A very small number of interested
-    students from each — not an assigned batch — is the right shape to begin
-    with, and it settles three things at once.</p>
-    <ul class="rule-list">
-      <li><strong>Role follows calibration, not campus.</strong> A pāṭhaśāla
-      student may construe fluently and never have typed Devanagari; a college
-      student may build well and read slowly. Everyone works the same calibrated
-      training set first, and who reads and who builds falls out of the
-      result.</li>
-      <li><strong>Four locations make the design honest early.</strong> A single
-      pāṭhaśāla could run a pilot on paper and one shared laptop. Spread across
-      four cities, offline work and signed sync are not a later scaling concern;
-      they are the minimum that has to work on the first day.</li>
-      <li><strong>Turnover is normal.</strong> Interested students graduate and
-      sit examinations. Work is saved verse by verse, so a lost session costs
-      nothing, and credit attaches to decisions — a reader who signs two hundred
-      and stops keeps their name in the published apparatus.</li>
-    </ul>
-    <p>It also makes one commitment concrete rather than aspirational: the
-    interface has to work in Sanskrit and in the reader's own bhāṣā, which for
-    this cohort means Malayalam, Hindi and Kannada. That is a list the
-    recruitment gives you, not a guess.</p>
+<div class="part">
+  <div class="pn">Part two</div>
+  <div>
+    <h2>What is made instead</h2>
+    <p>An entry that carries both — the judgement and the address — and, where a recording exists, the second at which the verse is chanted.</p>
   </div>
-</section>
+</div>
 
-<section>
-  <div class="marg"><span class="num">IV</span>
-    <p>The rule that shapes everything else</p></div>
+<section id="s3">
+  <div class="marg"><span class="num">3</span>
+    <p>Sorensen's form, and the rule that protects it</p>
+    <a class="back" href="#top">↑ contents</a></div>
   <div class="body">
+    <h2>An entry is a judgement with an address</h2>
     <h2>Both readings stand</h2>
     <p>The store is an append-only log over the text. It holds two kinds of row,
     and keeping them apart is the whole design.</p>
@@ -360,32 +408,13 @@ footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem
     <p>An index that never decides is a concordance. Sorensen's worth is that he
     <em>did</em> decide — four Parikṣits, seven Ugrasenas, divided and glossed —
     and that a century later you can see what he decided and on what evidence.</p>
-
-    <h3>The difference is visible in public, at scale</h3>
-    <p>This is not a hypothetical distinction, and it can be checked in about
-    ten seconds. <a href="https://www.wisdomlib.org/definition/vishnu">Wisdom
-    Library's page for <i>Viṣṇu</i></a> assembles some fifty-nine definitions
-    drawn from many texts and dictionaries across eight traditions — Vaiṣṇava,
-    Purāṇic, Śaiva, Jain, Buddhist, and six language lexicons — each snippet
-    carefully attributed to where it came from. It is substantial, genuinely
-    useful work over a corpus far larger than this one, and it is free.</p>
-    <p>And it lists the god, the author of a dharmaśāstra, and <em>fire</em> in
-    one undivided run, because separating them is not a thing aggregation can
-    do. <strong>That is a concordance, and an excellent one.</strong> The step
-    it does not take is the step this proposal is entirely about.</p>
-    <p>Read the right way round, that is the strongest available argument for
-    funding the reading. The automated half of this work has already been
-    demonstrated at scale, publicly and for free, by someone else. It did not
-    produce an index — because sense-division is a judgement, and judgements are
-    made by people who have read the passage. Sorensen made those judgements for
-    one text, a hundred years ago, and no one has made them since for
-    anything larger.</p>
   </div>
 </section>
 
-<section>
-  <div class="marg"><span class="num">V</span>
-    <p>Retold everywhere, addressed almost nowhere</p></div>
+<section id="s4">
+  <div class="marg"><span class="num">4</span>
+    <p>Retold everywhere, addressed almost nowhere</p>
+    <a class="back" href="#top">↑ contents</a></div>
   <div class="body">
     <h2>What a scholar is handed</h2>
     <p>Take two of the best-known figures in the tradition, and two passages
@@ -483,9 +512,114 @@ footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem
   </div>
 </section>
 
-<section>
-  <div class="marg"><span class="num">VI</span>
-    <p>A term's work, and what the corpus gets out of it</p></div>
+<section id="s5">
+  <div class="marg"><span class="num">5</span>
+    <p>The half of the argument that was missing</p>
+    <a class="back" href="#top">↑ contents</a></div>
+  <div class="body">
+    <h2>The upanyāsam is itself apparatus</h2>
+    <p>An <em>upanyāsakar</em> expounding a text does something no index does.
+    He glosses each verse in the vernacular, names figures the verse leaves
+    unnamed, and reaches across the corpus from memory — <em>as the Rāmāyaṇa
+    tells it</em>, <em>as the Bhāgavata has it</em> — because that is what the
+    tradition of exposition <em>is</em>.</p>
+    <p>The transcripts already catch this. Across the recordings processed so
+    far the material is structured as Sanskrit verse followed by its
+    vernacular exposition, alternating, so each gloss is bound to the verse it
+    glosses:</p>
+    <div class="tw"><table>
+      <tr><th>in the transcripts so far</th><th></th></tr>
+      <tr><td>Episodes transcribed</td><td class="n">129</td></tr>
+      <tr><td>Units of vernacular exposition</td><td class="n">13,375</td></tr>
+      <tr><td>Episodes invoking the Gītā by name</td><td class="n">44</td></tr>
+      <tr><td>…the Upaniṣads</td><td class="n">33</td></tr>
+      <tr><td>…the Bhāgavata</td><td class="n">29</td></tr>
+      <tr><td>…the Rāmāyaṇa</td><td class="n">28</td></tr>
+    </table></div>
+    <p>At a hundred and twenty-nine episodes this is suggestive. At the few
+    hundred the audio proposal would commission it becomes a
+    <strong>corpus of pointers</strong>: the places a scholar did not know to
+    look, named by someone who did.</p>
+    <p>It must be graded honestly. A pointer is a <em>lead</em>, not a citation.
+    The expounder rarely gives chapter and verse; the transcript is machine
+    output with machine errors; and the exposition inherits its place in the
+    recording from the verse beside it rather than from its own measurement. So
+    it ranks below an indexed citation — but it differs from a machine's guess
+    in the way that matters: a named scholar said it, on a date, at a timestamp,
+    in a recording anyone can play.</p>
+    <p><strong>This is where the two proposals actually meet.</strong> Each
+    produces something the other needs. The
+    <a href="purana-nama-kosa.html">Nāma-Kośa</a> supplies the entity layer the
+    <a href="purana-audio.html">Audio Project</a> lists among its own limits;
+    the Audio Project supplies the growing body of expert cross-references that
+    turns a search box into pointers.</p>
+  </div>
+</section>
+
+<div class="part">
+  <div class="pn">Part three</div>
+  <div>
+    <h2>Who makes it</h2>
+    <p>The reading is the expensive part and cannot be automated. It can, however, be the same act as learning the text.</p>
+  </div>
+</div>
+
+<section id="s6">
+  <div class="marg"><span class="num">6</span>
+    <p>Two audiences, three roles, four cities</p>
+    <a class="back" href="#top">↑ contents</a></div>
+  <div class="body">
+    <h2>A wiki inward, an index outward</h2>
+    <p>The wiki feeling belongs to the people <em>making</em> the index. Among
+    themselves they want exactly what a wiki gives: a page for each name, links
+    between them, somewhere to argue, and the sense of a thing taking shape.</p>
+    <p>Readers of the finished work get none of that model. They get an index —
+    typed headwords, sense divisions, glosses, verse-addressed citations, and
+    audio where it exists. Nobody outside sees a work queue or an undecided
+    span, except where the index deliberately publishes its own frontier.</p>
+    <h2>Who does the reading</h2>
+    <p>Three roles, and they are not three job descriptions so much as three
+    different substances being contributed.</p>
+    <div class="tw"><table>
+      <tr><th>role</th><th>contributes</th><th>working conditions</th></tr>
+      <tr><td>First-pass reader</td><td>Judgements — is this name standing in
+        this verse?</td><td>Phone, twenty minutes between classes, unreliable
+        data. One decision at a time.</td></tr>
+      <tr><td>Technical intern</td><td>Apparatus — extractors, guards, the
+        generated pages</td><td>Laptop, version control, review.</td></tr>
+      <tr><td>Senior scholar</td><td>Rulings and the written entry</td>
+        <td>Sees only what the system has already marked hard.</td></tr>
+    </table></div>
+    <p>The Śāradā Pīṭham runs educational institutions at Kalady, New Delhi and
+    Bangalore alongside its Veda Pāṭhaśālas. A very small number of interested
+    students from each — not an assigned batch — is the right shape to begin
+    with, and it settles three things at once.</p>
+    <ul class="rule-list">
+      <li><strong>Role follows calibration, not campus.</strong> A pāṭhaśāla
+      student may construe fluently and never have typed Devanagari; a college
+      student may build well and read slowly. Everyone works the same calibrated
+      training set first, and who reads and who builds falls out of the
+      result.</li>
+      <li><strong>Four locations make the design honest early.</strong> A single
+      pāṭhaśāla could run a pilot on paper and one shared laptop. Spread across
+      four cities, offline work and signed sync are not a later scaling concern;
+      they are the minimum that has to work on the first day.</li>
+      <li><strong>Turnover is normal.</strong> Interested students graduate and
+      sit examinations. Work is saved verse by verse, so a lost session costs
+      nothing, and credit attaches to decisions — a reader who signs two hundred
+      and stops keeps their name in the published apparatus.</li>
+    </ul>
+    <p>It also makes one commitment concrete rather than aspirational: the
+    interface has to work in Sanskrit and in the reader's own bhāṣā, which for
+    this cohort means Malayalam, Hindi and Kannada. That is a list the
+    recruitment gives you, not a guess.</p>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="marg"><span class="num">7</span>
+    <p>A term's work, and what the corpus gets out of it</p>
+    <a class="back" href="#top">↑ contents</a></div>
   <div class="body">
     <h2>The classroom is the workshop</h2>
     <p>The proposals ask for reading time, and reading time is expensive because
@@ -496,7 +630,7 @@ footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem
     verse is her. Those are not two tasks that happen to align. They are one
     task, described twice.</p>
 
-    <div class="panel">
+    <div class="brief-card">
       <div class="hd">
         <span class="hw">Scenario one</span>
         <span class="tag m">undergraduate · one term · no Sanskrit required</span>
@@ -545,7 +679,7 @@ footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem
       difference between an index that gets built and one that stays proposed.</p>
     </div>
 
-    <div class="panel">
+    <div class="brief-card">
       <div class="hd">
         <span class="hw">Scenario two</span>
         <span class="tag s">pāṭhaśāla · recurring · Sanskrit fluency required</span>
@@ -561,7 +695,7 @@ footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem
       it, as part of their own study rather than instead of it.</p>
     </div>
 
-    <div class="panel">
+    <div class="brief-card">
       <div class="hd">
         <span class="hw">Scenario three</span>
         <span class="tag s">seminar · comparative · senior-led</span>
@@ -576,7 +710,7 @@ footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem
       text and a machine having made a mistake.</p>
     </div>
 
-    <div class="panel">
+    <div class="brief-card">
       <div class="hd">
         <span class="hw">Scenario four</span>
         <span class="tag m">technical intern · one project</span>
@@ -587,8 +721,15 @@ footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem
       users, which becomes part of what every reader above uses the following
       term. The portfolio piece is genuine because the artefact is.</p>
     </div>
+  </div>
+</section>
 
-    <h3>The chain of review, and where it stops</h3>
+<section id="s8">
+  <div class="marg"><span class="num">8</span>
+    <p>Two reviews, two standards</p>
+    <a class="back" href="#top">↑ contents</a></div>
+  <div class="body">
+    <h2>The chain of review, and where it stops</h2>
     <p>A submission is read twice, to two different standards, and the
     distinction is not a formality.</p>
     <ul class="rule-list">
@@ -610,8 +751,15 @@ footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem
     citations will be produced. Assessment rests on the senior's sample, and
     <em>I could not determine which Uttara this is</em> earns full credit when
     the verse genuinely does not say.</p>
+  </div>
+</section>
 
-    <h3>Why this is a fair exchange rather than free labour</h3>
+<section id="s9">
+  <div class="marg"><span class="num">9</span>
+    <p>The precedent is older than the technology</p>
+    <a class="back" href="#top">↑ contents</a></div>
+  <div class="body">
+    <h2>Why this is a fair exchange</h2>
     <p>The arrangement needs no defending on novel grounds, because it is not
     novel. <strong>In this tradition, teaching and transmission were never
     separate activities.</strong> A student who chanted the text was the
@@ -647,52 +795,80 @@ footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem
   </div>
 </section>
 
-<section>
-  <div class="marg"><span class="num">VII</span>
-    <p>The half of the argument that was missing</p></div>
+<div class="part">
+  <div class="pn">Part four</div>
+  <div>
+    <h2>What it yields</h2>
+    <p>Beyond the index itself: what having the addresses lets this project give back, and how anyone can watch it being built.</p>
+  </div>
+</div>
+
+<section id="s10">
+  <div class="marg"><span class="num">10</span>
+    <p>What having the addresses lets you give back</p>
+    <a class="back" href="#top">↑ contents</a></div>
   <div class="body">
-    <h2>The upanyāsam is itself apparatus</h2>
-    <p>An <em>upanyāsakar</em> expounding a text does something no index does.
-    He glosses each verse in the vernacular, names figures the verse leaves
-    unnamed, and reaches across the corpus from memory — <em>as the Rāmāyaṇa
-    tells it</em>, <em>as the Bhāgavata has it</em> — because that is what the
-    tradition of exposition <em>is</em>.</p>
-    <p>The transcripts already catch this. Across the recordings processed so
-    far the material is structured as Sanskrit verse followed by its
-    vernacular exposition, alternating, so each gloss is bound to the verse it
-    glosses:</p>
-    <div class="tw"><table>
-      <tr><th>in the transcripts so far</th><th></th></tr>
-      <tr><td>Episodes transcribed</td><td class="n">129</td></tr>
-      <tr><td>Units of vernacular exposition</td><td class="n">13,375</td></tr>
-      <tr><td>Episodes invoking the Gītā by name</td><td class="n">44</td></tr>
-      <tr><td>…the Upaniṣads</td><td class="n">33</td></tr>
-      <tr><td>…the Bhāgavata</td><td class="n">29</td></tr>
-      <tr><td>…the Rāmāyaṇa</td><td class="n">28</td></tr>
-    </table></div>
-    <p>At a hundred and twenty-nine episodes this is suggestive. At the few
-    hundred the audio proposal would commission it becomes a
-    <strong>corpus of pointers</strong>: the places a scholar did not know to
-    look, named by someone who did.</p>
-    <p>It must be graded honestly. A pointer is a <em>lead</em>, not a citation.
-    The expounder rarely gives chapter and verse; the transcript is machine
-    output with machine errors; and the exposition inherits its place in the
-    recording from the verse beside it rather than from its own measurement. So
-    it ranks below an indexed citation — but it differs from a machine's guess
-    in the way that matters: a named scholar said it, on a date, at a timestamp,
-    in a recording anyone can play.</p>
-    <p><strong>This is where the two proposals actually meet.</strong> Each
-    produces something the other needs. The
-    <a href="purana-nama-kosa.html">Nāma-Kośa</a> supplies the entity layer the
-    <a href="purana-audio.html">Audio Project</a> lists among its own limits;
-    the Audio Project supplies the growing body of expert cross-references that
-    turns a search box into pointers.</p>
+    <h2>Settling other people's citations</h2>
+    <p>A corpus that is addressed at the verse can settle other people's
+    citations, and that is worth more to the field than another set of pages.
+    The disagreement above took one lookup to resolve: a chapter-by-chapter
+    translation's verses 1, 2–3 and 4–6 correspond exactly to this corpus's
+    13.1, 13.2 and 13.4, so chapter 13 is right and the rival attribution is
+    not.</p>
+    <p>Note the shape of that correspondence, because it is the whole method.
+    The chapter numbers agree but the <strong>segmentation does not</strong> —
+    a translation prints as one unit what the text divides into three. Joining
+    verse <em>n</em> to verse <em>n</em> therefore drifts silently at every
+    merge, which is a defect this project has already shipped once, with a
+    different translation, and had to fix by matching on the text instead. So
+    the join is <strong>content-addressed</strong>: two passages are the same
+    passage when the Sanskrit says so, never when the numbering does.</p>
+    <p>What that yields is a <em>resolver</em> — give it a loose citation or a
+    quoted half-verse, and it returns the address, the Sanskrit standing there,
+    and, where a recording exists, the second at which it is chanted. The same
+    machinery makes the expounders' cross-references in
+    <span class="fig">VII</span> followable, since those are loose citations
+    too. It is a by-product of having built the index, not a second project.</p>
+    <p>Three limits keep it honest. A resolver links to another site's
+    <em>text</em> pages, where a chapter and a translator are named; it must
+    never take that site's aggregated name-pages as an index, for the reason
+    set out in <span class="fig">IV</span>. Translations in copyright cannot be
+    absorbed, only <strong>linked</strong> — which is the correct relationship anyway, and
+    it means a Purāṇa this site carries no translation for can still hand a
+    reader one, verse by verse, without holding a word of it. And a mapping to
+    somebody else's page numbers has to be stored with the text that justified
+    it, so that when their site is reorganised the link can be rebuilt rather
+    than merely lost.</p>
+    <div class="split">
+      <div class="side them">
+        <span class="k">on a wiki</span>
+        <p class="s">A citation is text in a paragraph, verified by whichever
+        reader happens to check. A page is authored and edited; provenance means
+        knowing who last changed the wording. Where two traditions disagree, the
+        last editor decides.</p>
+      </div>
+      <div class="vs">against</div>
+      <div class="side us">
+        <span class="k">here</span>
+        <p class="s">A citation is an address into a machine-readable edition,
+        and the build refuses to publish one that does not resolve. A page is
+        <strong>derived</strong> — rebuilt nightly from evidence. Provenance
+        means knowing which decisions produced a claim, by whom, on what
+        grounds. Disagreement is recorded with both readings standing.</p>
+      </div>
+    </div>
+    <p>And one thing no wiki can offer at all: where a recording exists,
+    <strong>the citation plays</strong>. Kārtika 13.2 is not only a verse whose
+    Sanskrit can be printed. It is a named reciter, at a measured second, in a
+    recording anyone can open — which is what the
+    <a href="../kartika-atlas.html">atlases</a> on this site already do.</p>
   </div>
 </section>
 
-<section>
-  <div class="marg"><span class="num">VIII</span>
-    <p>Why anyone keeps going</p></div>
+<section id="s11">
+  <div class="marg"><span class="num">11</span>
+    <p>Why anyone keeps going</p>
+    <a class="back" href="#top">↑ contents</a></div>
   <div class="body">
     <h2>Watching it take shape</h2>
     <p>This is not a book sent to the press, with a copy shared when it arrives.
@@ -711,9 +887,10 @@ footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem
   </div>
 </section>
 
-<section>
-  <div class="marg"><span class="num">IX</span>
-    <p>Stated plainly</p></div>
+<section id="s12">
+  <div class="marg"><span class="num">12</span>
+    <p>Stated plainly</p>
+    <a class="back" href="#top">↑ contents</a></div>
   <div class="body">
     <h2>What exists, and what does not</h2>
     <p><strong>Exists.</strong> The corpus, addressed at the verse across the
