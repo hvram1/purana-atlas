@@ -105,6 +105,19 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
 .soon .who{display:block;color:var(--muted);font-size:.8rem;
   letter-spacing:.02em;margin-top:.3rem}
 .card h2.pitch{font-family:var(--ui);font-size:1.08rem;letter-spacing:-.01em}
+/* The working note. Deliberately NOT a .card and NOT inside .cards.two: it is
+   not a third proposal, and a reader who counts three cards will read it as
+   one. Full width, quieter, and it says what it is in its own eyebrow. */
+.aside{display:block;margin:1.25rem 0 0;padding:1.1rem 1.3rem;background:var(--sunk);
+       border:1px solid var(--line);border-left:3px solid var(--muted);
+       border-radius:0 10px 10px 0;text-decoration:none;color:inherit;
+       transition:border-left-color .12s ease}
+.aside:hover{border-left-color:var(--accent)}
+.aside .rom{margin:0 0 .25rem}
+.aside h2{font-family:var(--ui);font-size:1.02rem;letter-spacing:-.01em;
+          margin:0 0 .35rem;font-weight:600}
+.aside p{margin:0;font-size:.9rem;color:var(--ink2)}
+.aside .go{margin-top:.55rem}
 </style>
 </head>
 <body>
@@ -211,6 +224,19 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
       <div class="go">Read the proposal →</div>
     </a>
   </div>
+
+  <a class="aside" href="docs/purana-scholar-workbench.html">
+    <p class="rom">Working note · not a proposal</p>
+    <h2>How the index gets made</h2>
+    <p>Both proposals ask for scholarly reading time. This note describes the
+    instrument that reading time is spent inside — why a published page is
+    derived rather than edited, and why an index of this kind cannot be a wiki.
+    It turns on two passages in the Kārtika atlas: Satyabhāmā asking Kṛṣṇa what
+    she did in a former birth, and a brahmin promised he will be reborn as
+    Daśaratha. Two figures everyone knows, in two stories almost nobody does —
+    and the corpus names both in its own chapter headings.</p>
+    <div class="go">Read the note →</div>
+  </a>
 </section>
 
 <footer>

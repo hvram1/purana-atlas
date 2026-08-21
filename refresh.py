@@ -232,6 +232,36 @@ def set_site_url(url, check_only):
     return 0
 
 
+def check_deeplinks(path, four_by_page):
+    """A link into an atlas must name a verse that atlas actually has.
+
+    The atlases route on the fragment: `#13.4` calls showChapter(13) and
+    focuses the verse. But the guard is `if(h && V.verses[h])`, so a fragment
+    the data does not carry falls through to `showChapter(1)` -- the page loads,
+    looks perfect, and quietly shows the wrong adhyaya. Nothing about that is
+    visible to a link checker, to the author, or to the reader who assumes the
+    verse they were promised is the one on screen.
+
+    So the fragment is checked against the same 4lang file the page will load,
+    which is why this runs after the atlases are copied rather than before.
+    A bad deep link is a false citation in a document arguing that our
+    citations resolve, and it stops the deploy.
+    """
+    html = open(path, encoding="utf-8").read()
+    bad = 0
+    for page, frag in re.findall(r'href="(?:\.\./)?([a-z-]+-atlas\.html)#([^"]+)"',
+                                 html):
+        four = four_by_page.get(page)
+        if four is None:
+            bad += fail("%s links to %s, which this site does not publish"
+                        % (os.path.basename(path), page))
+        elif frag not in four.get("verses", {}):
+            bad += fail("%s links to %s#%s -- no such verse; the atlas would "
+                        "silently open at adhyaya 1"
+                        % (os.path.basename(path), page, frag))
+    return bad
+
+
 def sizes(path):
     raw = os.path.getsize(path)
     gz = len(gzip.compress(open(path, "rb").read(), 6))
@@ -298,6 +328,10 @@ def main():
     stats = {}
     bad += copy_fonts(a.src, a.check)
 
+    # Kept so the authored pages in docs/ can have their deep links checked
+    # against the very data the atlas will load, further down.
+    four_by_page = {}
+
     for page, four_name, sub_name in ATLASES:
         key = page.split("-")[0]
         print("\n%s" % page)
@@ -321,6 +355,7 @@ def main():
 
         bad += check_fetches(page_dst, (four_name, sub_name))
         b, four = check_4lang(four_dst); bad += b
+        four_by_page[page] = four
         b, sub = check_substrate(sub_dst); bad += b
 
         if not a.with_sim and not a.check:
@@ -381,6 +416,7 @@ def main():
         path = os.path.join(HERE, rel)
         bad += check_fetches(path, ())
         bad += check_selfcontained(path)
+        bad += check_deeplinks(path, four_by_page)
         raw, gz = sizes(path)
         total_raw += raw; total_gz += gz
         print("    %-34s %7.2f MB raw  %6.2f MB gzip" % (rel, raw/1e6, gz/1e6))

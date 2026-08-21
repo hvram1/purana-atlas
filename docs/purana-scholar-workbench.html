@@ -1,0 +1,581 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How the Index Gets Made</title>
+<style>
+/* Noto Serif Devanagari, SELF-HOSTED -- see the sibling proposals. This site
+   makes exactly one off-site request, and it is not for a font. */
+@font-face{
+  font-family:"Noto Serif Devanagari";
+  src:url("../fonts/NotoSerifDevanagari.woff2") format("woff2");
+  font-weight:100 900; font-style:normal; font-display:swap;
+  unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,
+                U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09;
+}
+/* Light is the base; both dark states redefine only these. */
+:root{
+  --paper:#ECEFEF; --leaf:#F8FAFA; --leaf-2:#E2E7E8;
+  --rule:#C6CFD1; --rule-soft:#D8DFE0;
+  --ink:#15202A; --ink-2:#4C5D68; --ink-3:#74848D;
+  --indigo:#2B3A72; --indigo-soft:#E0E4F1;
+  --madder:#9C3B2E; --madder-soft:#F0E0DC;
+  --shadow:0 1px 2px rgba(21,32,42,.06), 0 8px 24px -12px rgba(21,32,42,.18);
+  --serif:"Noto Serif Devanagari","Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+  --mono:ui-monospace,"SF Mono","Cascadia Mono","JetBrains Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --measure:68ch; --rail:8.5rem; --gap:2.75rem;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#12181D; --leaf:#1A2229; --leaf-2:#222C34;
+    --rule:#33404A; --rule-soft:#28333B;
+    --ink:#DDE4E7; --ink-2:#9DAAB3; --ink-3:#7A8790;
+    --indigo:#9DB0E8; --indigo-soft:#232C45;
+    --madder:#D98C7C; --madder-soft:#33241F;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#12181D; --leaf:#1A2229; --leaf-2:#222C34;
+  --rule:#33404A; --rule-soft:#28333B;
+  --ink:#DDE4E7; --ink-2:#9DAAB3; --ink-3:#7A8790;
+  --indigo:#9DB0E8; --indigo-soft:#232C45;
+  --madder:#D98C7C; --madder-soft:#33241F;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
+     font-size:17px;line-height:1.62;text-rendering:optimizeLegibility}
+.sheet{max-width:calc(var(--rail) + var(--measure) + 6rem);margin:0 auto;
+       padding:0 1.75rem 6rem}
+section{display:grid;grid-template-columns:var(--rail) minmax(0,1fr);
+        column-gap:2.5rem;padding-block:var(--gap);border-top:1px solid var(--rule-soft)}
+section > .body{display:flex;flex-direction:column;gap:1.15rem;min-width:0}
+.marg{display:flex;flex-direction:column;gap:.5rem;padding-top:.45rem}
+.num{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;
+     color:var(--madder);font-variant-numeric:tabular-nums}
+.marg p{margin:0;font-family:var(--mono);font-size:.68rem;line-height:1.55;
+        color:var(--ink-3);letter-spacing:.01em}
+@media (max-width:760px){
+  section{grid-template-columns:1fr;row-gap:1rem}
+  .marg{flex-direction:row;flex-wrap:wrap;gap:.75rem;align-items:baseline;padding-top:0}
+  :root{--gap:2.1rem}
+}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:600;line-height:1.18}
+h1{font-size:clamp(2.1rem,5.5vw,3rem);letter-spacing:-.015em}
+h2{font-size:1.38rem;letter-spacing:-.005em}
+h3{font-size:1rem;color:var(--ink-2)}
+p{margin:0;max-width:var(--measure)}
+ul{margin:0;padding-left:1.15rem;max-width:var(--measure)}
+li{margin:.3rem 0}
+a{color:var(--indigo);text-decoration-thickness:1px;text-underline-offset:2px}
+a:focus-visible{outline:2px solid var(--indigo);outline-offset:3px;border-radius:2px}
+strong{font-weight:600}
+.lede{font-size:1.14rem;color:var(--ink-2);max-width:60ch}
+.eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;
+         text-transform:uppercase;color:var(--ink-3)}
+.fig{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:.94em}
+.dv{font-family:"Noto Serif Devanagari",var(--mono);color:var(--madder);padding-inline:.15em}
+header.mast{display:grid;grid-template-columns:var(--rail) minmax(0,1fr);
+            column-gap:2.5rem;padding-block:4rem 2.5rem}
+@media (max-width:760px){header.mast{grid-template-columns:1fr;row-gap:1.25rem}}
+.mast .body{display:flex;flex-direction:column;gap:1.3rem}
+.subtitle{font-size:1.04rem;color:var(--ink-2);max-width:56ch}
+/* the claim of the note, in two columns */
+.split{display:grid;grid-template-columns:1fr auto 1fr;align-items:start;gap:1.25rem;
+       margin-top:.5rem;padding:1.4rem 1.5rem;background:var(--leaf);
+       border:1px solid var(--rule);border-radius:3px;box-shadow:var(--shadow)}
+.split .side{display:flex;flex-direction:column;gap:.35rem;min-width:0}
+.split .k{font-family:var(--mono);font-size:.66rem;letter-spacing:.11em;
+          text-transform:uppercase;color:var(--ink-3)}
+.split .s{font-size:.93rem;color:var(--ink-2)}
+.split .vs{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;color:var(--madder);
+           writing-mode:vertical-rl;text-orientation:mixed;align-self:center}
+.split .them .k{color:var(--ink-3)}
+.split .us .k{color:var(--madder)}
+@media (max-width:640px){
+  .split{grid-template-columns:1fr;gap:1rem}
+  .split .vs{writing-mode:horizontal-tb;border-top:1px solid var(--rule);padding-top:.9rem}
+}
+.tw{overflow-x:auto;border:1px solid var(--rule);border-radius:3px;background:var(--leaf)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:.55rem .8rem;border-bottom:1px solid var(--rule-soft);
+      vertical-align:top}
+th{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
+   color:var(--ink-3);font-weight:400;white-space:nowrap}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.panel{background:var(--leaf);border:1px solid var(--rule);border-radius:3px;
+       padding:1.3rem 1.5rem;box-shadow:var(--shadow);
+       display:flex;flex-direction:column;gap:.75rem}
+.panel .hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:.55rem;
+           padding-bottom:.7rem;border-bottom:1px solid var(--rule-soft)}
+.hw{font-size:1.24rem;font-weight:600}
+.hw-dev{font-size:1.1rem;color:var(--madder)}
+.tag{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
+     padding:.18rem .5rem;border-radius:2px;white-space:nowrap}
+.tag.m{background:var(--indigo-soft);color:var(--indigo)}
+.tag.s{background:var(--madder-soft);color:var(--madder)}
+.rule-list{display:grid;gap:.55rem;margin:0;padding:0;list-style:none;max-width:var(--measure)}
+.rule-list li{background:var(--leaf-2);border-left:2px solid var(--madder);
+              border-radius:0 3px 3px 0;padding:.6rem .85rem;font-size:.93rem;color:var(--ink-2)}
+footer{border-top:1px solid var(--rule);margin-top:var(--gap);padding-top:1.4rem;
+       display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;font-family:var(--mono);
+       font-size:.7rem;letter-spacing:.03em;color:var(--ink-3)}
+</style>
+
+<div class="sheet">
+
+<header class="mast">
+  <div class="marg"><span class="num">NOTE</span></div>
+  <div class="body">
+    <p class="eyebrow">Working note · companion to the two proposals</p>
+    <h1>How the index gets made</h1>
+    <p class="subtitle">The two proposals ask for scholarly reading time. This
+    note describes the instrument that reading time is spent inside — who writes
+    to it, what it refuses to do, and why it is not a wiki.</p>
+    <p class="lede">It is not itself a proposal. The instrument has to exist
+    whether or not either proposal is funded, and most of it already does.</p>
+  </div>
+</header>
+
+<section>
+  <div class="marg"><span class="num">I</span>
+    <p>The question everyone asks first</p></div>
+  <div class="body">
+    <h2>Why not simply a wiki?</h2>
+    <p>Dharmawiki, Hindupedia, and the Sanskrit-topic pages of the general
+    encyclopaedias already carry a great deal of Paurāṇic material, some of it
+    written with real care. The difference proposed here is not diligence. It is
+    <strong>checkability</strong>.</p>
+    <p>On a wiki a page is a document and a citation is a string typed into that
+    document by hand. <span class="fig">Skanda Purāṇa, Kārtika Māhātmya 13.4</span>
+    <em>looks</em> like an address, but nothing dereferences it, nothing tests
+    it, and nothing fails when it is wrong. There is no build that can go red.</p>
+    <div class="split">
+      <div class="side them">
+        <span class="k">on a wiki</span>
+        <p class="s">A citation is text in a paragraph, verified by whichever
+        reader happens to check. A page is authored and edited; provenance means
+        knowing who last changed the wording. Where two traditions disagree, the
+        last editor decides.</p>
+      </div>
+      <div class="vs">against</div>
+      <div class="side us">
+        <span class="k">here</span>
+        <p class="s">A citation is an address into a machine-readable edition,
+        and the build refuses to publish one that does not resolve. A page is
+        <strong>derived</strong> — rebuilt nightly from evidence. Provenance
+        means knowing which decisions produced a claim, by whom, on what
+        grounds. Disagreement is recorded with both readings standing.</p>
+      </div>
+    </div>
+    <p>And one thing no wiki can offer at all: where a recording exists,
+    <strong>the citation plays</strong>. Kārtika 13.2 is not only a verse whose
+    Sanskrit can be printed. It is a named reciter, at a measured second, in a
+    recording anyone can open — which is what the
+    <a href="../kartika-atlas.html">atlases</a> on this site already do.</p>
+  </div>
+</section>
+
+<section>
+  <div class="marg"><span class="num">II</span>
+    <p>Two audiences, one store</p></div>
+  <div class="body">
+    <h2>A wiki inward, an index outward</h2>
+    <p>The wiki feeling belongs to the people <em>making</em> the index. Among
+    themselves they want exactly what a wiki gives: a page for each name, links
+    between them, somewhere to argue, and the sense of a thing taking shape.</p>
+    <p>Readers of the finished work get none of that model. They get an index —
+    typed headwords, sense divisions, glosses, verse-addressed citations, and
+    audio where it exists. Nobody outside sees a work queue or an undecided
+    span, except where the index deliberately publishes its own frontier.</p>
+  </div>
+</section>
+
+<section>
+  <div class="marg"><span class="num">III</span>
+    <p>The cohort, and how it is picked</p></div>
+  <div class="body">
+    <h2>Who does the reading</h2>
+    <p>Three roles, and they are not three job descriptions so much as three
+    different substances being contributed.</p>
+    <div class="tw"><table>
+      <tr><th>role</th><th>contributes</th><th>working conditions</th></tr>
+      <tr><td>First-pass reader</td><td>Judgements — is this name standing in
+        this verse?</td><td>Phone, twenty minutes between classes, unreliable
+        data. One decision at a time.</td></tr>
+      <tr><td>Technical intern</td><td>Apparatus — extractors, guards, the
+        generated pages</td><td>Laptop, version control, review.</td></tr>
+      <tr><td>Senior scholar</td><td>Rulings and the written entry</td>
+        <td>Sees only what the system has already marked hard.</td></tr>
+    </table></div>
+    <p>The Śāradā Pīṭham runs educational institutions at Kalady, New Delhi and
+    Bangalore alongside its Veda Pāṭhaśālas. A very small number of interested
+    students from each — not an assigned batch — is the right shape to begin
+    with, and it settles three things at once.</p>
+    <ul class="rule-list">
+      <li><strong>Role follows calibration, not campus.</strong> A pāṭhaśāla
+      student may construe fluently and never have typed Devanagari; a college
+      student may build well and read slowly. Everyone works the same calibrated
+      training set first, and who reads and who builds falls out of the
+      result.</li>
+      <li><strong>Four locations make the design honest early.</strong> A single
+      pāṭhaśāla could run a pilot on paper and one shared laptop. Spread across
+      four cities, offline work and signed sync are not a later scaling concern;
+      they are the minimum that has to work on the first day.</li>
+      <li><strong>Turnover is normal.</strong> Interested students graduate and
+      sit examinations. Work is saved verse by verse, so a lost session costs
+      nothing, and credit attaches to decisions — a reader who signs two hundred
+      and stops keeps their name in the published apparatus.</li>
+    </ul>
+    <p>It also makes one commitment concrete rather than aspirational: the
+    interface has to work in Sanskrit and in the reader's own bhāṣā, which for
+    this cohort means Malayalam, Hindi and Kannada. That is a list the
+    recruitment gives you, not a guess.</p>
+  </div>
+</section>
+
+<section>
+  <div class="marg"><span class="num">IV</span>
+    <p>The rule that shapes everything else</p></div>
+  <div class="body">
+    <h2>Both readings stand</h2>
+    <p>The store is an append-only log over the text. It holds two kinds of row,
+    and keeping them apart is the whole design.</p>
+    <p><strong>Testimony</strong> is never adjudicated. An entry records that
+    <em>Sorensen states X is the son of Y at III, 65</em> — never that X is the
+    son of Y. Judging whether the authority is right is a later, human, separate
+    act.</p>
+    <p><strong>Rulings</strong> are adjudicated, and they supersede rather than
+    delete. A junior's reading survives a senior's correction, because the
+    disagreement between them is a measurement the project needs, not a conflict
+    to be tidied away.</p>
+    <p>Parikṣit shows why both are needed, because he presents one of each.</p>
+    <div class="panel">
+      <div class="hd">
+        <span class="hw">Parikṣit</span>
+        <span class="hw-dev">परीक्षित्</span>
+        <span class="tag s">two different problems</span>
+      </div>
+      <p><strong>One person, two treatments.</strong> The Mahābhārata's
+      Parikṣit — cursed by Śṛṅgi, bitten by Takṣaka — and the Bhāgavata's
+      Parikṣit, the listener of the seven-day discourse, are the same man
+      differently expounded. Both accounts stand. Nobody rules, and no entity is
+      split: a name is never divided by which book it stands in.</p>
+      <p><strong>Four people, one spelling.</strong> Sorensen's index separates
+      four distinct Parikṣits — a son of Abhimanyu, a son of Avikṣit, a king of
+      Ayodhyā, a son of Anaśvan — and the works spell them alike. Here a machine
+      has no business deciding, and a scholar must.</p>
+      <p class="s" style="color:var(--ink-3);font-size:.88rem">A search engine
+      cannot tell these two situations apart. It is the entire reason the
+      reading is worth funding.</p>
+    </div>
+    <p>An index that never decides is a concordance. Sorensen's worth is that he
+    <em>did</em> decide — four Parikṣits, seven Ugrasenas, divided and glossed —
+    and that a century later you can see what he decided and on what evidence.</p>
+  </div>
+</section>
+
+<section>
+  <div class="marg"><span class="num">V</span>
+    <p>Two figures everyone knows, in two stories almost nobody does</p></div>
+  <div class="body">
+    <h2>What a scholar is handed</h2>
+    <p>Take two of the best-known figures in the tradition, and two passages
+    about them that are not part of what anybody knows.</p>
+    <div class="panel">
+      <div class="hd">
+        <span class="hw">Satyabhāmā</span>
+        <span class="hw-dev">सत्यभामा</span>
+        <span class="tag m">Kārtika Māsa Māhātmya 13</span>
+      </div>
+      <p>She asks Kṛṣṇa what she can possibly have done to deserve him —
+      <span class="dv">दानं व्रतं तपो वापि किं नु पूर्वं कृतं मया</span> — and he
+      answers by telling her of her former birth. The chapter's own Sanskrit
+      heading says so outright: that she obtained the standing of Kṛṣṇa's wife
+      <em>through the merit of the Kārtika observance in a previous life</em>.</p>
+      <p class="s" style="color:var(--ink-3);font-size:.88rem">In the recording,
+      the verse where he begins — <span class="dv">शृणुष्वैकमनाः कान्ते</span>,
+      <em>listen with a single mind, beloved</em> — is seated in the waveform to
+      within a second.
+      <a href="../kartika-atlas.html#13.4">Open it in the atlas and hear it
+      →</a></p>
+    </div>
+    <div class="panel">
+      <div class="hd">
+        <span class="hw">Daśaratha</span>
+        <span class="hw-dev">दशरथ</span>
+        <span class="tag m">Kārtika Māsa Māhātmya 25</span>
+      </div>
+      <p>A brahmin named Dharmadatta is granted a boon by Viṣṇu's messenger:
+      that in another birth he will be a king renowned in the Solar line by the
+      name of Daśaratha — <em>and that Viṣṇu himself will be born as his
+      son</em>. The Rāmāyaṇa's premise, given here as the fruit of a month's
+      observance, in a Purāṇa that is not the Rāmāyaṇa.</p>
+      <p class="s" style="color:var(--ink-3);font-size:.88rem">This one is also
+      the honest case. The verse naming him is placed to its chapter in the
+      recording but not seated in the waveform, so the citation is exact and the
+      second is approximate — and the atlas says which it is rather than
+      blurring the two.
+      <a href="../kartika-atlas.html#25.24">Open it in the atlas and see the
+      difference →</a></p>
+    </div>
+    <p><strong>Why these two carry the argument.</strong> Both are figures a
+    reader already knows, which is precisely what makes the passages hard to
+    find. Search either name and the famous material buries everything else —
+    Satyabhāmā across the epic and the Kṛṣṇa cycle, Daśaratha across the whole
+    Rāma tradition. These chapters are a needle in that. Yet neither required
+    any inference to locate: <strong>the corpus states both stories in its own
+    chapter headings</strong>, in Sanskrit, and has done all along. Nobody had
+    read those headings as an index.</p>
+    <p>So what a scholar should be handed is not a corpus and not a search box.
+    Handing someone eighteen Mahāpurāṇas and a search field is handing them the
+    problem back. It is a <strong>dossier for each headword</strong> —
+    Satyabhāmā's, as it stands today, before any new work:</p>
+    <div class="tw"><table>
+      <tr><th>what is known</th><th></th></tr>
+      <tr><td>In the Mahābhārata, under her own index entry</td>
+        <td class="n">62 attestations, 41 of them certified by a philologist</td></tr>
+      <tr><td>Across twelve Purāṇas — Skanda, Padma, Viṣṇu, Brahma,
+        Brahmavaivarta, Bhāgavata and others</td>
+        <td class="n">155 candidates, none yet verified</td></tr>
+      <tr><td>Chapters whose own heading names her</td>
+        <td class="n">including the one above, unreachable by name-search</td></tr>
+      <tr><td>Recordings in which she is heard</td>
+        <td class="n">two reciters, onsets measured in the waveform</td></tr>
+    </table></div>
+    <p>That is roughly <strong>two hundred and twenty verses ranked by
+    evidence</strong>, in place of three hundred and fifty thousand. A scholar
+    writing on Satyabhāmā would not have thought to open the Brahma Purāṇa.</p>
+    <p>Four things go into such a dossier, and the order matters:</p>
+    <ul>
+      <li><strong>The graded shortlist.</strong> The grade <em>is</em> the
+      product. Forty-one rows are ruled; a hundred and fifty-five are
+      candidates. <em>Here are the places that might be her — decide</em> is a
+      task a junior can do in twenty-minute sessions. A search box cannot
+      produce that sentence.</li>
+      <li><strong>The corpus's own table of contents.</strong> Some twelve
+      thousand Sanskrit <em>viṣaya</em> headings, keyed to the names inside
+      them. This is the cheapest valuable thing available, and it involves no
+      inference at all: the corpus naming its own contents in its own language.
+      Both passages above are found this way, and so is everything like
+      them.</li>
+      <li><strong>Co-occurrence.</strong> Which other names stand in the verses
+      where this one stands. This is context rather than string-matching, and it
+      falls out of work already done.</li>
+      <li><strong>The frontier.</strong> Where the evidence stops, published
+      rather than hidden. An honest map of what is not yet known is itself a
+      deliverable.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="marg"><span class="num">VI</span>
+    <p>A term's work, and what the corpus gets out of it</p></div>
+  <div class="body">
+    <h2>The classroom is the workshop</h2>
+    <p>The proposals ask for reading time, and reading time is expensive because
+    it is normally bought. There is a second way to get it, and it is better than
+    buying: <strong>set it as coursework</strong>. A student who reads the
+    Virāṭa Parva closely enough to write about Uttarā has, in the same act, read
+    it closely enough to say whether <span class="dv">उत्तरा</span> in a given
+    verse is her. Those are not two tasks that happen to align. They are one
+    task, described twice.</p>
+
+    <div class="panel">
+      <div class="hd">
+        <span class="hw">Scenario one</span>
+        <span class="tag m">undergraduate · one week · no Sanskrit required</span>
+      </div>
+      <p><strong>The assignment.</strong> <em>Write two pages on Uttarā, and
+      cite every claim to a verse.</em></p>
+      <p><strong>What the student meets.</strong> Seven different entries claim
+      the string she is named by. One is her brother. One is an epithet of
+      Viṣṇu. <strong>One is the direction north.</strong> Before writing a
+      sentence the student has learnt something no lecture conveys as well: a
+      name in Sanskrit is a set, not a label — and the tool refuses to choose
+      for them.</p>
+      <p><strong>Where it leads.</strong> Uttarā's own entry reads
+      <em>daughter of Virāṭa, wife of Abhimanyu, mother of Parikṣit</em>. Follow
+      that and the student walks from a dancing lesson in a disguised court to
+      the child revived in the womb, to Parikṣit, to Janamejaya — to the man the
+      whole epic is being recited to. The frame of the Mahābhārata, arrived at
+      from one minor character, by following citations rather than being told.</p>
+      <p><strong>What the corpus gets.</strong> A set of bookmarked verses with
+      a student's reading attached to each, and — where the student was sure —
+      a proposed identification of which Uttara stands where.</p>
+    </div>
+
+    <div class="panel">
+      <div class="hd">
+        <span class="hw">Scenario two</span>
+        <span class="tag s">pāṭhaśāla · recurring · Sanskrit fluency required</span>
+      </div>
+      <p><strong>The assignment.</strong> <em>Here are ninety-seven verses in
+      which four different Uttaras are each claimed. Rule on them.</em></p>
+      <p>This is not the essay task in another form. It requires construing the
+      verse — the case ending, the governing verb, who is being addressed —
+      and it is exactly what a pāṭhaśāla trains. The student may also mark
+      <em>cannot determine</em>, which is a real answer and is credited as one.</p>
+      <p><strong>What the corpus gets.</strong> Signed adjudications: the
+      substance of the index, produced by the readers best qualified to produce
+      it, as part of their own study rather than instead of it.</p>
+    </div>
+
+    <div class="panel">
+      <div class="hd">
+        <span class="hw">Scenario three</span>
+        <span class="tag s">seminar · comparative · senior-led</span>
+      </div>
+      <p><strong>The assignment.</strong> <em>Parikṣit is treated one way in the
+      Mahābhārata and another in the Bhāgavata. Document the difference without
+      deciding which is right.</em></p>
+      <p>The seminar produces something the machinery specifically needs and
+      cannot generate: a ruling that <strong>two accounts both stand</strong>,
+      attributed to their sources and reconciled by neither. It is also where a
+      student first meets the difference between a text disagreeing with another
+      text and a machine having made a mistake.</p>
+    </div>
+
+    <div class="panel">
+      <div class="hd">
+        <span class="hw">Scenario four</span>
+        <span class="tag m">technical intern · one project</span>
+      </div>
+      <p><strong>The assignment.</strong> <em>Build the view that answers: which
+      other names stand in the verses where this one stands?</em></p>
+      <p>A self-contained piece of work on a real corpus, delivered to real
+      users, which becomes part of what every reader above uses the following
+      term. The portfolio piece is genuine because the artefact is.</p>
+    </div>
+
+    <h3>The chain of review, and where it stops</h3>
+    <p>A submission is read twice, to two different standards, and the
+    distinction is not a formality.</p>
+    <ul class="rule-list">
+      <li><strong>The teacher reviews it as coursework.</strong> Is the argument
+      sound, are the citations used honestly, has the student understood the
+      passage? This produces a grade, and it produces nothing in the index.</li>
+      <li><strong>The senior scholar reviews it as scholarship.</strong> Only
+      what they sign enters the index. A student's essay is evidence about the
+      student; it becomes evidence about the corpus when someone qualified says
+      so, and their name goes on it.</li>
+    </ul>
+    <p>So the classroom lane is <strong>quarantined by default</strong>. What
+    can flow in immediately is the mechanical residue — which verses were
+    looked at, which identifications were proposed — because each of those is a
+    claim with an address that anybody can re-check. Prose and sense-divisions
+    wait for a signature.</p>
+    <p>One rule follows from this and it is not negotiable: <strong>never assess
+    by volume.</strong> If a mark depends on producing thirty citations, thirty
+    citations will be produced. Assessment rests on the senior's sample, and
+    <em>I could not determine which Uttara this is</em> earns full credit when
+    the verse genuinely does not say.</p>
+
+    <h3>Why this is a fair exchange rather than free labour</h3>
+    <p>The student gets a corpus that answers back, a supervisor's correction on
+    real textual judgement, and a named credit in a published scholarly
+    apparatus — a route from study into research authorship that presently
+    barely exists. The project gets reading time it could not otherwise afford,
+    from readers who are already doing the reading.</p>
+    <p>Neither side is doing the other a favour. That is the only arrangement of
+    this kind that lasts more than one term.</p>
+  </div>
+</section>
+
+<section>
+  <div class="marg"><span class="num">VII</span>
+    <p>The half of the argument that was missing</p></div>
+  <div class="body">
+    <h2>The upanyāsam is itself apparatus</h2>
+    <p>An <em>upanyāsakar</em> expounding a text does something no index does.
+    He glosses each verse in the vernacular, names figures the verse leaves
+    unnamed, and reaches across the corpus from memory — <em>as the Rāmāyaṇa
+    tells it</em>, <em>as the Bhāgavata has it</em> — because that is what the
+    tradition of exposition <em>is</em>.</p>
+    <p>The transcripts already catch this. Across the recordings processed so
+    far the material is structured as Sanskrit verse followed by its
+    vernacular exposition, alternating, so each gloss is bound to the verse it
+    glosses:</p>
+    <div class="tw"><table>
+      <tr><th>in the transcripts so far</th><th></th></tr>
+      <tr><td>Episodes transcribed</td><td class="n">129</td></tr>
+      <tr><td>Units of vernacular exposition</td><td class="n">13,375</td></tr>
+      <tr><td>Episodes invoking the Gītā by name</td><td class="n">44</td></tr>
+      <tr><td>…the Upaniṣads</td><td class="n">33</td></tr>
+      <tr><td>…the Bhāgavata</td><td class="n">29</td></tr>
+      <tr><td>…the Rāmāyaṇa</td><td class="n">28</td></tr>
+    </table></div>
+    <p>At a hundred and twenty-nine episodes this is suggestive. At the few
+    hundred the audio proposal would commission it becomes a
+    <strong>corpus of pointers</strong>: the places a scholar did not know to
+    look, named by someone who did.</p>
+    <p>It must be graded honestly. A pointer is a <em>lead</em>, not a citation.
+    The expounder rarely gives chapter and verse; the transcript is machine
+    output with machine errors; and the exposition inherits its place in the
+    recording from the verse beside it rather than from its own measurement. So
+    it ranks below an indexed citation — but it differs from a machine's guess
+    in the way that matters: a named scholar said it, on a date, at a timestamp,
+    in a recording anyone can play.</p>
+    <p><strong>This is where the two proposals actually meet.</strong> Each
+    produces something the other needs. The
+    <a href="purana-nama-kosa.html">Nāma-Kośa</a> supplies the entity layer the
+    <a href="purana-audio.html">Audio Project</a> lists among its own limits;
+    the Audio Project supplies the growing body of expert cross-references that
+    turns a search box into pointers.</p>
+  </div>
+</section>
+
+<section>
+  <div class="marg"><span class="num">VIII</span>
+    <p>Why anyone keeps going</p></div>
+  <div class="body">
+    <h2>Watching it take shape</h2>
+    <p>This is not a book sent to the press, with a copy shared when it arrives.
+    The output is digital and close to real time, so what a supporter — or a
+    contributing institution, or a reader — should get is a nightly rebuild with
+    a report of what changed: decisions signed and by whom, headwords closed,
+    escalations opened, agreement between readers, and how far the frontier has
+    moved.</p>
+    <p>The unit that closes should be small: a headword, or a single adhyāya —
+    never <em>the Harivaṃśa</em>. Begin where an existing index already supplies
+    the answers, so that units start closing in the first fortnight. If the
+    first closed unit is eight months away, nobody watches.</p>
+    <p>It matters more for the readers than for anyone funding it. A student who
+    can see their name against four hundred signed decisions, and watch a
+    chapter go from grey to complete, comes back next week.</p>
+  </div>
+</section>
+
+<section>
+  <div class="marg"><span class="num">IX</span>
+    <p>Stated plainly</p></div>
+  <div class="body">
+    <h2>What exists, and what does not</h2>
+    <p><strong>Exists.</strong> The corpus, addressed at the verse across the
+    epic and all eighteen Mahāpurāṇas. The name layer over it, with graded
+    evidence and rival claimants kept as sets rather than guesses. The
+    transcripts described in <span class="fig">VI</span>. The two atlases on
+    this site, and the publish-and-verify step that refuses to ship a page whose
+    data is broken. The dossier in <span class="fig">V</span> is a query away.</p>
+    <p><strong>Does not exist.</strong> The reading client itself, and the queue
+    behind it. The discussion threads. The nightly report. The index of chapter
+    headings. Nothing here is large, and none of it is the hard part.</p>
+    <p><strong>Neither software nor solvable by it.</strong> Who assigns the
+    work; what happens when a reader stalls; who chases an unanswered
+    escalation; how a reader is calibrated before going live and checked again
+    afterwards. That is the part which decides whether any of this works, and no
+    amount of design settles it in advance.</p>
+  </div>
+</section>
+
+<footer>
+  <span>Companion to <a href="purana-audio.html">Purāṇa Audio Project</a> and
+  <a href="purana-nama-kosa.html">Purāṇa Nāma-Kośa</a>.</span>
+  <span>Working atlases: <a href="../virata-atlas.html">Virāṭa Parva</a> ·
+  <a href="../kartika-atlas.html">Kārtika Māsa Māhātmya</a>.</span>
+  <span>Figures are measurements over the built corpus, not projections.</span>
+</footer>
+
+</div>
