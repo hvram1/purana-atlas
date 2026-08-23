@@ -102,8 +102,12 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
   border-left:3px solid var(--line);border-radius:8px;padding:.85rem 1rem;
   font-size:.92rem;color:var(--ink2)}
 .soon b{color:var(--ink);font-weight:600}
-.soon .who{display:block;color:var(--muted);font-size:.8rem;
+/* The reciter's name, in the "what is coming" list and on the atlas cards.
+   Same treatment in both places: it is an attribution, not a statistic, so it
+   sits under the prose rather than in the .stats row. */
+.soon .who,.card .who{display:block;color:var(--muted);font-size:.8rem;
   letter-spacing:.02em;margin-top:.3rem}
+.card .who{margin-top:.55rem}
 .card h2.pitch{font-family:var(--ui);font-size:1.08rem;letter-spacing:-.01em}
 /* The working note. Deliberately NOT a .card and NOT inside .cards.two: it is
    not a third proposal, and a reader who counts three cards will read it as
@@ -125,7 +129,7 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
 <div class="wrap">
 <header>
   <h1>Purāṇa Atlas</h1>
-  <p class="sub">Two Sanskrit texts, each verse tied to the second it is chanted
+  <p class="sub">Three Sanskrit texts, each verse tied to the second it is chanted
   in a recorded <i>upanyāsam</i>. Click a verse, hear it. <a href="#soon">Five
   more are in hand.</a></p>
   <p class="sub why">They are built to argue for two things the Purāṇas still
@@ -147,12 +151,21 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
 
 <section>
   <h3>Reading the lanes</h3>
-  <p>A lane is one reciter's traversal of the text. The Kārtika atlas has two,
-  and they barely overlap: <span class="s1">Speaker 1</span> reads the book
-  straight through, while <span class="s2">Speaker 2</span> follows the
-  calendar, taking each day's verses from wherever the text supports them.
-  Together they reach more of the work than either alone, and the
-  <span id="both">verses</span> both chant are the same words in two voices.</p>
+  <p>A lane is one traversal of the text, and what separates two lanes is not
+  the same thing in every atlas. In <b>Kārtika</b> they are <i>reciters</i>:
+  <span class="s1">Speaker 1</span> reads the book straight through, while
+  <span class="s2">Speaker 2</span> follows the calendar, taking each day's
+  verses from wherever the text supports them. Together they reach more of the
+  work than either alone, and the <span id="both">verses</span> both chant are
+  the same words in two voices.</p>
+  <p>In the <b>Adhyātma Rāmāyaṇa</b> the two lanes are one reciter in two
+  settings. <span class="s1">Upanyāsa</span> is seven days of discourse, a few
+  verses at a time with their explanation between them.
+  <span class="s2">Pārāyaṇa</span> is a single day given to near-continuous
+  recitation before any exposition begins — which is why one recording covers
+  almost the whole of Araṇyakāṇḍa while seven days of discourse reach a third
+  of what they touch. <span id="bothar">Verses</span> are heard in both: the
+  same words, in the same voice, twice.</p>
 </section>
 
 <section>
@@ -202,7 +215,7 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
 
 <section id="why">
   <h3>Why this exists</h3>
-  <p>These two atlases are the working proof behind two proposals. They share a
+  <p>These three atlases are the working proof behind two proposals. They share a
   corpus, and each is worth more with the other: one would make the Purāṇas
   <i>audible</i> at the verse, the other would make them <i>searchable</i> by
   name.</p>
@@ -267,13 +280,21 @@ const CARDS = {
     blurb: 'The glory of the month of Kārtika, in two independent Tamil '
          + 'renditions — one reading the book straight through, one following '
          + 'the calendar.'
+  },
+  adhyatma: {
+    href: 'adhyatma-atlas.html',
+    title: 'अध्यात्मरामायणम्',
+    rom: 'Adhyātma Rāmāyaṇa · eight kāṇḍas',
+    blurb: 'Rāma\'s story told by Śiva to Pārvatī, in two lanes that are the '
+         + 'same voice on two occasions — seven days of discourse, and one '
+         + 'day of continuous recitation. Text from sanskritdocuments.org.'
   }
 };
 const n = x => x.toLocaleString('en-IN');
 
 fetch('data/stats.json').then(r => r.json()).then(S => {
   const box = document.getElementById('cards');
-  for (const key of ['virata', 'kartika']) {
+  for (const key of ['virata', 'kartika', 'adhyatma']) {
     const c = CARDS[key], s = S.atlases[key];
     if (!s) continue;
     const a = document.createElement('a');
@@ -285,15 +306,26 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
       + '<div class="stats">'
       +   '<span class="stat"><b>' + n(s.verses) + '</b>verses</span>'
       +   '<span class="stat"><b>' + s.reached_pct + '%</b>heard aloud</span>'
-      +   '<span class="stat"><b>' + s.chapters + '</b>adhyāyas</span>'
+      +   '<span class="stat"><b>' + s.chapters + '</b>'
+      +     (key === 'adhyatma' ? 'sargas' : 'adhyāyas') + '</span>'
       +   '<span class="stat"><b>' + s.recordings + '</b>recordings</span>'
       + '</div>'
+      // Named from stats.json, which reads them off the lanes -- so a page
+      // that gains a reciter says so without anyone editing this file.
+      + ((s.speakers && s.speakers.length)
+          ? '<p class="who">Expounded by ' + s.speakers.join(' · ') + '</p>'
+          : '')
       + '<div class="go">Open the atlas →</div>';
     box.appendChild(a);
   }
   const k = S.atlases.kartika;
   if (k && k.both_lanes) {
     document.getElementById('both').textContent = n(k.both_lanes) + ' verses';
+  }
+  const ar = S.atlases.adhyatma;
+  if (ar && ar.both_lanes) {
+    document.getElementById('bothar').textContent =
+      n(ar.both_lanes) + ' verses';
   }
   document.getElementById('built').textContent = 'Refreshed ' + S.built;
 }).catch(e => {
@@ -303,6 +335,8 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
     + '<a class="card" href="virata-atlas.html"><h2>विराटपर्व</h2>'
     + '<div class="go">Open the atlas →</div></a>'
     + '<a class="card" href="kartika-atlas.html"><h2>कार्तिकमासमाहात्म्यम्</h2>'
+    + '<div class="go">Open the atlas →</div></a>'
+    + '<a class="card" href="adhyatma-atlas.html"><h2>अध्यात्मरामायणम्</h2>'
     + '<div class="go">Open the atlas →</div></a>';
 });
 </script>

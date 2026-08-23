@@ -73,6 +73,8 @@ SRC = os.environ.get("ATLAS_SRC",
 ATLASES = [
     ("virata-atlas.html", "virata_4lang.json", "virata_atlas_substrate.json"),
     ("kartika-atlas.html", "kartika_4lang.json", "kartika_atlas_substrate.json"),
+    ("adhyatma-atlas.html", "adhyatma_4lang.json",
+     "adhyatma_atlas_substrate.json"),
 ]
 
 # Shape contract of the substrate. Getting one of these wrong does not degrade
@@ -432,6 +434,13 @@ def main():
             "reached_pct": round(100.0 * reached / max(1, verses), 1),
             "lanes": len(four["langs"]), "real_lanes": len(real),
             "recordings": rec, "parts": len(eps), "both_lanes": both,
+            # Who is chanting, read off the lanes rather than typed into
+            # index.html -- the same rule the coverage figures follow. A lane
+            # with no `speaker` contributes nothing rather than an empty
+            # string, so the page can tell "not recorded here" from "unknown".
+            "speakers": sorted({l["speaker"] for l in four["langs"]
+                                if l.get("speaker")}),
+            "lane_axis": four.get("lane_axis") or "",
         }
         print("  %d verses · %d reached by a real recording (%.1f%%) · "
               "%d lanes (%d real) · %d parts, %d recordings"
