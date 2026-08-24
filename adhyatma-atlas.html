@@ -1328,7 +1328,28 @@ function markCue(){
   const c=P.cues[P.idx];
   const chip=document.querySelector('.mk[data-ref="'+P.ref+'"][data-l="'+P.lid+'"][data-i="'+c.i+'"]');
   if(chip)chip.classList.add('playing');
-  const n=document.getElementById('v-'+P.ref);
+  // A passing cue must not take the reader's place away either.
+  //
+  // `focus` already refuses to CHASE a quotation -- no adhyāya switch, no
+  // scroll -- but the cue still became current, and this function clears every
+  // .cue before setting the new one. When the quoted verse is in another
+  // adhyāya there is no node to set, so the highlight simply went out: kmm-09
+  // quotes 35.1 at 435.65 in the middle of its run through adhyāya 12, and for
+  // the four seconds to 12.6 the page showed no current verse while the
+  // recitation was audibly still in 12.5. Verified in a browser before and
+  // after this change.
+  //
+  // So when the current cue is passing and its verse is not on screen, hold
+  // the last settled verse that IS. The transport still reports the quotation;
+  // only the highlight stays put.
+  let mref=P.ref;
+  if(passing(c)&&!document.getElementById('v-'+mref)){
+    for(let j=P.idx-1;j>=0;j--){
+      const b=P.cues[j];
+      if(!passing(b)&&document.getElementById('v-'+b.ref)){mref=b.ref;break;}
+    }
+  }
+  const n=document.getElementById('v-'+mref);
   if(n){n.classList.add('cue');n.classList.toggle('exp',P.state==='exp');}
 }
 function tick(){
