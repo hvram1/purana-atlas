@@ -219,6 +219,32 @@ def check_substrate(path):
         if k in d and not isinstance(d[k], list):
             bad += fail("%s.%s must be a list; `.filter is not a function` "
                         "blanks the page" % (os.path.basename(path), k))
+    # The DCS layer, when a substrate carries one. The page does `A.dcs.v[ref]`
+    # and then indexes `h.p` and `h.a` positionally, so the container kinds are
+    # load-bearing the same way the ones above are. An anvaya that is not a
+    # permutation of that hemistich's own padas is the one error the data can
+    # carry that renders as plausible Sanskrit rather than as a broken page.
+    dcs = d.get("dcs")
+    if dcs is not None:
+        if not isinstance(dcs.get("v"), dict):
+            bad += fail("%s.dcs.v must be a dict keyed by verse ref"
+                        % os.path.basename(path))
+        else:
+            if not dcs.get("anvaya_derived"):
+                bad += fail("%s.dcs does not declare the anvaya derived; the "
+                            "page badges it from this flag"
+                            % os.path.basename(path))
+            for ref, hs in dcs["v"].items():
+                for h in hs:
+                    n = len(h.get("p") or ())
+                    a = h.get("a")
+                    if a is None:
+                        continue
+                    if sorted(a) != list(range(n)):
+                        bad += fail("%s.dcs.v[%s] anvaya is not a permutation "
+                                    "of its padas" % (os.path.basename(path),
+                                                      ref))
+                        break
     return bad, d
 
 

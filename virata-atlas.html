@@ -26,7 +26,7 @@
   --bg:#f7f4ee;--panel:#fffdf9;--sunk:#f1ece2;--line:#e2dace;--line2:#efe9dd;
   --ink:#282320;--ink2:#4a423b;--muted:#857a6e;--faint:#a99e90;
   --accent:#8b3a2e;--accent-bg:#f7ebe6;
-  --sa:#7a4a1e;--en:#2e5a8b;--bd:#4a6b32;
+  --sa:#7a4a1e;--en:#2e5a8b;--bd:#4a6b32;--pc:#6b4a7a;--an:#8b5a2e;
   --ta:#a8362b;--kn:#3b5ba5;--te:#2e7d6b;--bn:#7a4e9e;
   --person:#8b3a2e;--person-bg:#f7ebe6;--place:#2e6b5a;--place-bg:#e6f2ee;
   --people:#8a6d1f;--people-bg:#f5efdd;--divine:#54509b;--divine-bg:#ebeaf6;
@@ -40,7 +40,7 @@
   --bg:#16140f;--panel:#1e1b16;--sunk:#242019;--line:#332d24;--line2:#2a251d;
   --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
   --accent:#d98a72;--accent-bg:#2c211c;
-  --sa:#d4a574;--en:#7fb0dd;--bd:#9ec87a;
+  --sa:#d4a574;--en:#7fb0dd;--bd:#9ec87a;--pc:#c2a0d4;--an:#d9a878;
   --ta:#e08878;--kn:#8fa9e8;--te:#6cc4ae;--bn:#b98fdb;
   --person:#e0a08e;--person-bg:#33201c;--place:#6cc4ae;--place-bg:#12302a;
   --people:#d3b562;--people-bg:#302816;--divine:#a6a2e8;--divine-bg:#232140;
@@ -51,7 +51,7 @@
   --bg:#16140f;--panel:#1e1b16;--sunk:#242019;--line:#332d24;--line2:#2a251d;
   --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
   --accent:#d98a72;--accent-bg:#2c211c;
-  --sa:#d4a574;--en:#7fb0dd;--bd:#9ec87a;
+  --sa:#d4a574;--en:#7fb0dd;--bd:#9ec87a;--pc:#c2a0d4;--an:#d9a878;
   --ta:#e08878;--kn:#8fa9e8;--te:#6cc4ae;--bn:#b98fdb;
   --person:#e0a08e;--person-bg:#33201c;--place:#6cc4ae;--place-bg:#12302a;
   --people:#d3b562;--people-bg:#302816;--divine:#a6a2e8;--divine-bg:#232140;
@@ -133,6 +133,15 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
 .layer{margin:0 0 11px;padding-left:13px;border-left:2px solid var(--line)}
 .layer.sa{border-left-color:var(--sa)}.layer.en{border-left-color:var(--en)}
 .layer.bd{border-left-color:var(--bd)}
+.layer.pc{border-left-color:var(--pc)}.layer.an{border-left-color:var(--an)}
+.layer.pc .txt,.layer.an .txt{font-family:var(--serif);font-size:16px;line-height:2}
+.pada{cursor:help;border-bottom:1px dotted transparent}
+.pada:hover{border-bottom-color:var(--muted)}
+.hemisep{color:var(--faint);margin:0 6px}
+.derived{font-size:9px;letter-spacing:.06em;color:var(--faint);
+  border:1px solid var(--line);border-radius:3px;padding:0 4px;margin-left:6px;
+  text-transform:none;letter-spacing:0}
+.layer.pc .lowsim{color:var(--muted)}
 .layer .lbl{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);
   margin-bottom:4px;font-weight:600}
 .layer.sa .txt{font-family:var(--serif);font-size:17px;line-height:1.9}
@@ -336,6 +345,14 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
     <button data-g="translation" class="on">Translated</button>
     <button data-g="scan">Scanned</button>
   </div>
+  <!-- The DCS layer. Padaccheda is hand-annotated in the Digital Corpus of
+       Sanskrit and is on by default. The anvaya is NOT: it is linearised from a
+       machine parse by this pipeline, it is right often enough to be useful and
+       wrong often enough that nobody should meet it without having asked. -->
+  <div class="tog" id="dcstog" title="Digital Corpus of Sanskrit: word separation, and prose order derived from it">
+    <button data-k="pc" class="on">पदच्छेद</button>
+    <button data-k="an">अन्वय</button>
+  </div>
   <div class="tog" id="ambtog" title="Mark names that could denote more than one entity">
     <button data-k="amb" class="on">Ambiguity</button>
   </div>
@@ -403,7 +420,7 @@ const cmpHit=(a,b)=>(b.res|0)-(a.res|0)
 
 let V=null,A=null,curChap=1,
     show={person:true,people:true,place:true,divine:true,band:true,
-          unknown:true},
+          unknown:true,pc:true,an:false},
   // `scan` has no index behind it -- 8,593 of the annotations here, and
   // the source of most of the ambiguity markers. Off until asked for.
   showAmb=true,
@@ -450,6 +467,10 @@ Promise.all([fetch('data/virata_4lang.json').then(r=>r.json()),
    +'Serve with <code>python3 -m http.server 8137</code><br><small>'+esc(e.message)+'</small></div>';});
 
 document.querySelectorAll('#showtog button').forEach(b=>b.onclick=()=>{
+  show[b.dataset.k]=!show[b.dataset.k];b.classList.toggle('on',show[b.dataset.k]);
+  showChapter(curChap);});
+
+document.querySelectorAll('#dcstog button').forEach(b=>b.onclick=()=>{
   show[b.dataset.k]=!show[b.dataset.k];b.classList.toggle('on',show[b.dataset.k]);
   showChapter(curChap);});
 
@@ -595,6 +616,42 @@ function mark(text,hits,surface){
   return out+esc(text.slice(at));
 }
 
+// ---------------- DCS layer: padaccheda and anvaya ----------------
+// A pada carries its own grammar in the tooltip, which is the whole reason the
+// morphology is shipped: `विराट-नगरे  nagara · NOUN · Loc sg neut` is what
+// makes the separation checkable rather than decorative.
+const FEATSHORT={Nom:'nom',Acc:'acc',Ins:'ins',Dat:'dat',Abl:'abl',Gen:'gen',
+  Loc:'loc',Voc:'voc',Cpd:'in compound',Sing:'sg',Dual:'du',Plur:'pl',
+  Masc:'masc',Fem:'fem',Neut:'neut'};
+function gloss(p){
+  const [w,lemma,pos,feats]=p;
+  const bits=(feats||'').split('|').filter(Boolean).map(f=>{
+    const v=f.split('=')[1];return FEATSHORT[v]||v;});
+  return lemma+' · '+pos.toLowerCase()+(bits.length?' · '+bits.join(' '):'');
+}
+function padaSpan(p){
+  return '<span class="pada" title="'+esc(gloss(p))+'">'+esc(p[0])+'</span>';
+}
+// One lane for the whole verse, hemistichs separated -- not one lane each.
+// The verse is the unit a reader is looking at even though the annotation unit
+// underneath is the half-verse.
+function dcsLane(rows,kind){
+  const parts=[];
+  for(const h of rows){
+    if(kind==='an'&&!h.a)continue;
+    const order=kind==='an'?h.a.map(i=>h.p[i]):h.p;
+    // Below a perfect match the words shown are the critical edition's, which
+    // can differ from the mūla above by a word (16.10: केशपाशे / केशपक्षे).
+    // Saying so costs one class; not saying it makes the page look wrong.
+    const cls=h.sim<1?' class="lowsim"':'';
+    parts.push('<span'+cls+(h.sim<1?' title="'+h.ref+', matched at '+h.sim
+      +' -- the words shown are the critical edition\'s"':' title="'+h.ref+'"')
+      +'>'+order.map(padaSpan).join(' ')+'</span>');
+  }
+  if(!parts.length)return null;
+  return parts.join('<span class="hemisep">।</span>');
+}
+
 function verse(ref){
   const v=V.verses[ref],hits=A.ann[ref]||[],node=el('div','v');
   node.id='v-'+ref;node.dataset.ref=ref;
@@ -623,6 +680,20 @@ function verse(ref){
     e.innerHTML='<div class="lbl">M. N. Dutt · 1897</div><div class="txt">'+mark(v.en,hits,'en')+'</div>';
     node.appendChild(e);}
   else node.appendChild(el('div','absent','no English translation for this verse'));
+  // Between the mūla and the translations: the separation is of the Sanskrit,
+  // so it belongs next to the Sanskrit.
+  const dcs=(A.dcs&&A.dcs.v[ref])||null;
+  if(dcs){
+    if(show.pc){const t=dcsLane(dcs,'pc');
+      if(t)node.appendChild(el('div','layer pc',
+        '<div class="lbl">पदच्छेद · DCS</div><div class="txt">'+t+'</div>'));}
+    if(show.an){const t=dcsLane(dcs,'an');
+      if(t)node.appendChild(el('div','layer an',
+        '<div class="lbl">अन्वय<span class="derived" title="Linearised from the '
+        +'corpus\'s machine parse by this pipeline -- not a commentator\'s '
+        +'anvaya, and not always right">derived</span></div>'
+        +'<div class="txt">'+t+'</div>'));}
+  }
   if(v.bd) node.appendChild(el('div','layer bd',
     '<div class="lbl">भावदीप · नीलकण्ठ</div><div class="txt">'+esc(v.bd)+'</div>'));
   if(show.band) node.appendChild(band(v,ref));
