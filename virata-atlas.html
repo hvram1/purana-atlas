@@ -450,7 +450,13 @@ Promise.all([fetch('data/virata_4lang.json').then(r=>r.json()),
    V.verses={};
    for(const r in (A.text||{})){
      const t=A.text[r],p=r.split('.');
-     V.verses[r]={ch:+p[0],v:+p[1],sa:t.sa,en:t.en,lang:(audio[r]||{}).lang||{}};
+     // `bd` too. Without it `v.bd` is undefined for every verse and the
+     // भावदीप branch in verse() is unreachable -- measured at 0 of 2,262
+     // verses. The lane died when the substrate became the authority for
+     // the text and 4lang was demoted to lanes and timings; the commentary
+     // now comes through the substrate, where the text belongs.
+     V.verses[r]={ch:+p[0],v:+p[1],sa:t.sa,en:t.en,bd:t.bd,
+                  lang:(audio[r]||{}).lang||{}};
    }
    if(A.chapters)V.chapters=A.chapters;
    // An audio lane for a verse the text does not contain is a mismatch to
