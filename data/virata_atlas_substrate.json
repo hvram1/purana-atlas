@@ -458675,7 +458675,7 @@
    ],
    "2.31": [
     {
-     "ref": "MBh 4,2",
+     "ref": "MBh 4,3",
      "sim": 0.927,
      "p": [
       [
@@ -459799,7 +459799,7 @@
      ]
     },
     {
-     "ref": "MBh 4,9",
+     "ref": "MBh 4,3",
      "sim": 1.0,
      "p": [
       [
@@ -460317,7 +460317,7 @@
    ],
    "3.18": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,3",
      "sim": 1.0,
      "p": [
       [
@@ -460497,7 +460497,7 @@
      ]
     },
     {
-     "ref": "MBh 4,2",
+     "ref": "MBh 4,3",
      "sim": 0.927,
      "p": [
       [
@@ -460535,7 +460535,7 @@
    ],
    "3.20": [
     {
-     "ref": "MBh 4,2",
+     "ref": "MBh 4,3",
      "sim": 1.0,
      "p": [
       [
@@ -460563,10 +460563,10 @@
        "Tense=Fut|Mood=Ind|Person=1|Number=Sing"
       ],
       [
-       "पृष्टः",
+       "पृष्टा",
        "pracch",
        "VERB",
-       "Case=Nom|Gender=Masc|Number=Sing|VerbForm=Part"
+       "Case=Nom|Gender=Fem|Number=Sing|VerbForm=Part"
       ],
       [
        "राज्ञा",
@@ -468304,51 +468304,6 @@
      ]
     }
    ],
-   "5.35": [
-    {
-     "ref": "MBh 4,22",
-     "sim": 0.947,
-     "p": [
-      [
-       "जयः",
-       "jaya",
-       "NOUN",
-       "Case=Nom|Gender=Masc|Number=Sing"
-      ],
-      [
-       "जयन्तः",
-       "jayanta",
-       "NOUN",
-       "Case=Nom|Gender=Masc|Number=Sing"
-      ],
-      [
-       "विजयः",
-       "vijaya",
-       "NOUN",
-       "Case=Nom|Gender=Masc|Number=Sing"
-      ],
-      [
-       "जयत्सेनः",
-       "jayatsena",
-       "NOUN",
-       "Case=Nom|Gender=Masc|Number=Sing"
-      ],
-      [
-       "जयद्बलः",
-       "jayadbala",
-       "NOUN",
-       "Case=Nom|Gender=Masc|Number=Sing"
-      ]
-     ],
-     "a": [
-      0,
-      1,
-      2,
-      3,
-      4
-     ]
-    }
-   ],
    "7.1": [
     {
      "ref": "MBh 4,6",
@@ -472538,7 +472493,7 @@
    ],
    "9.9": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,8",
      "sim": 1.0,
      "p": [
       [
@@ -473169,7 +473124,7 @@
    ],
    "9.17": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,8",
      "sim": 1.0,
      "p": [
       [
@@ -473664,7 +473619,7 @@
    ],
    "9.22": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,8",
      "sim": 1.0,
      "p": [
       [
@@ -474411,7 +474366,7 @@
    ],
    "9.30": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,8",
      "sim": 1.0,
      "p": [
       [
@@ -474774,7 +474729,7 @@
    ],
    "9.35": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,8",
      "sim": 1.0,
      "p": [
       [
@@ -474912,28 +474867,6 @@
        "ADV",
        ""
       ]
-     ]
-    },
-    {
-     "ref": "MBh 4,63",
-     "sim": 0.933,
-     "p": [
-      [
-       "वैशम्पायनः",
-       "vaiśampāyana",
-       "NOUN",
-       "Case=Nom|Gender=Masc|Number=Sing"
-      ],
-      [
-       "उवाच",
-       "vac",
-       "VERB",
-       "Tense=Past|Mood=Ind|Person=3|Number=Sing"
-      ]
-     ],
-     "a": [
-      0,
-      1
      ]
     },
     {
@@ -483616,7 +483549,7 @@
    ],
    "14.34": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,15",
      "sim": 1.0,
      "p": [
       [
@@ -484016,28 +483949,6 @@
     }
    ],
    "14.47": [
-    {
-     "ref": "MBh 4,23",
-     "sim": 0.933,
-     "p": [
-      [
-       "सैरन्ध्री",
-       "sairandhrī",
-       "NOUN",
-       "Case=Nom|Gender=Fem|Number=Sing"
-      ],
-      [
-       "उवाच",
-       "vac",
-       "VERB",
-       "Tense=Past|Mood=Ind|Person=3|Number=Sing"
-      ]
-     ],
-     "a": [
-      0,
-      1
-     ]
-    },
     {
      "ref": "MBh 4,13",
      "sim": 0.939,
@@ -485335,7 +485246,7 @@
    ],
    "15.10": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,15",
      "sim": 1.0,
      "p": [
       [
@@ -485443,28 +485354,6 @@
     }
    ],
    "15.11": [
-    {
-     "ref": "MBh 4,23",
-     "sim": 1.0,
-     "p": [
-      [
-       "सैरन्ध्री",
-       "sairandhrī",
-       "NOUN",
-       "Case=Nom|Gender=Fem|Number=Sing"
-      ],
-      [
-       "उवाच",
-       "vac",
-       "VERB",
-       "Tense=Past|Mood=Ind|Person=3|Number=Sing"
-      ]
-     ],
-     "a": [
-      0,
-      1
-     ]
-    },
     {
      "ref": "MBh 4,14",
      "sim": 1.0,
@@ -485938,7 +485827,7 @@
    ],
    "15.16": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,15",
      "sim": 1.0,
      "p": [
       [
@@ -486105,30 +485994,6 @@
       2,
       3,
       0
-     ]
-    }
-   ],
-   "15.18": [
-    {
-     "ref": "MBh 4,23",
-     "sim": 1.0,
-     "p": [
-      [
-       "सैरन्ध्री",
-       "sairandhrī",
-       "NOUN",
-       "Case=Nom|Gender=Fem|Number=Sing"
-      ],
-      [
-       "उवाच",
-       "vac",
-       "VERB",
-       "Tense=Past|Mood=Ind|Person=3|Number=Sing"
-      ]
-     ],
-     "a": [
-      0,
-      1
      ]
     }
    ],
@@ -486703,7 +486568,7 @@
    ],
    "16.4": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,18",
      "sim": 1.0,
      "p": [
       [
@@ -486943,7 +486808,7 @@
    ],
    "16.6": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,18",
      "sim": 1.0,
      "p": [
       [
@@ -487480,58 +487345,6 @@
      ]
     }
    ],
-   "16.18": [
-    {
-     "ref": "MBh 4,32",
-     "sim": 1.0,
-     "p": [
-      [
-       "तम्",
-       "tad",
-       "PRON",
-       "Case=Acc|Gender=Masc|Number=Sing"
-      ],
-      [
-       "मत्तम्",
-       "mad",
-       "VERB",
-       "Case=Acc|Gender=Masc|Number=Sing|VerbForm=Part"
-      ],
-      [
-       "इव",
-       "iva",
-       "PART",
-       ""
-      ],
-      [
-       "मातंगम्",
-       "mātaṃga",
-       "NOUN",
-       "Case=Acc|Gender=Masc|Number=Sing"
-      ],
-      [
-       "वीक्षमाणम्",
-       "vīkṣ",
-       "VERB",
-       "Case=Acc|Gender=Masc|Number=Sing|Tense=Pres|VerbForm=Part"
-      ],
-      [
-       "वनस्पतिम्",
-       "vanaspati",
-       "NOUN",
-       "Case=Acc|Gender=Masc|Number=Sing"
-      ]
-     ],
-     "a": [
-      1,
-      3,
-      2,
-      0,
-      5,
-      4
-     ]
-    }
-   ],
    "16.20": [
     {
      "ref": "MBh 4,15",
@@ -487710,7 +487523,7 @@
    ],
    "16.22": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,18",
      "sim": 1.0,
      "p": [
       [
@@ -489149,7 +488962,7 @@
    ],
    "16.40": [
     {
-     "ref": "MBh 4,15",
+     "ref": "MBh 4,16",
      "sim": 1.0,
      "p": [
       [
@@ -489519,28 +489332,6 @@
    ],
    "16.45": [
     {
-     "ref": "MBh 4,23",
-     "sim": 0.933,
-     "p": [
-      [
-       "सैरन्ध्री",
-       "sairandhrī",
-       "NOUN",
-       "Case=Nom|Gender=Fem|Number=Sing"
-      ],
-      [
-       "उवाच",
-       "vac",
-       "VERB",
-       "Tense=Past|Mood=Ind|Person=3|Number=Sing"
-      ]
-     ],
-     "a": [
-      0,
-      1
-     ]
-    },
-    {
      "ref": "MBh 4,15",
      "sim": 1.0,
      "p": [
@@ -489775,7 +489566,7 @@
    ],
    "16.48": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,15",
      "sim": 1.0,
      "p": [
       [
@@ -489907,7 +489698,7 @@
    ],
    "16.49": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,18",
      "sim": 1.0,
      "p": [
       [
@@ -489979,7 +489770,7 @@
    ],
    "16.50": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,15",
      "sim": 1.0,
      "p": [
       [
@@ -490098,30 +489889,6 @@
       2,
       4,
       5
-     ]
-    }
-   ],
-   "16.51": [
-    {
-     "ref": "MBh 4,23",
-     "sim": 0.933,
-     "p": [
-      [
-       "सैरन्ध्री",
-       "sairandhrī",
-       "NOUN",
-       "Case=Nom|Gender=Fem|Number=Sing"
-      ],
-      [
-       "उवाच",
-       "vac",
-       "VERB",
-       "Tense=Past|Mood=Ind|Person=3|Number=Sing"
-      ]
-     ],
-     "a": [
-      0,
-      1
      ]
     }
    ],
@@ -490687,28 +490454,6 @@
      ]
     },
     {
-     "ref": "MBh 4,23",
-     "sim": 0.933,
-     "p": [
-      [
-       "सैरन्ध्री",
-       "sairandhrī",
-       "NOUN",
-       "Case=Nom|Gender=Fem|Number=Sing"
-      ],
-      [
-       "उवाच",
-       "vac",
-       "VERB",
-       "Tense=Past|Mood=Ind|Person=3|Number=Sing"
-      ]
-     ],
-     "a": [
-      0,
-      1
-     ]
-    },
-    {
      "ref": "MBh 4,16",
      "sim": 0.95,
      "p": [
@@ -490815,28 +490560,6 @@
       4,
       2,
       6
-     ]
-    },
-    {
-     "ref": "MBh 4,63",
-     "sim": 0.933,
-     "p": [
-      [
-       "वैशम्पायनः",
-       "vaiśampāyana",
-       "NOUN",
-       "Case=Nom|Gender=Masc|Number=Sing"
-      ],
-      [
-       "उवाच",
-       "vac",
-       "VERB",
-       "Tense=Past|Mood=Ind|Person=3|Number=Sing"
-      ]
-     ],
-     "a": [
-      0,
-      1
      ]
     }
    ],
@@ -491309,7 +491032,7 @@
    ],
    "17.17": [
     {
-     "ref": "MBh 4,15",
+     "ref": "MBh 4,16",
      "sim": 1.0,
      "p": [
       [
@@ -491888,7 +491611,7 @@
    ],
    "18.1": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,20",
      "sim": 1.0,
      "p": [
       [
@@ -494444,7 +494167,7 @@
    ],
    "19.1": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,21",
      "sim": 1.0,
      "p": [
       [
@@ -495143,8 +494866,8 @@
    ],
    "19.14": [
     {
-     "ref": "MBh 4,2",
-     "sim": 0.978,
+     "ref": "MBh 4,18",
+     "sim": 0.955,
      "p": [
       [
        "यः",
@@ -495153,9 +494876,9 @@
        "Case=Nom|Gender=Masc|Number=Sing"
       ],
       [
-       "तु",
-       "tu",
-       "PART",
+       "स",
+       "sa",
+       "ADV",
        ""
       ],
       [
@@ -495177,10 +494900,10 @@
        ""
       ],
       [
-       "सर्वाः",
-       "sarva",
-       "PRON",
-       "Case=Acc|Gender=Fem|Number=Plur"
+       "सर्पान्",
+       "sarpa",
+       "NOUN",
+       "Case=Acc|Gender=Masc|Number=Plur"
       ],
       [
        "च",
@@ -495203,14 +494926,14 @@
      ],
      "a": [
       0,
-      5,
-      4,
       7,
+      1,
       2,
       3,
+      4,
+      5,
       6,
-      8,
-      1
+      8
      ]
     },
     {
@@ -497593,7 +497316,7 @@
    ],
    "20.1": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,22",
      "sim": 1.0,
      "p": [
       [
@@ -501707,7 +501430,7 @@
    ],
    "21.18": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,22",
      "sim": 1.0,
      "p": [
       [
@@ -504844,7 +504567,7 @@
    ],
    "22.12": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,22",
      "sim": 1.0,
      "p": [
       [
@@ -505186,7 +504909,7 @@
    ],
    "22.16": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,22",
      "sim": 1.0,
      "p": [
       [
@@ -506917,7 +506640,7 @@
    ],
    "22.35": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,22",
      "sim": 1.0,
      "p": [
       [
@@ -510783,7 +510506,7 @@
    ],
    "23.12": [
     {
-     "ref": "MBh 4,14",
+     "ref": "MBh 4,22",
      "sim": 1.0,
      "p": [
       [
@@ -513736,7 +513459,7 @@
      ]
     },
     {
-     "ref": "MBh 4,16",
+     "ref": "MBh 4,23",
      "sim": 1.0,
      "p": [
       [
@@ -524439,28 +524162,6 @@
      ]
     },
     {
-     "ref": "MBh 4,63",
-     "sim": 0.933,
-     "p": [
-      [
-       "वैशम्पायनः",
-       "vaiśampāyana",
-       "NOUN",
-       "Case=Nom|Gender=Masc|Number=Sing"
-      ],
-      [
-       "उवाच",
-       "vac",
-       "VERB",
-       "Tense=Past|Mood=Ind|Person=3|Number=Sing"
-      ]
-     ],
-     "a": [
-      0,
-      1
-     ]
-    },
-    {
      "ref": "MBh 4,29",
      "sim": 1.0,
      "p": [
@@ -525908,7 +525609,7 @@
    ],
    "31.10": [
     {
-     "ref": "MBh 4,36",
+     "ref": "MBh 4,30",
      "sim": 1.0,
      "p": [
       [
@@ -526858,19 +526559,19 @@
        "कवचानि",
        "kavaca",
        "NOUN",
-       "Case=Nom|Gender=Neut|Number=Plur"
+       "Case=Acc|Gender=Neut|Number=Plur"
       ],
       [
        "विचित्राणि",
        "vicitra",
        "ADJ",
-       "Case=Nom|Gender=Neut|Number=Plur"
+       "Case=Acc|Gender=Neut|Number=Plur"
       ],
       [
        "दृढानि",
        "dṛḍha",
        "ADJ",
-       "Case=Nom|Gender=Neut|Number=Plur"
+       "Case=Acc|Gender=Neut|Number=Plur"
       ],
       [
        "च",
@@ -526882,7 +526583,7 @@
        "मृदूनि",
        "mṛdu",
        "ADJ",
-       "Case=Nom|Gender=Neut|Number=Plur"
+       "Case=Acc|Gender=Neut|Number=Plur"
       ],
       [
        "च",
@@ -531637,28 +531338,6 @@
       4,
       3,
       0
-     ]
-    },
-    {
-     "ref": "MBh 4,63",
-     "sim": 0.933,
-     "p": [
-      [
-       "वैशम्पायनः",
-       "vaiśampāyana",
-       "NOUN",
-       "Case=Nom|Gender=Masc|Number=Sing"
-      ],
-      [
-       "उवाच",
-       "vac",
-       "VERB",
-       "Tense=Past|Mood=Ind|Person=3|Number=Sing"
-      ]
-     ],
-     "a": [
-      0,
-      1
      ]
     }
    ],
@@ -537764,28 +537443,6 @@
     }
    ],
    "36.21": [
-    {
-     "ref": "MBh 4,14",
-     "sim": 1.0,
-     "p": [
-      [
-       "द्रौपदी",
-       "draupadī",
-       "NOUN",
-       "Case=Nom|Gender=Fem|Number=Sing"
-      ],
-      [
-       "उवाच",
-       "vac",
-       "VERB",
-       "Tense=Past|Mood=Ind|Person=3|Number=Sing"
-      ]
-     ],
-     "a": [
-      0,
-      1
-     ]
-    },
     {
      "ref": "MBh 4,34",
      "sim": 1.0,
@@ -544882,42 +544539,6 @@
        "Case=Voc|Gender=Masc|Number=Sing"
       ]
      ]
-    },
-    {
-     "ref": "MBh 4,41",
-     "sim": 1.0,
-     "p": [
-      [
-       "कथम्",
-       "katham",
-       "ADV",
-       ""
-      ],
-      [
-       "पुरुष-शार्दूलैः",
-       "śārdūla",
-       "NOUN",
-       "Case=Voc|Gender=Masc|Number=Sing"
-      ],
-      [
-       "शत्रु-मध्ये",
-       "madhye",
-       "ADV",
-       ""
-      ],
-      [
-       "विषीदसि",
-       "viṣad",
-       "VERB",
-       "Tense=Pres|Mood=Ind|Person=2|Number=Sing"
-      ]
-     ],
-     "a": [
-      1,
-      0,
-      2,
-      3
-     ]
     }
    ],
    "38.49": [
@@ -550656,8 +550277,8 @@
      "sim": 1.0,
      "p": [
       [
-       "शालभाः",
-       "śālabha",
+       "शलभाः",
+       "śalabha",
        "NOUN",
        "Case=Nom|Gender=Masc|Number=Plur"
       ],
@@ -554546,7 +554167,7 @@
    ],
    "45.6": [
     {
-     "ref": "MBh 4,36",
+     "ref": "MBh 4,40",
      "sim": 1.0,
      "p": [
       [
@@ -554583,7 +554204,7 @@
        "ते",
        "tvad",
        "PRON",
-       "Case=Dat|Number=Sing"
+       "Case=Gen|Number=Sing"
       ],
       [
        "पशून्",
@@ -557211,7 +556832,7 @@
    ],
    "46.11": [
     {
-     "ref": "MBh 4,36",
+     "ref": "MBh 4,41",
      "sim": 1.0,
      "p": [
       [
@@ -557526,10 +557147,10 @@
        ""
       ],
       [
-       "नदताम्",
-       "nad",
-       "VERB",
-       "Case=Gen|Gender=Masc|Number=Plur|Tense=Pres|VerbForm=Part"
+       "निनदाः",
+       "ninada",
+       "NOUN",
+       "Case=Nom|Gender=Masc|Number=Plur"
       ],
       [
        "व्यूढ-अनीकेषु",
@@ -557543,13 +557164,6 @@
        "VERB",
        "Case=Gen|Gender=Masc|Number=Plur|Tense=Pres|VerbForm=Part"
       ]
-     ],
-     "a": [
-      2,
-      4,
-      0,
-      1,
-      3
      ]
     }
    ],
@@ -560079,7 +559693,7 @@
    ],
    "47.15": [
     {
-     "ref": "MBh 4,42",
+     "ref": "MBh 4,43",
      "sim": 1.0,
      "p": [
       [
@@ -561722,7 +561336,7 @@
    ],
    "48.2": [
     {
-     "ref": "MBh 4,42",
+     "ref": "MBh 4,43",
      "sim": 1.0,
      "p": [
       [
@@ -565443,7 +565057,7 @@
    ],
    "50.1": [
     {
-     "ref": "MBh 4,45",
+     "ref": "MBh 4,46",
      "sim": 1.0,
      "p": [
       [
@@ -568568,7 +568182,7 @@
    ],
    "51.14": [
     {
-     "ref": "MBh 4,45",
+     "ref": "MBh 4,46",
      "sim": 1.0,
      "p": [
       [
@@ -570726,49 +570340,6 @@
        "Case=Acc|Gender=Masc|Number=Sing"
       ]
      ]
-    },
-    {
-     "ref": "MBh 4,43",
-     "sim": 1.0,
-     "p": [
-      [
-       "अहम्",
-       "mad",
-       "PRON",
-       "Case=Nom|Number=Sing"
-      ],
-      [
-       "आवारयिष्यामि",
-       "āvāray",
-       "VERB",
-       "Tense=Fut|Mood=Ind|Person=1|Number=Sing"
-      ],
-      [
-       "वेला",
-       "velā",
-       "NOUN",
-       "Case=Nom|Gender=Fem|Number=Sing"
-      ],
-      [
-       "इव",
-       "iva",
-       "PART",
-       ""
-      ],
-      [
-       "मकर-आलयम्",
-       "ālaya",
-       "NOUN",
-       "Case=Acc|Gender=Masc|Number=Sing"
-      ]
-     ],
-     "a": [
-      0,
-      2,
-      3,
-      4,
-      1
-     ]
     }
    ],
    "52.22": [
@@ -572870,7 +572441,7 @@
    ],
    "53.24": [
     {
-     "ref": "MBh 4,41",
+     "ref": "MBh 4,48",
      "sim": 1.0,
      "p": [
       [
@@ -572910,49 +572481,6 @@
       2,
       3,
       4
-     ]
-    },
-    {
-     "ref": "MBh 4,41",
-     "sim": 1.0,
-     "p": [
-      [
-       "गाण्डीवस्य",
-       "gāṇḍīva",
-       "NOUN",
-       "Case=Gen|Gender=Neut|Number=Sing"
-      ],
-      [
-       "च",
-       "ca",
-       "CONJ",
-       ""
-      ],
-      [
-       "घोषेण",
-       "ghoṣa",
-       "NOUN",
-       "Case=Ins|Gender=Masc|Number=Sing"
-      ],
-      [
-       "पृथिवी",
-       "pṛthivī",
-       "NOUN",
-       "Case=Nom|Gender=Fem|Number=Sing"
-      ],
-      [
-       "समकम्पत",
-       "saṃkamp",
-       "VERB",
-       "Tense=Impf|Mood=Ind|Person=3|Number=Sing"
-      ]
-     ],
-     "a": [
-      3,
-      0,
-      2,
-      4,
-      1
      ]
     }
    ],
@@ -575511,8 +575039,8 @@
      ]
     },
     {
-     "ref": "MBh 4,40",
-     "sim": 1.0,
+     "ref": "MBh 4,50",
+     "sim": 0.977,
      "p": [
       [
        "कतमत्",
@@ -595247,49 +594775,6 @@
    ],
    "64.1": [
     {
-     "ref": "MBh 4,27",
-     "sim": 0.971,
-     "p": [
-      [
-       "ततस्",
-       "tatas",
-       "ADV",
-       ""
-      ],
-      [
-       "शांतनवः",
-       "śāṃtanava",
-       "NOUN",
-       "Case=Nom|Gender=Masc|Number=Sing"
-      ],
-      [
-       "भीष्मः",
-       "bhīṣma",
-       "NOUN",
-       "Case=Nom|Gender=Masc|Number=Sing"
-      ],
-      [
-       "भरतानाम्",
-       "bharata",
-       "NOUN",
-       "Case=Gen|Gender=Masc|Number=Plur"
-      ],
-      [
-       "पितामहः",
-       "pitāmaha",
-       "NOUN",
-       "Case=Nom|Gender=Masc|Number=Sing"
-      ]
-     ],
-     "a": [
-      2,
-      1,
-      0,
-      3,
-      4
-     ]
-    },
-    {
      "ref": "MBh 4,59",
      "sim": 0.974,
      "p": [
@@ -605927,28 +605412,6 @@
        "NOUN",
        "Case=Nom|Gender=Fem|Number=Sing"
       ]
-     ]
-    },
-    {
-     "ref": "MBh 4,63",
-     "sim": 0.933,
-     "p": [
-      [
-       "वैशम्पायनः",
-       "vaiśampāyana",
-       "NOUN",
-       "Case=Nom|Gender=Masc|Number=Sing"
-      ],
-      [
-       "उवाच",
-       "vac",
-       "VERB",
-       "Tense=Past|Mood=Ind|Person=3|Number=Sing"
-      ]
-     ],
-     "a": [
-      0,
-      1
      ]
     },
     {
