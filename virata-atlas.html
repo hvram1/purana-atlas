@@ -349,9 +349,16 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
        Sanskrit and is on by default. The anvaya is NOT: it is linearised from a
        machine parse by this pipeline, it is right often enough to be useful and
        wrong often enough that nobody should meet it without having asked. -->
-  <div class="tog" id="dcstog" title="Digital Corpus of Sanskrit: word separation, and prose order derived from it">
+  <!-- The अन्वय toggle is deliberately absent. The lane is built and its data
+       still ships (dcs.v[...].a), but nothing verifies that an ordering is
+       *right*: the permutation gate proves only that the words are the verse's
+       own, and it accepts a random shuffle. There is no human-made Mahābhārata
+       anvaya to score against, and agreement between two models is not
+       evidence -- their errors correlate. It goes back the moment somebody who
+       reads Sanskrit has judged a sample and given us an error rate. Restoring
+       it is this one button plus show.an. -->
+  <div class="tog" id="dcstog" title="Digital Corpus of Sanskrit: hand-annotated word separation">
     <button data-k="pc" class="on">पदच्छेद</button>
-    <button data-k="an">अन्वय</button>
   </div>
   <div class="tog" id="ambtog" title="Mark names that could denote more than one entity">
     <button data-k="amb" class="on">Ambiguity</button>
