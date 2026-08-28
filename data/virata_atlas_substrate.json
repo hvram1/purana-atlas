@@ -454265,7 +454265,7 @@
        "Tense=Pres|Mood=Imp|Person=2|Number=Sing"
       ],
       [
-       "नराधिपैः",
+       "नराधिप",
        "narādhipa",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -454567,7 +454567,7 @@
        "Tense=Past|Mood=Ind|Person=3|Number=Sing"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -454665,7 +454665,7 @@
        "Case=Acc|Gender=Masc|Number=Sing"
       ],
       [
-       "अर्जुनैः",
+       "अर्जुन",
        "arjuna",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -455182,7 +455182,7 @@
        "Case=Loc|Gender=Masc|Number=Sing"
       ],
       [
-       "तातैः",
+       "तात",
        "tāta",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -455236,7 +455236,7 @@
        "Tense=Fut|Mood=Cond|Person=1|Number=Plur"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -455395,7 +455395,7 @@
        "Tense=Fut|Mood=Ind|Person=2|Number=Sing"
       ],
       [
-       "पाण्डवैः",
+       "पाण्डव",
        "pāṇḍava",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -456351,7 +456351,7 @@
        "Case=Acc|Gender=Neut|Number=Plur"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -457617,7 +457617,7 @@
        "Case=Loc|Gender=Fem|Number=Sing"
       ],
       [
-       "वृकोदरैः",
+       "वृकोदर",
        "vṛkodara",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -458278,7 +458278,7 @@
        "VerbForm=Inf"
       ],
       [
-       "नृपैः",
+       "नृप",
        "nṛpa",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -458640,7 +458640,7 @@
        "Tense=Fut|Mood=Ind|Person=1|Number=Sing"
       ],
       [
-       "कौन्तेयैः",
+       "कौन्तेय",
        "kaunteya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -458933,7 +458933,7 @@
        "Case=Nom|Number=Sing"
       ],
       [
-       "नकुलैः",
+       "नकुल",
        "nakula",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -458951,7 +458951,7 @@
        ""
       ],
       [
-       "तातैः",
+       "तात",
        "tāta",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -459238,7 +459238,7 @@
        "Case=Nom|Gender=Masc|Number=Plur"
       ],
       [
-       "कुरुराजैः",
+       "कुरुराज",
        "kururāja",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -459373,7 +459373,7 @@
        ""
       ],
       [
-       "तातैः",
+       "तात",
        "tāta",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -459435,7 +459435,7 @@
      "sim": 1.0,
      "p": [
       [
-       "सहदेवैः",
+       "सहदेव",
        "sahadeva",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -460373,7 +460373,7 @@
        "Tense=Pres|Mood=Ind|Person=3|Number=Plur"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -460581,7 +460581,7 @@
        ""
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -461514,7 +461514,7 @@
        ""
       ],
       [
-       "कौरव्याः",
+       "कौरव्या",
        "kauravya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Plur"
@@ -464762,7 +464762,7 @@
        "Case=Acc|Gender=Masc|Number=Sing"
       ],
       [
-       "तातैः",
+       "तात",
        "tāta",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -465960,7 +465960,7 @@
      "sim": 0.974,
      "p": [
       [
-       "धनंजयैः",
+       "धनंजय",
        "dhanaṃjaya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -465984,7 +465984,7 @@
        "Tense=Pres|Mood=Imp|Person=2|Number=Sing"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -466683,7 +466683,7 @@
        "Case=Acc|Gender=Neut|Number=Plur"
       ],
       [
-       "पार्थिवैः",
+       "पार्थिव",
        "pārthiva",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -467755,7 +467755,7 @@
        "Case=Acc|Gender=Fem|Number=Sing"
       ],
       [
-       "वीरैः",
+       "वीर",
        "vīra",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -469547,7 +469547,7 @@
        "Tense=Pres|Mood=Ind|Person=1|Number=Sing"
       ],
       [
-       "विराटैः",
+       "विराट",
        "virāṭa",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -469767,7 +469767,7 @@
        "Case=Nom|Gender=Neut|Number=Sing"
       ],
       [
-       "मत्स्यैः",
+       "मत्स्य",
        "matsya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -470973,7 +470973,7 @@
        "Tense=Pres|Mood=Ind|Person=1|Number=Sing"
       ],
       [
-       "नरेन्द्रैः",
+       "नरेन्द्र",
        "narendra",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -471091,7 +471091,7 @@
      "sim": 0.967,
      "p": [
       [
-       "नरेन्द्रैः",
+       "नरेन्द्र",
        "narendra",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -471284,7 +471284,7 @@
        ""
       ],
       [
-       "पार्थिवैः",
+       "पार्थिव",
        "pārthiva",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -475021,7 +475021,7 @@
        "Case=Ins|Gender=Neut|Number=Sing"
       ],
       [
-       "जनमेजयैः",
+       "जनमेजय",
        "janamejaya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -475263,7 +475263,7 @@
        ""
       ],
       [
-       "तातैः",
+       "तात",
        "tāta",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -475484,7 +475484,7 @@
        "Case=Gen|Gender=Fem|Number=Plur"
       ],
       [
-       "वरिष्ठैः",
+       "वरिष्ठ",
        "variṣṭha",
        "ADJ",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -477406,7 +477406,7 @@
        "Case=Gen|Gender=Fem|Number=Sing"
       ],
       [
-       "नरदेवैः",
+       "नरदेव",
        "naradeva",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -477516,7 +477516,7 @@
        ""
       ],
       [
-       "नरदेवैः",
+       "नरदेव",
        "naradeva",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -478402,7 +478402,7 @@
        "Case=Gen|Number=Sing"
       ],
       [
-       "पार्थिवैः",
+       "पार्थिव",
        "pārthiva",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -478444,7 +478444,7 @@
        "Case=Nom|Gender=Masc|Number=Sing|VerbForm=Part"
       ],
       [
-       "नृपैः",
+       "नृप",
        "nṛpa",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -479734,7 +479734,7 @@
        ""
       ],
       [
-       "द्विजैः",
+       "द्विज",
        "dvija",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -480645,7 +480645,7 @@
        "Case=Nom|Gender=Masc|Number=Plur|VerbForm=Part"
       ],
       [
-       "नराधिपैः",
+       "नराधिप",
        "narādhipa",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -482649,7 +482649,7 @@
        "Case=Acc|Gender=Neut|Number=Sing"
       ],
       [
-       "जनमेजयैः",
+       "जनमेजय",
        "janamejaya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -484049,7 +484049,7 @@
        ""
       ],
       [
-       "सूतपुत्रैः",
+       "सूतपुत्र",
        "sūtaputra",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -484580,7 +484580,7 @@
        ""
       ],
       [
-       "कीचकैः",
+       "कीचक",
        "kīcaka",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -487206,7 +487206,7 @@
        "Case=Ins|Gender=Masc|Number=Sing"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -488692,7 +488692,7 @@
        "VerbForm=Inf"
       ],
       [
-       "मत्स्यैः",
+       "मत्स्य",
        "matsya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -491142,7 +491142,7 @@
        "Tense=Pres|Mood=Ind|Person=2|Number=Sing"
       ],
       [
-       "भीमसेनैः",
+       "भीमसेन",
        "bhīmasena",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -492113,7 +492113,7 @@
        "Tense=Pres|Mood=Ind|Person=3|Number=Sing"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -492348,7 +492348,7 @@
        ""
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -492378,7 +492378,7 @@
        "Tense=Pres|Mood=Ind|Person=2|Number=Sing"
       ],
       [
-       "कौन्तेयैः",
+       "कौन्तेय",
        "kaunteya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -492452,7 +492452,7 @@
        ""
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -494126,7 +494126,7 @@
        "Tense=Pres|Mood=Imp|Person=2|Number=Sing"
       ],
       [
-       "पाण्डवैः",
+       "पाण्डव",
        "pāṇḍava",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -494274,7 +494274,7 @@
        "Case=Nom|Gender=Fem|Number=Sing"
       ],
       [
-       "वीरैः",
+       "वीर",
        "vīra",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -494331,7 +494331,7 @@
        "Tense=Pres|Mood=Imp|Person=2|Number=Sing"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -494414,7 +494414,7 @@
        "Case=Acc|Number=Sing"
       ],
       [
-       "भीमैः",
+       "भीम",
        "bhīma",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -494512,7 +494512,7 @@
        "Tense=Fut|Mood=Ind|Person=1|Number=Sing"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -495658,7 +495658,7 @@
        "VerbForm=Conv"
       ],
       [
-       "भीमैः",
+       "भीम",
        "bhīma",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -495972,7 +495972,7 @@
        "Case=Nom|Gender=Fem|Number=Sing"
       ],
       [
-       "भीमैः",
+       "भीम",
        "bhīma",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -496079,7 +496079,7 @@
        ""
       ],
       [
-       "भीमसेनैः",
+       "भीमसेन",
        "bhīmasena",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -496522,7 +496522,7 @@
        "Tense=Pres|Mood=Ind|Person=1|Number=Sing"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -497022,7 +497022,7 @@
        "Tense=Pres|Mood=Ind|Person=1|Number=Sing"
       ],
       [
-       "पाण्डवैः",
+       "पाण्डव",
        "pāṇḍava",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -497339,7 +497339,7 @@
        "Tense=Pres|Mood=Ind|Person=2|Number=Sing"
       ],
       [
-       "पार्थैः",
+       "पार्थ",
        "pārtha",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -497357,7 +497357,7 @@
        ""
       ],
       [
-       "परंतपैः",
+       "परंतप",
        "paraṃtapa",
        "ADJ",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -497429,7 +497429,7 @@
        "Case=Nom|Gender=Neut|Number=Plur"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -497460,7 +497460,7 @@
        "Case=Loc|Number=Sing"
       ],
       [
-       "कौन्तेयैः",
+       "कौन्तेय",
        "kaunteya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -497730,7 +497730,7 @@
        "Case=Gen|Gender=Fem|Number=Sing"
       ],
       [
-       "परंतपैः",
+       "परंतप",
        "paraṃtapa",
        "ADJ",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -498578,7 +498578,7 @@
        ""
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -498887,7 +498887,7 @@
        "Tense=Pres|Mood=Imp|Person=2|Number=Sing"
       ],
       [
-       "पाण्डवैः",
+       "पाण्डव",
        "pāṇḍava",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -498991,7 +498991,7 @@
        ""
       ],
       [
-       "भीमैः",
+       "भीम",
        "bhīma",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -499015,7 +499015,7 @@
        "Case=Gen|Number=Sing"
       ],
       [
-       "पार्थैः",
+       "पार्थ",
        "pārtha",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -499187,7 +499187,7 @@
        "VerbForm=Inf"
       ],
       [
-       "पार्थैः",
+       "पार्थ",
        "pārtha",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -499390,7 +499390,7 @@
        "Tense=Pres|Mood=Imp|Person=2|Number=Sing"
       ],
       [
-       "पाण्डवैः",
+       "पाण्डव",
        "pāṇḍava",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -499710,7 +499710,7 @@
        "Case=Acc|Gender=Neut|Number=Sing"
       ],
       [
-       "कौन्तेयैः",
+       "कौन्तेय",
        "kaunteya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -500226,7 +500226,7 @@
        "Case=Ins|Number=Sing"
       ],
       [
-       "भीमैः",
+       "भीम",
        "bhīma",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -500302,7 +500302,7 @@
        "Case=Loc|Gender=Masc|Number=Sing|Tense=Pres|VerbForm=Part"
       ],
       [
-       "पाण्डवैः",
+       "पाण्डव",
        "pāṇḍava",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -501789,7 +501789,7 @@
        "Case=Ins|Gender=Masc|Number=Sing|VerbForm=Part"
       ],
       [
-       "भीमसेनैः",
+       "भीमसेन",
        "bhīmasena",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -501863,7 +501863,7 @@
        ""
       ],
       [
-       "भीमैः",
+       "भीम",
        "bhīma",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -502081,7 +502081,7 @@
        "Case=Nom|Gender=Fem|Number=Sing|VerbForm=Part"
       ],
       [
-       "भीमैः",
+       "भीम",
        "bhīma",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -502151,7 +502151,7 @@
        "Tense=Pres|Mood=Imp|Person=2|Number=Sing"
       ],
       [
-       "कीचकैः",
+       "कीचक",
        "kīcaka",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -502571,7 +502571,7 @@
        "Tense=Pres|Mood=Ind|Person=2|Number=Sing"
       ],
       [
-       "कीचकैः",
+       "कीचक",
        "kīcaka",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -503135,7 +503135,7 @@
        ""
       ],
       [
-       "भीमसेनैः",
+       "भीमसेन",
        "bhīmasena",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -503304,7 +503304,7 @@
        "Case=Gen|Number=Sing"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -503405,7 +503405,7 @@
        "Case=Gen|Number=Sing"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -503543,7 +503543,7 @@
        "Case=Dat|Number=Sing"
       ],
       [
-       "भीमसेनैः",
+       "भीमसेन",
        "bhīmasena",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -504906,7 +504906,7 @@
        "Tense=Pres|Mood=Imp|Person=2|Number=Sing"
       ],
       [
-       "कीचकैः",
+       "कीचक",
        "kīcaka",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -505478,7 +505478,7 @@
        "Case=Nom|Gender=Neut|Number=Sing"
       ],
       [
-       "नृपैः",
+       "नृप",
        "nṛpa",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -506077,7 +506077,7 @@
        "Tense=Past|Mood=Jus|Person=2|Number=Sing"
       ],
       [
-       "परंतपैः",
+       "परंतप",
        "paraṃtapa",
        "ADJ",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -506197,7 +506197,7 @@
        "Case=Acc|Gender=Masc|Number=Sing"
       ],
       [
-       "कौन्तेयैः",
+       "कौन्तेय",
        "kaunteya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -506258,7 +506258,7 @@
        "Tense=Pres|Mood=Imp|Person=2|Number=Sing"
       ],
       [
-       "पाण्डवैः",
+       "पाण्डव",
        "pāṇḍava",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -506348,7 +506348,7 @@
        "Tense=Pres|Mood=Imp|Person=2|Number=Sing"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -512344,7 +512344,7 @@
        ""
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -512615,7 +512615,7 @@
        "Case=Acc|Gender=Neut|Number=Sing"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -516218,7 +516218,7 @@
      "sim": 0.939,
      "p": [
       [
-       "नरेन्द्रैः",
+       "नरेन्द्र",
        "narendra",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -516504,7 +516504,7 @@
        "Case=Ins|Gender=Masc|Number=Plur"
       ],
       [
-       "परंतपैः",
+       "परंतप",
        "paraṃtapa",
        "ADJ",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -516838,7 +516838,7 @@
        "Case=Ins|Gender=Neut|Number=Sing"
       ],
       [
-       "नृपैः",
+       "नृप",
        "nṛpa",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -516896,7 +516896,7 @@
        "Case=Loc|Gender=Fem|Number=Sing"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -516973,7 +516973,7 @@
        ""
       ],
       [
-       "कौरव्यैः",
+       "कौरव्य",
        "kauravya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -517613,7 +517613,7 @@
        "Tense=Pres|Mood=Imp|Person=3|Number=Plur"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -518683,7 +518683,7 @@
        "Case=Nom|Gender=Masc|Number=Plur"
       ],
       [
-       "नृपैः",
+       "नृप",
        "nṛpa",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -519917,7 +519917,7 @@
        ""
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -520192,7 +520192,7 @@
        "Case=Loc|Gender=Neut|Number=Sing"
       ],
       [
-       "तातैः",
+       "तात",
        "tāta",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -521148,7 +521148,7 @@
        "Tense=Fut|Mood=Ind|Person=3|Number=Plur"
       ],
       [
-       "तातैः",
+       "तात",
        "tāta",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -521623,7 +521623,7 @@
        "Tense=Pres|Mood=Imp|Person=2|Number=Sing"
       ],
       [
-       "कौरव्यैः",
+       "कौरव्य",
        "kauravya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -522537,7 +522537,7 @@
        ""
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -525502,7 +525502,7 @@
        "Case=Gen|Gender=Masc|Number=Sing"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -529667,7 +529667,7 @@
        ""
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -530762,7 +530762,7 @@
      "sim": 1.0,
      "p": [
       [
-       "भीमसेनैः",
+       "भीमसेन",
        "bhīmasena",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -530836,7 +530836,7 @@
        "Case=Gen|Number=Sing"
       ],
       [
-       "पार्थिवैः",
+       "पार्थिव",
        "pārthiva",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -531191,7 +531191,7 @@
        ""
       ],
       [
-       "भीमैः",
+       "भीम",
        "bhīma",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -531315,7 +531315,7 @@
        ""
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -531459,7 +531459,7 @@
        "Case=Nom|Gender=Neut|Number=Sing"
       ],
       [
-       "भीमैः",
+       "भीम",
        "bhīma",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -531613,7 +531613,7 @@
        "Case=Loc|Gender=Neut|Number=Sing"
       ],
       [
-       "तातैः",
+       "तात",
        "tāta",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -533687,7 +533687,7 @@
      "sim": 1.0,
      "p": [
       [
-       "वैयाघ्रपद्यैः",
+       "वैयाघ्रपद्य",
        "vaiyāghrapadya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -533937,7 +533937,7 @@
        "Case=Acc|Gender=Neut|Number=Sing"
       ],
       [
-       "मत्स्यैः",
+       "मत्स्य",
        "matsya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -534037,7 +534037,7 @@
        "Case=Gen|Number=Sing"
       ],
       [
-       "पार्थिवैः",
+       "पार्थिव",
        "pārthiva",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -535627,7 +535627,7 @@
        "Case=Gen|Gender=Masc|Number=Plur"
       ],
       [
-       "वरैः",
+       "वर",
        "vara",
        "ADJ",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -537556,7 +537556,7 @@
        "Case=Ins|Number=Sing"
       ],
       [
-       "वीरैः",
+       "वीर",
        "vīra",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -539954,7 +539954,7 @@
        "Case=Nom|Gender=Masc|Number=Sing|Tense=Pres|VerbForm=Part"
       ],
       [
-       "अरिंदमैः",
+       "अरिंदम",
        "ariṃdama",
        "ADJ",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -542521,7 +542521,7 @@
        "Tense=Fut|Mood=Ind|Person=3|Number=Plur"
       ],
       [
-       "वीरैः",
+       "वीर",
        "vīra",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -544109,7 +544109,7 @@
        "VerbForm=Conv"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -544876,7 +544876,7 @@
        "Tense=Pres|Mood=Ind|Person=2|Number=Sing"
       ],
       [
-       "परंतपैः",
+       "परंतप",
        "paraṃtapa",
        "ADJ",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -546370,7 +546370,7 @@
        "Case=Nom|Gender=Masc|Number=Sing"
       ],
       [
-       "राधेयैः",
+       "राधेय",
        "rādheya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -553963,7 +553963,7 @@
        "Case=Acc|Number=Sing"
       ],
       [
-       "पार्थैः",
+       "पार्थ",
        "pārtha",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -553987,7 +553987,7 @@
        "Case=Gen|Number=Sing"
       ],
       [
-       "धनंजयैः",
+       "धनंजय",
        "dhanaṃjaya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -557257,7 +557257,7 @@
        "Tense=Pres|Mood=Ind|Person=2|Number=Sing"
       ],
       [
-       "परंतपैः",
+       "परंतप",
        "paraṃtapa",
        "ADJ",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -563617,7 +563617,7 @@
        "Case=Gen|Number=Sing"
       ],
       [
-       "राधेयैः",
+       "राधेय",
        "rādheya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -564303,7 +564303,7 @@
        "Case=Ins|Number=Sing"
       ],
       [
-       "कर्णैः",
+       "कर्ण",
        "karṇa",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -564888,7 +564888,7 @@
        "Case=Acc|Gender=Masc|Number=Sing"
       ],
       [
-       "कर्णैः",
+       "कर्ण",
        "karṇa",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -565297,7 +565297,7 @@
        "Case=Acc|Gender=Masc|Number=Sing"
       ],
       [
-       "कर्णैः",
+       "कर्ण",
        "karṇa",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -565559,7 +565559,7 @@
        ""
       ],
       [
-       "कर्णैः",
+       "कर्ण",
        "karṇa",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -566423,7 +566423,7 @@
        "Case=Acc|Gender=Neut|Number=Sing"
       ],
       [
-       "शूरैः",
+       "शूर",
        "śūra",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -568664,7 +568664,7 @@
        "Tense=Past|Mood=Ind|Formation=peri|Person=3|Number=Sing"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -569115,7 +569115,7 @@
        "VerbForm=Conv"
       ],
       [
-       "गाङ्गेयैः",
+       "गाङ्गेय",
        "gāṅgeya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -570304,7 +570304,7 @@
        ""
       ],
       [
-       "कौरवैः",
+       "कौरव",
        "kaurava",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -570495,7 +570495,7 @@
        "Case=Gen|Gender=Masc|Number=Plur"
       ],
       [
-       "पितामहैः",
+       "पितामह",
        "pitāmaha",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -575638,7 +575638,7 @@
        "Case=Acc|Gender=Masc|Number=Sing|Tense=Pres|VerbForm=Part"
       ],
       [
-       "उत्तरैः",
+       "उत्तर",
        "uttara",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -575803,7 +575803,7 @@
        "Case=Nom|Gender=Masc|Number=Sing"
       ],
       [
-       "वीरैः",
+       "वीर",
        "vīra",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -576241,7 +576241,7 @@
        "Case=Acc|Gender=Neut|Number=Sing"
       ],
       [
-       "वीरैः",
+       "वीर",
        "vīra",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -581374,7 +581374,7 @@
        ""
       ],
       [
-       "उत्तरैः",
+       "उत्तर",
        "uttara",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -587141,7 +587141,7 @@
        "Tense=Impf|Mood=Ind|Person=3|Number=Sing"
       ],
       [
-       "परपुरंजयैः",
+       "परपुरंजय",
        "parapuraṃjaya",
        "ADJ",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -588445,7 +588445,7 @@
      "sim": 1.0,
      "p": [
       [
-       "कर्णैः",
+       "कर्ण",
        "karṇa",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -588702,7 +588702,7 @@
        "Tense=Pres|Mood=Imp|Person=2|Number=Sing"
       ],
       [
-       "राधेयैः",
+       "राधेय",
        "rādheya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -588884,7 +588884,7 @@
        "Case=Gen|Gender=Masc|Number=Sing"
       ],
       [
-       "राधेयैः",
+       "राधेय",
        "rādheya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -589007,7 +589007,7 @@
        "Case=Acc|Gender=Neut|Number=Sing"
       ],
       [
-       "पार्थैः",
+       "पार्थ",
        "pārtha",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -589114,7 +589114,7 @@
        "Case=Acc|Gender=Neut|Number=Sing"
       ],
       [
-       "पार्थैः",
+       "पार्थ",
        "pārtha",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -589328,7 +589328,7 @@
        ""
       ],
       [
-       "पार्थैः",
+       "पार्थ",
        "pārtha",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -589429,7 +589429,7 @@
        "Case=Nom|Gender=Masc|Number=Sing"
       ],
       [
-       "कौन्तेयैः",
+       "कौन्तेय",
        "kaunteya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -589598,7 +589598,7 @@
        "Tense=Pres|Mood=Ind|Person=2|Number=Sing"
       ],
       [
-       "राधेयैः",
+       "राधेय",
        "rādheya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -593029,7 +593029,7 @@
        "Tense=Impf|Mood=Ind|Person=3|Number=Plur"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -594201,7 +594201,7 @@
        "Tense=Impf|Mood=Ind|Person=3|Number=Sing"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -597102,7 +597102,7 @@
        "Case=Nom|Gender=Neut|Number=Sing"
       ],
       [
-       "पार्थैः",
+       "पार्थ",
        "pārtha",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -598564,7 +598564,7 @@
        "Case=Ins|Gender=Masc|Number=Sing"
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -600277,7 +600277,7 @@
        "Tense=Pres|Mood=Imp|Person=2|Number=Sing"
       ],
       [
-       "धार्तराष्ट्रैः",
+       "धार्तराष्ट्र",
        "dhārtarāṣṭra",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -600461,7 +600461,7 @@
        "Tense=Pres|Mood=Ind|Person=1|Number=Sing"
       ],
       [
-       "दुर्योधनैः",
+       "दुर्योधन",
        "duryodhana",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -601707,7 +601707,7 @@
      "sim": 1.0,
      "p": [
       [
-       "आचार्यैः",
+       "आचार्य",
        "ācārya",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -603769,7 +603769,7 @@
        "Case=Nom|Gender=Masc|Number=Plur|VerbForm=Part"
       ],
       [
-       "पार्थैः",
+       "पार्थ",
        "pārtha",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -604139,7 +604139,7 @@
        "Case=Voc|Gender=Masc|Number=Sing"
       ],
       [
-       "वीरैः",
+       "वीर",
        "vīra",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -605753,7 +605753,7 @@
        "Case=Nom|Gender=Masc|Number=Sing"
       ],
       [
-       "सहैः",
+       "सह",
        "saha",
        "ADJ",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -605777,7 +605777,7 @@
        ""
       ],
       [
-       "परंतपैः",
+       "परंतप",
        "paraṃtapa",
        "ADJ",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -606666,7 +606666,7 @@
        "Case=Voc|Gender=Fem|Number=Sing"
       ],
       [
-       "कङ्कैः",
+       "कङ्क",
        "kaṅka",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -607007,7 +607007,7 @@
        "Case=Ins|Gender=Neut|Number=Sing"
       ],
       [
-       "मानदैः",
+       "मानद",
        "mānada",
        "ADJ",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -610032,7 +610032,7 @@
        "Case=Gen|Number=Sing"
       ],
       [
-       "तातैः",
+       "तात",
        "tāta",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -610133,7 +610133,7 @@
        "Case=Gen|Number=Sing"
       ],
       [
-       "तातैः",
+       "तात",
        "tāta",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -610235,7 +610235,7 @@
        "Case=Gen|Number=Sing"
       ],
       [
-       "तातैः",
+       "तात",
        "tāta",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -610396,7 +610396,7 @@
        "Case=Gen|Number=Sing"
       ],
       [
-       "तातैः",
+       "तात",
        "tāta",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -610483,7 +610483,7 @@
        "Case=Gen|Number=Sing"
       ],
       [
-       "तातैः",
+       "तात",
        "tāta",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -610674,7 +610674,7 @@
        "Case=Ins|Number=Sing"
       ],
       [
-       "तातैः",
+       "तात",
        "tāta",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -613344,7 +613344,7 @@
        "VerbForm=Inf"
       ],
       [
-       "नरेश्वरैः",
+       "नरेश्वर",
        "nareśvara",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -613752,7 +613752,7 @@
        "Case=Gen|Number=Sing"
       ],
       [
-       "नराधिपैः",
+       "नराधिप",
        "narādhipa",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -616781,7 +616781,7 @@
        "Tense=Pres|Mood=Ind|Person=2|Number=Sing"
       ],
       [
-       "पार्थैः",
+       "पार्थ",
        "pārtha",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
@@ -616997,7 +616997,7 @@
        ""
       ],
       [
-       "भारतैः",
+       "भारत",
        "bhārata",
        "NOUN",
        "Case=Voc|Gender=Masc|Number=Sing"
