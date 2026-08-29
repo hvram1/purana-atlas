@@ -1,12 +1,12 @@
 {
- "built": "2026-08-28",
+ "built": "2026-08-29",
  "simulated_lanes": false,
  "atlases": {
   "virata": {
    "verses": 2262,
    "chapters": 72,
-   "reached": 1993,
-   "reached_pct": 88.1,
+   "reached": 1989,
+   "reached_pct": 87.9,
    "lanes": 1,
    "real_lanes": 1,
    "recordings": 22,
