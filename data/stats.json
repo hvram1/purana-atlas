@@ -1,5 +1,5 @@
 {
- "built": "2026-08-29",
+ "built": "2026-08-30",
  "simulated_lanes": false,
  "atlases": {
   "virata": {
@@ -20,13 +20,13 @@
   "kartika": {
    "verses": 1817,
    "chapters": 36,
-   "reached": 1116,
-   "reached_pct": 61.4,
+   "reached": 993,
+   "reached_pct": 54.7,
    "lanes": 2,
    "real_lanes": 2,
    "recordings": 35,
    "parts": 41,
-   "both_lanes": 178,
+   "both_lanes": 155,
    "speakers": [
     "Musiri Yagnarama Somayaji Dīkṣitar",
     "Pondicherry Vaisampayanar"
