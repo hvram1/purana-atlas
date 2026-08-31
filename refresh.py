@@ -5,9 +5,15 @@ This repository is a *deployment*, not a source tree. Nothing here is authored
 by hand except index.html, README.md and docs/. Everything else is produced in
 the workbench and copied in by this script:
 
-    dharmasastra-gcp/workbench/virata-atlas.html       + data/virata_*.json
-    dharmasastra-gcp/workbench/kartika-atlas.html      + data/kartika_*.json
-    dharmasastra-gcp/workbench/tulakaveri-witness.html + data/tulakaveri_*.json
+    dharmasastra-gcp/workbench/virata-atlas.html   + data/virata_*.json
+    dharmasastra-gcp/workbench/kartika-atlas.html  + data/kartika_*.json
+    audio-ingest/tulakaveri-witness.html           + data/tulakaveri_*.json
+
+The atlases come from the workbench because that is where the corpus and the
+entity substrate they read live. The Tulā Kāverī page comes from audio-ingest
+because that is where ITS inputs live -- the cross-series matches, the forced
+alignments, the colophons -- and it reads nothing from the workbench at all.
+The source of a page follows its inputs, not the habit of the page beside it.
 
 So the loop is: rebuild there, refresh here, commit here.
 
@@ -67,6 +73,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.environ.get("ATLAS_SRC",
                      "/home/wipro/projects/dharmasastra-gcp/workbench")
+INGEST = os.environ.get("ATLAS_INGEST", "/home/wipro/projects/audio-ingest")
 
 # (page, 4lang file, substrate file). The page names the JSON in its own
 # fetch() calls; these must agree, and check_fetches() below proves they do
@@ -82,7 +89,10 @@ ATLASES = [
 # substrate: there is no printed edition for one to be the authority over. It
 # ships one file, whose rows are correspondences between two RECORDINGS, so it
 # gets its own shape check further down rather than being bent into ATLASES.
+# It also comes from a different repo -- see the header -- so it carries where
+# each half is found rather than inheriting the ATLASES layout.
 WITNESS = ("tulakaveri-witness.html", "tulakaveri_witness.json")
+WITNESS_SRC = ("", os.path.join("build", "witness"))   # page dir, data dir
 
 # Shape contract of the substrate. Getting one of these wrong does not degrade
 # the page, it blanks it.
@@ -445,6 +455,8 @@ def main():
     ap.add_argument("--with-sim", action="store_true",
                     help="keep the simulated Virāṭa lanes (dropped by default)")
     ap.add_argument("--src", default=SRC, help="workbench directory")
+    ap.add_argument("--ingest", default=INGEST,
+                    help="audio-ingest directory, source of the witness page")
     ap.add_argument("--site-url", help="public base URL, e.g. "
                     "https://hvram1.github.io/purana-atlas -- substituted into "
                     "docs/*.md and remembered in .site-url for later refreshes")
@@ -452,6 +464,9 @@ def main():
 
     if not a.check and not os.path.isdir(a.src):
         sys.exit("no workbench at %s -- set --src or $ATLAS_SRC" % a.src)
+    if not a.check and not os.path.isdir(a.ingest):
+        sys.exit("no audio-ingest at %s -- set --ingest or $ATLAS_INGEST"
+                 % a.ingest)
 
     bad_url = set_site_url(a.site_url, a.check)
     data_dir = os.path.join(HERE, "data")
@@ -540,11 +555,12 @@ def main():
     page_dst = os.path.join(HERE, WITNESS[0])
     data_dst = os.path.join(data_dir, WITNESS[1])
     if not a.check:
-        for name, dst in ((WITNESS[0], page_dst), (WITNESS[1], data_dst)):
-            src = os.path.join(a.src, "" if name.endswith(".html") else "data",
-                               name)
+        for name, sub_dir, dst in ((WITNESS[0], WITNESS_SRC[0], page_dst),
+                                   (WITNESS[1], WITNESS_SRC[1], data_dst)):
+            src = os.path.join(a.ingest, sub_dir, name)
             if not os.path.exists(src):
-                bad += fail("missing in the workbench: %s" % src)
+                bad += fail("missing in audio-ingest: %s -- run "
+                            "scripts/tulakaveri_witness.py there" % src)
                 continue
             shutil.copyfile(src, dst)
     if not os.path.exists(page_dst):
