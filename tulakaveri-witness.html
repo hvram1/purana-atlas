@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Same reason as index.html: a page of Devanagari must not depend on the
+     server appending charset=utf-8 to text/html. -->
+<meta charset="utf-8">
+<title>Tulā Kāverī Māhātmya — two witnesses</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A text with no printed edition we can reach,
+ attested by two reciters who share 141 verses that appear in no index.">
+<style>
+@font-face{
+  font-family:"Noto Serif Devanagari";
+  src:url("fonts/NotoSerifDevanagari.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;
+  unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,
+                U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09;
+}
+:root{
+  --bg:#f7f4ee;--panel:#fffdf9;--sunk:#f1ece2;--line:#e2dace;
+  --ink:#282320;--ink2:#4a423b;--muted:#857a6e;--faint:#a99e90;
+  --accent:#8b3a2e;--s1:#a8362b;--s2:#2e6b8b;
+  --shadow:0 1px 2px rgba(40,35,32,.06),0 8px 26px rgba(40,35,32,.10);
+  --serif:"Noto Serif Devanagari","Sanskrit 2003",Georgia,serif;
+  --ui:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#16140f;--panel:#1e1b16;--sunk:#242019;--line:#332d24;
+  --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
+  --accent:#d98a72;--s1:#e08878;--s2:#6fa8cc;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 26px rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --bg:#16140f;--panel:#1e1b16;--sunk:#242019;--line:#332d24;
+  --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
+  --accent:#d98a72;--s1:#e08878;--s2:#6fa8cc;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 26px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);
+     line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:58rem;margin:0 auto;padding:3rem 1.25rem 5rem}
+a{color:var(--accent)}
+header{border-bottom:1px solid var(--line);padding-bottom:1.5rem;margin-bottom:1.5rem}
+.back{font-size:.85rem;color:var(--muted);text-decoration:none;display:inline-block;
+      margin-bottom:1rem}
+.back:hover{color:var(--accent)}
+h1{font-family:var(--serif);font-size:2.1rem;line-height:1.25;margin:0 0 .3rem;
+   font-weight:600}
+.rom{color:var(--muted);font-size:.9rem;letter-spacing:.02em;margin:0 0 1rem}
+.claim{color:var(--ink2);font-size:1.02rem;max-width:46rem;margin:0}
+.claim b{color:var(--ink)}
+h3{font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+   margin:0 0 .7rem;font-weight:600}
+p{font-size:.95rem;color:var(--ink2)}
+section{margin:2.25rem 0}
+.note{background:var(--sunk);border:1px solid var(--line);border-left:3px solid var(--accent);
+      border-radius:0 8px 8px 0;padding:.9rem 1.1rem;font-size:.9rem;color:var(--ink2)}
+.note p{margin:0;font-size:.9rem}
+.note p+p{margin-top:.6rem}
+code{font-family:var(--mono);font-size:.86em;background:var(--sunk);
+     padding:.1em .35em;border-radius:3px}
+
+/* ---- the number band -------------------------------------------------- */
+.band{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));
+      gap:.9rem;margin:1.5rem 0}
+.num{background:var(--panel);border:1px solid var(--line);border-radius:9px;
+     padding:.8rem .9rem;box-shadow:var(--shadow)}
+.num b{display:block;font-family:var(--mono);font-size:1.35rem;color:var(--ink);
+       font-weight:600;letter-spacing:-.02em;line-height:1.2}
+.num span{font-size:.78rem;color:var(--muted);display:block;margin-top:.15rem}
+
+/* ---- the two witnesses ------------------------------------------------ */
+.who2{display:grid;grid-template-columns:repeat(auto-fit,minmax(17rem,1fr));gap:1rem}
+.wit{background:var(--panel);border:1px solid var(--line);border-radius:9px;
+     padding:1rem 1.1rem;box-shadow:var(--shadow);border-top:3px solid var(--line)}
+.wit.tk{border-top-color:var(--s1)}
+.wit.dsb{border-top-color:var(--s2)}
+.wit h4{margin:0 0 .1rem;font-size:1rem;font-weight:600}
+.wit .sr{color:var(--muted);font-size:.8rem;margin:0 0 .5rem}
+.wit p{margin:0;font-size:.88rem}
+
+/* ---- player ------------------------------------------------------------ */
+.player{position:sticky;top:0;z-index:30;background:var(--bg);
+        padding:.6rem 0 .7rem;border-bottom:1px solid var(--line);margin-bottom:1rem}
+.player.idle .frame{display:none}
+.frame{position:relative;width:100%;max-width:32rem;aspect-ratio:16/9;
+       border-radius:9px;overflow:hidden;background:#000;margin:0 auto .5rem}
+.frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.nowbar{font-size:.83rem;color:var(--muted);text-align:center;min-height:1.3em}
+.nowbar b{color:var(--ink);font-weight:600}
+.nowbar .stop{margin-left:.6rem;background:none;border:0;color:var(--accent);
+      font:inherit;cursor:pointer;text-decoration:underline}
+
+/* ---- filter ------------------------------------------------------------ */
+.filter{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;margin:0 0 1.25rem}
+.filter button{font:inherit;font-size:.83rem;padding:.32rem .75rem;cursor:pointer;
+    background:var(--panel);color:var(--ink2);border:1px solid var(--line);
+    border-radius:99px}
+.filter button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);
+    color:#fff}
+.filter .count{font-size:.8rem;color:var(--muted);margin-left:auto}
+
+/* ---- chapters and rows -------------------------------------------------- */
+.chap{margin:2rem 0 .8rem;padding-bottom:.35rem;border-bottom:1px solid var(--line);
+      display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+.chap h2{margin:0;font-size:1.05rem;font-weight:600}
+.chap .ep{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.chap .cite{font-size:.78rem;color:var(--faint)}
+.row{background:var(--panel);border:1px solid var(--line);border-radius:9px;
+     padding:.85rem 1rem;margin-bottom:.7rem;box-shadow:var(--shadow)}
+.row.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow)}
+.row .head{display:flex;align-items:baseline;gap:.6rem;margin-bottom:.5rem}
+.row .n{font-family:var(--mono);font-size:.78rem;color:var(--faint)}
+.tag{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;
+     padding:.1rem .45rem;border-radius:99px;border:1px solid var(--line);
+     color:var(--muted)}
+.tag.same{color:var(--s2);border-color:color-mix(in srgb,var(--s2) 40%,transparent)}
+.read{font-family:var(--serif);font-size:1.12rem;line-height:1.75;margin:0}
+.read.alt{margin-top:.5rem;padding-top:.5rem;border-top:1px dashed var(--line)}
+.read .lbl{display:block;font-family:var(--ui);font-size:.7rem;
+     letter-spacing:.06em;text-transform:uppercase;color:var(--faint);
+     margin-bottom:.1rem}
+.read.s1 .lbl{color:var(--s1)}
+.read.s2 .lbl{color:var(--s2)}
+.plays{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.7rem;align-items:center}
+.plays button{font:inherit;font-size:.82rem;padding:.3rem .7rem;cursor:pointer;
+     border-radius:7px;border:1px solid var(--line);background:var(--sunk);
+     color:var(--ink2);display:inline-flex;gap:.35rem;align-items:center}
+.plays button:hover{border-color:var(--accent);color:var(--accent)}
+.plays button .t{font-family:var(--mono);font-size:.76rem;color:var(--faint)}
+.plays .b1{border-left:3px solid var(--s1)}
+.plays .b2{border-left:3px solid var(--s2)}
+.plays .both{margin-left:auto;background:var(--panel)}
+.dur{font-family:var(--mono);font-size:.75rem;color:var(--faint)}
+
+/* ---- colophons ---------------------------------------------------------- */
+.cols{list-style:none;padding:0;margin:0;display:grid;gap:.5rem}
+.cols li{background:var(--panel);border:1px solid var(--line);border-radius:8px;
+   padding:.6rem .85rem;font-family:var(--serif);font-size:1rem;line-height:1.7}
+.cols .meta{display:block;font-family:var(--ui);font-size:.75rem;color:var(--muted);
+   margin-top:.2rem;letter-spacing:.02em}
+footer{margin-top:3rem;padding-top:1.25rem;border-top:1px solid var(--line);
+       color:var(--faint);font-size:.82rem;display:flex;flex-wrap:wrap;
+       gap:.4rem 1.2rem;justify-content:space-between}
+.err{background:var(--sunk);border:1px solid var(--line);border-left:3px solid var(--accent);
+     padding:1rem;border-radius:0 8px 8px 0}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <a class="back" href="index.html">← Purāṇa Atlas</a>
+  <h1 id="title">तुलाकावेरीमाहात्म्यम्</h1>
+  <p class="rom" id="rom">Tulā Kāverī Māhātmya</p>
+  <p class="claim">Two reciters, recorded years apart, chant
+  <b id="nshared">141</b> of the same verses in the same order. Those verses
+  appear in <b>none</b> of the <span id="nindex">488,149</span> verses we
+  index, and no digital exemplar of the text has been found. So this page does
+  not put a printed edition against a recording, the way the atlases do. It
+  puts <b>one recording against another</b>.</p>
+</header>
+
+<div class="player idle" id="player">
+  <div class="frame"><div id="yt"></div></div>
+  <div class="nowbar" id="nowbar"></div>
+</div>
+
+<section>
+  <h3>Why this is not an atlas</h3>
+  <p>Every atlas on this site is text-first: a printed edition is the spine,
+  the recording is hung on it, and the point worth making is that the two were
+  authenticated separately. Here there is no spine. We could have built one out
+  of the transcript and seated the audio against it — and every timestamp on the
+  resulting page would have been true by construction, because the text side
+  and the audio side would be the same measurement wearing two hats. That page
+  would look exactly like the honest ones and would mean nothing.</p>
+  <p>What is left is better than it sounds. Two independent performances,
+  transcribed by separate passes and aligned by separate passes, agreeing
+  verse for verse, is evidence about a text — produced <i>without</i> the text.
+  Each row below is one such agreement: the words as each witness decoded them,
+  and the second each of them begins.</p>
+</section>
+
+<section>
+  <h3>The two witnesses</h3>
+  <div class="who2" id="who2"></div>
+</section>
+
+<div class="band" id="band"></div>
+
+<section>
+  <h3>What the recordings call the text</h3>
+  <p>Nobody assigned these chapter numbers. The reciter reads the colophon out
+  at the close of each adhyāya, and they run strictly ascending across the
+  series — so the numbering below is quoted, not counted. The named division,
+  <i id="grantha"></i>, exists in neither circulating Agni Purāṇa: this is the
+  ordinary signature of a regional māhātmya carrying a purāṇic colophon that no
+  printed purāṇa matches.</p>
+  <ul class="cols" id="cols"></ul>
+</section>
+
+<section>
+  <h3>The correspondences</h3>
+  <p>Ordered as the continuous series walks the text. Press one voice, then the
+  other: the same words, in two mouths, at two tempos. Where the two decodes
+  differ, both are printed — the divergence brackets the reading rather than
+  hiding behind one of them, and neither is an edition.</p>
+  <div class="filter" id="filter">
+    <button data-f="all" aria-pressed="true">All</button>
+    <button data-f="same" aria-pressed="false">Decodes agree</button>
+    <button data-f="diff" aria-pressed="false">Decodes differ</button>
+    <span class="count" id="count"></span>
+  </div>
+  <div id="rows"></div>
+</section>
+
+<footer>
+  <span>Timings are CTC forced alignment against the waveform. No timestamp on
+  this page was typed, and none came from a transcription model.</span>
+  <span id="built"></span>
+</footer>
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+// ---------------------------------------------------------------------------
+// One player for the whole page. Two recordings of one verse cannot be heard
+// at once and should not be offered at once, so a row's buttons queue spans
+// into a single player rather than each owning an iframe: "play both" is then
+// the ordinary case of a two-item queue, not a special mode.
+// ---------------------------------------------------------------------------
+var PAD_IN = 0.5, PAD_OUT = 0.4;   // forced-alignment onsets are tight; a beat
+                                   // of lead-in keeps the first syllable whole
+var DATA = null, player = null, ready = false, queue = [], qi = -1, tick = null;
+
+function fmt(s){
+  s = Math.max(0, Math.round(s));
+  var m = Math.floor(s / 60), h = Math.floor(m / 60);
+  return h ? h + ':' + String(m % 60).padStart(2, '0') + ':' +
+             String(s % 60).padStart(2, '0')
+           : m + ':' + String(s % 60).padStart(2, '0');
+}
+
+function onYouTubeIframeAPIReady(){
+  player = new YT.Player('yt', {
+    height: '100%', width: '100%',
+    playerVars: {playsinline: 1, rel: 0, modestbranding: 1},
+    events: {onReady: function(){ ready = true; if (queue.length) step(0); }}
+  });
+}
+window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+
+function play(spans, label){
+  queue = spans; qi = -1;
+  document.getElementById('player').classList.remove('idle');
+  setNow(label);
+  if (ready) step(0);          // otherwise onReady picks the queue up
+}
+
+function step(i){
+  if (i >= queue.length) { stop(); return; }
+  qi = i;
+  var s = queue[i];
+  markRow(s.row);
+  setNow(s.label + (queue.length > 1 ? ' (' + (i + 1) + ' of ' +
+                                        queue.length + ')' : ''));
+  player.loadVideoById({videoId: s.yt,
+                        startSeconds: Math.max(0, s.t - PAD_IN)});
+  watch(s);
+}
+
+function watch(s){
+  if (tick) clearInterval(tick);
+  tick = setInterval(function(){
+    if (!player || !player.getCurrentTime) return;
+    var st = player.getPlayerState ? player.getPlayerState() : 1;
+    if (st !== 1) return;                       // only judge while PLAYING
+    if (player.getCurrentTime() >= s.e + PAD_OUT) step(qi + 1);
+  }, 200);
+}
+
+function stop(){
+  if (tick) { clearInterval(tick); tick = null; }
+  if (player && player.pauseVideo) player.pauseVideo();
+  queue = []; qi = -1; markRow(null); setNow(null);
+}
+
+function setNow(label){
+  var bar = document.getElementById('nowbar');
+  bar.textContent = '';
+  if (!label) return;
+  var b = document.createElement('b'); b.textContent = label;
+  bar.appendChild(b);
+  var x = document.createElement('button');
+  x.className = 'stop'; x.textContent = 'stop';
+  x.addEventListener('click', stop);
+  bar.appendChild(x);
+}
+
+function markRow(n){
+  var on = document.querySelectorAll('.row.on');
+  for (var i = 0; i < on.length; i++) on[i].classList.remove('on');
+  if (n == null) return;
+  var el = document.getElementById('row-' + n);
+  if (el) el.classList.add('on');
+}
+
+// ---------------------------------------------------------------------------
+// Render
+// ---------------------------------------------------------------------------
+function chapLabel(c){
+  if (!c) return '';
+  if (c.exact) return 'Adhyāya ' + c.lo;
+  if (c.hi) return 'Adhyāya ' + c.lo + '–' + c.hi;
+  return 'Adhyāya ' + c.lo + ' or later';
+}
+
+function el(tag, cls, text){
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+}
+
+function button(cls, name, span, label, row){
+  var b = el('button', cls);
+  b.appendChild(el('span', null, '▶ ' + name));
+  b.appendChild(el('span', 't', fmt(span.t)));
+  b.addEventListener('click', function(){
+    play([{yt: DATA.episodes[span.ep].yt, t: span.t, e: span.e,
+           label: label, row: row}], label);
+  });
+  return b;
+}
+
+function reading(cls, lbl, text){
+  var p = el('p', 'read ' + cls);
+  p.appendChild(el('span', 'lbl', lbl));
+  p.appendChild(document.createTextNode(text));
+  return p;
+}
+
+function rowNode(r){
+  var s1 = DATA.speakers.tk.name, s2 = DATA.speakers.dsb.name;
+  var box = el('div', 'row'); box.id = 'row-' + r.n;
+  box.dataset.kind = r.identical ? 'same' : 'diff';
+
+  var head = el('div', 'head');
+  head.appendChild(el('span', 'n', '#' + r.n));
+  head.appendChild(el('span', 'tag' + (r.identical ? ' same' : ''),
+                      r.identical ? 'both decodes agree' : 'decodes differ'));
+  head.appendChild(el('span', 'dur',
+      (r.tk.e - r.tk.t).toFixed(1) + 's · ' + (r.dsb.e - r.dsb.t).toFixed(1) + 's'));
+  box.appendChild(head);
+
+  if (r.identical) {
+    box.appendChild(reading('', 'as chanted in both', r.tk.text));
+  } else {
+    box.appendChild(reading('s1', s1, r.tk.text));
+    box.appendChild(reading('s2 alt', s2, r.dsb.text));
+  }
+
+  var plays = el('div', 'plays');
+  plays.appendChild(button('b1', 'Musiri', r.tk, s1 + ' · ' + r.tk.ep, r.n));
+  plays.appendChild(button('b2', 'Vaisampayanar', r.dsb,
+                           s2 + ' · ' + r.dsb.ep, r.n));
+  var both = el('button', 'both', '▶ both, one after the other');
+  both.addEventListener('click', function(){
+    play([{yt: DATA.episodes[r.tk.ep].yt, t: r.tk.t, e: r.tk.e,
+           label: s1 + ' · ' + r.tk.ep, row: r.n},
+          {yt: DATA.episodes[r.dsb.ep].yt, t: r.dsb.t, e: r.dsb.e,
+           label: s2 + ' · ' + r.dsb.ep, row: r.n}],
+         s1 + ' · ' + r.tk.ep);
+  });
+  plays.appendChild(both);
+  box.appendChild(plays);
+  return box;
+}
+
+var FILTER = 'all';
+
+function draw(){
+  var host = document.getElementById('rows');
+  host.textContent = '';
+  var shown = 0, ep = null;
+  DATA.rows.forEach(function(r){
+    if (FILTER === 'same' && !r.identical) return;
+    if (FILTER === 'diff' && r.identical) return;
+    if (r.tk.ep !== ep) {
+      ep = r.tk.ep;
+      var h = el('div', 'chap');
+      h.appendChild(el('h2', null, chapLabel(DATA.chapters[ep])));
+      h.appendChild(el('span', 'ep', ep + ' · ' + DATA.rows.filter(
+          function(x){ return x.tk.ep === ep; }).length + ' verses'));
+      var c = (DATA.colophons || []).filter(function(x){ return x.ep === ep; })[0];
+      if (c) h.appendChild(el('span', 'cite', 'colophon read at ' + fmt(c.at || 0)));
+      host.appendChild(h);
+    }
+    host.appendChild(rowNode(r));
+    shown++;
+  });
+  document.getElementById('count').textContent =
+      shown + ' of ' + DATA.rows.length + ' shown';
+}
+
+function render(D){
+  DATA = D;
+  document.getElementById('title').textContent = D.title;
+  document.getElementById('rom').textContent = D.rom + ' · ' + D.grantha;
+  document.getElementById('grantha').textContent = D.grantha;
+  document.getElementById('nshared').textContent = D.stats.shared;
+  document.getElementById('nindex').textContent =
+      D.stats.index_verses.toLocaleString('en-IN');
+  document.getElementById('built').textContent = 'Built ' + D.built;
+
+  var w = document.getElementById('who2');
+  [['tk', 'Continuous'], ['dsb', 'Braided']].forEach(function(p){
+    var s = D.speakers[p[0]];
+    var eps = Object.keys(D.episodes).filter(function(e){
+      return D.episodes[e].kind === p[0]; });
+    var hrs = D.stats[p[0] + '_hours'];
+    var c = el('div', 'wit ' + p[0]);
+    c.appendChild(el('h4', null, s.name));
+    c.appendChild(el('p', 'sr', s.series + ' · ' + eps.length +
+                                ' recordings · ' + hrs + ' h'));
+    c.appendChild(el('p', null, s.shape));
+    w.appendChild(c);
+  });
+
+  var band = [
+    [D.stats.shared, 'verses attested twice'],
+    ['0', 'of them in ' + D.stats.index_verses.toLocaleString('en-IN') +
+          ' indexed verses'],
+    [D.stats.control.shared, 'the same test against an unrelated series'],
+    [D.stats.identical, 'where the two decodes agree exactly'],
+    [D.stats.adhyayas_attested.length, 'adhyāyas numbered by colophon'],
+    [(D.stats.tk_hours + D.stats.dsb_hours).toFixed(1) + ' h',
+     'across ' + (D.stats.tk_episodes + D.stats.dsb_episodes) + ' recordings']
+  ];
+  var bh = document.getElementById('band');
+  band.forEach(function(p){
+    var d = el('div', 'num');
+    d.appendChild(el('b', null, String(p[0])));
+    d.appendChild(el('span', null, p[1]));
+    bh.appendChild(d);
+  });
+
+  var cols = document.getElementById('cols');
+  (D.colophons || []).forEach(function(c){
+    var li = el('li', null, c.text);
+    li.appendChild(el('span', 'meta', 'adhyāya ' + c.adhyaya + ' · ' + c.ep +
+        (c.purana ? ' · names the ' + c.purana + ' Purāṇa' : '')));
+    cols.appendChild(li);
+  });
+
+  var f = document.getElementById('filter');
+  f.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click', function(){
+      FILTER = b.dataset.f;
+      f.querySelectorAll('button').forEach(function(o){
+        o.setAttribute('aria-pressed', String(o === b)); });
+      draw();
+    });
+  });
+  draw();
+}
+
+fetch('data/tulakaveri_witness.json')
+  .then(function(r){ return r.json(); })
+  .then(render)
+  .catch(function(){
+    document.getElementById('rows').innerHTML =
+      '<div class="err">The page data did not load, so no correspondence ' +
+      'below can be played. Run <code>./refresh.py --check</code>.</div>';
+  });
+</script>
+</body>
+</html>

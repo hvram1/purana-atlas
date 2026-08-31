@@ -1,5 +1,5 @@
 {
- "built": "2026-08-30",
+ "built": "2026-08-31",
  "simulated_lanes": false,
  "atlases": {
   "virata": {
@@ -20,18 +20,18 @@
   "kartika": {
    "verses": 1817,
    "chapters": 36,
-   "reached": 993,
-   "reached_pct": 54.7,
-   "lanes": 2,
-   "real_lanes": 2,
-   "recordings": 35,
-   "parts": 41,
-   "both_lanes": 155,
+   "reached": 1094,
+   "reached_pct": 60.2,
+   "lanes": 3,
+   "real_lanes": 3,
+   "recordings": 53,
+   "parts": 59,
+   "both_lanes": 325,
    "speakers": [
     "Musiri Yagnarama Somayaji Dīkṣitar",
     "Pondicherry Vaisampayanar"
    ],
-   "lane_axis": "speaker"
+   "lane_axis": "speaker and series"
   },
   "adhyatma": {
    "verses": 4309,
@@ -48,5 +48,18 @@
    ],
    "lane_axis": "mode"
   }
+ },
+ "witness": {
+  "shared": 141,
+  "identical": 63,
+  "index_verses": 488149,
+  "control": 4,
+  "recordings": 42,
+  "hours": 32.0,
+  "adhyayas": 9,
+  "speakers": [
+   "Musiri Yagnarama Somayaji Dīkṣitar",
+   "Pondicherry Vaisampayanar"
+  ]
  }
 }

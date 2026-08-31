@@ -5,8 +5,9 @@ This repository is a *deployment*, not a source tree. Nothing here is authored
 by hand except index.html, README.md and docs/. Everything else is produced in
 the workbench and copied in by this script:
 
-    dharmasastra-gcp/workbench/virata-atlas.html   + data/virata_*.json
-    dharmasastra-gcp/workbench/kartika-atlas.html  + data/kartika_*.json
+    dharmasastra-gcp/workbench/virata-atlas.html       + data/virata_*.json
+    dharmasastra-gcp/workbench/kartika-atlas.html      + data/kartika_*.json
+    dharmasastra-gcp/workbench/tulakaveri-witness.html + data/tulakaveri_*.json
 
 So the loop is: rebuild there, refresh here, commit here.
 
@@ -76,6 +77,12 @@ ATLASES = [
     ("adhyatma-atlas.html", "adhyatma_4lang.json",
      "adhyatma_atlas_substrate.json"),
 ]
+
+# The Tulā Kāverī page is not an atlas and deliberately does not have a
+# substrate: there is no printed edition for one to be the authority over. It
+# ships one file, whose rows are correspondences between two RECORDINGS, so it
+# gets its own shape check further down rather than being bent into ATLASES.
+WITNESS = ("tulakaveri-witness.html", "tulakaveri_witness.json")
 
 # Shape contract of the substrate. Getting one of these wrong does not degrade
 # the page, it blanks it.
@@ -245,6 +252,53 @@ def check_substrate(path):
                                     "of its padas" % (os.path.basename(path),
                                                       ref))
                         break
+    return bad, d
+
+
+def check_witness(path):
+    """The witness page blanks differently from an atlas, so it checks so.
+
+    An atlas that loses a container renders nothing and the visitor sees it.
+    This page's failure is quieter and worse: a row whose episode has no video
+    id still renders, still prints its Sanskrit, and offers a play button that
+    does nothing when pressed. The whole claim of the page is that both
+    recordings can be heard, so a row that cannot be heard is not a degraded
+    row, it is a false one. Hence the id check, per row, per side.
+    """
+    d = json.load(open(path, encoding="utf-8"))
+    bad = 0
+    rows = d.get("rows")
+    if not isinstance(rows, list) or not rows:
+        return fail("%s has no rows" % os.path.basename(path)), {}
+    eps = d.get("episodes") or {}
+    if not isinstance(eps, dict) or not eps:
+        return fail("%s has no episodes to play" % os.path.basename(path)), {}
+    silent, malformed = set(), 0
+    for r in rows:
+        for side in ("tk", "dsb"):
+            v = r.get(side) or {}
+            if not all(k in v for k in ("ep", "t", "e", "text")):
+                malformed += 1
+                continue
+            if v["e"] <= v["t"]:
+                malformed += 1
+            e = eps.get(v["ep"]) or {}
+            if not e.get("yt"):
+                silent.add(v["ep"])
+    if malformed:
+        bad += fail("%s: %d row sides are malformed or end before they start"
+                    % (os.path.basename(path), malformed))
+    if silent:
+        bad += fail("%s: no video id for %s -- those rows would offer a play "
+                    "button that does nothing"
+                    % (os.path.basename(path), ", ".join(sorted(silent))))
+    st = d.get("stats") or {}
+    if st.get("shared") != len(rows):
+        bad += fail("%s: stats say %s correspondences, rows say %d"
+                    % (os.path.basename(path), st.get("shared"), len(rows)))
+    if st.get("in_index") != 0:
+        bad += fail("%s: in_index is %r -- the page's whole claim is that it "
+                    "is nought" % (os.path.basename(path), st.get("in_index")))
     return bad, d
 
 
@@ -478,12 +532,58 @@ def main():
             print("    %-34s %7.2f MB raw  %6.2f MB gzip"
                   % (os.path.basename(p), raw / 1e6, gz / 1e6))
 
+    # The witness page. Same copy-then-verify loop as an atlas, one file
+    # lighter, and its numbers land beside theirs so index.html can name it
+    # without anybody typing 141 into the markup.
+    print("\n%s" % WITNESS[0])
+    wit = {}
+    page_dst = os.path.join(HERE, WITNESS[0])
+    data_dst = os.path.join(data_dir, WITNESS[1])
+    if not a.check:
+        for name, dst in ((WITNESS[0], page_dst), (WITNESS[1], data_dst)):
+            src = os.path.join(a.src, "" if name.endswith(".html") else "data",
+                               name)
+            if not os.path.exists(src):
+                bad += fail("missing in the workbench: %s" % src)
+                continue
+            shutil.copyfile(src, dst)
+    if not os.path.exists(page_dst):
+        bad += fail("%s is not here" % WITNESS[0])
+    else:
+        bad += check_fetches(page_dst, (WITNESS[1],))
+        b, cites = check_selfcontained(page_dst); bad += b
+        b, wd = check_witness(data_dst); bad += b
+        if wd:
+            st = wd["stats"]
+            wit = {
+                "shared": st["shared"], "identical": st["identical"],
+                "index_verses": st["index_verses"],
+                "control": st["control"]["shared"],
+                "recordings": st["tk_episodes"] + st["dsb_episodes"],
+                "hours": round(st["tk_hours"] + st["dsb_hours"], 1),
+                "adhyayas": len(st["adhyayas_attested"]),
+                "speakers": sorted(w["name"] for w in wd["speakers"].values()),
+            }
+            print("  %d correspondences · %d with identical decodes · "
+                  "0 of them in %s indexed verses · %d recordings, %.1f h"
+                  % (wit["shared"], wit["identical"],
+                     format(wit["index_verses"], ","), wit["recordings"],
+                     wit["hours"]))
+        for pth in (page_dst, data_dst):
+            raw, gz = sizes(pth)
+            total_raw += raw; total_gz += gz
+            print("    %-34s %7.2f MB raw  %6.2f MB gzip"
+                  % (os.path.basename(pth), raw / 1e6, gz / 1e6))
+        for u in cites:
+            print("      %-32s cites %s" % ("", u))
+
     # index.html renders its figures from this file rather than carrying them
     # in the markup, so coverage printed on the landing page cannot drift away
     # from the coverage in the data. [[derive-do-not-ask-the-human]]
     if not a.check:
         json.dump({"built": datetime.date.today().isoformat(),
-                   "simulated_lanes": bool(a.with_sim), "atlases": stats},
+                   "simulated_lanes": bool(a.with_sim), "atlases": stats,
+                   "witness": wit},
                   open(os.path.join(data_dir, "stats.json"), "w",
                        encoding="utf-8"),
                   ensure_ascii=False, indent=1)

@@ -28,7 +28,7 @@
   --ink:#282320;--ink2:#4a423b;--muted:#857a6e;--faint:#a99e90;
   --accent:#8b3a2e;--accent-bg:#f7ebe6;
   --sa:#7a4a1e;--en:#2e5a8b;--bd:#4a6b32;
-  --s1:#a8362b;--s2:#2e6b8b;   /* two speakers, one text */
+  --s1:#a8362b;--s2:#2e6b8b;--s3:#5d7a3a;   /* two speakers, three series, one text */
   --person:#8b3a2e;--person-bg:#f7ebe6;--place:#2e6b5a;--place-bg:#e6f2ee;
   --people:#8a6d1f;--people-bg:#f5efdd;--divine:#54509b;--divine-bg:#ebeaf6;
   --unknown:#8b8178;--unknown-bg:#efebe6;
@@ -43,7 +43,7 @@
   --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
   --accent:#d98a72;--accent-bg:#2c211c;
   --sa:#d4a574;--en:#7fb0dd;--bd:#9ec87a;
-  --s1:#e08878;--s2:#6fa8cc;
+  --s1:#e08878;--s2:#6fa8cc;--s3:#9dbf72;
   --person:#e0a08e;--person-bg:#33201c;--place:#6cc4ae;--place-bg:#12302a;
   --people:#d3b562;--people-bg:#302816;--divine:#a6a2e8;--divine-bg:#232140;
   --unknown:#9a9088;--unknown-bg:#2a2724;
@@ -55,7 +55,7 @@
   --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
   --accent:#d98a72;--accent-bg:#2c211c;
   --sa:#d4a574;--en:#7fb0dd;--bd:#9ec87a;
-  --s1:#e08878;--s2:#6fa8cc;
+  --s1:#e08878;--s2:#6fa8cc;--s3:#9dbf72;
   --person:#e0a08e;--person-bg:#33201c;--place:#6cc4ae;--place-bg:#12302a;
   --people:#d3b562;--people-bg:#302816;--divine:#a6a2e8;--divine-bg:#232140;
   --unknown:#9a9088;--unknown-bg:#2a2724;
@@ -549,6 +549,13 @@ const unplayableNote = (l,o) => {
   return l.name+' chanted this — part '+o.ep.replace(/^[a-z]+-0*/,'')
     +' is not uploaded yet.';
 };
+// A lane can carry more than one taught series. Speaker 2 expounded this text
+// twice -- Kartika 2024 and Tulakaveri 2025 -- so `part 24` and `part 138` are
+// the same voice on two different occasions, and the part number alone does not
+// say which. The builder stamps `series` on every occurrence; this names it.
+const SERIES={kartika:'Kārtika 2024',tulakaveri:'Tulākāverī 2025'};
+const seriesOf=o=>o.series?(SERIES[o.series]||o.series):null;
+const seriesNote=o=>{const t=seriesOf(o);return t?'\n'+t:'';};
 const laneOcc = (v,l) => ((v.lang[l.id]||{}).occ)||[];
 const anyPlayable = v => V.langs.some(l=>laneOcc(v,l).some(o=>occPlayable(l,o)));
 const laneNote = l => l.nourl
@@ -882,8 +889,10 @@ function band(v,ref){
             +(o.conf!=null?'\nconf '+o.conf:'')
             +(w==='nourl'&&l.nourl
                 ?'\nThe onset is measured; only the upload is missing.':'');
+          m.title+=seriesNote(o);
           m.onclick=()=>toast(unplayableNote(l,o));}
         else{m.title='Part '+o.ep.replace('vp-','')+' at '+mmss(o.s)
+          +seriesNote(o)
           +(o.conf!=null?'\nconf '+o.conf:'')
           +(o.part?partTitle(o):'')
           +(o.cf?'\n° another verse is aligned to these seconds — at most one is right':'');

@@ -109,6 +109,26 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
   letter-spacing:.02em;margin-top:.3rem}
 .card .who{margin-top:.55rem}
 .card h2.pitch{font-family:var(--ui);font-size:1.08rem;letter-spacing:-.01em}
+/* The fourth text. NOT a .card, and the difference is the argument: a card
+   on this page opens an atlas, and an atlas has a printed edition behind it.
+   This one has none, so it gets a shape of its own -- full width, its own
+   accent, and its numbers counting correspondences rather than coverage.
+   Giving it a card would have said the site holds four atlases. It holds
+   three, and one open question. */
+.fourth{display:block;margin:0 0 2.5rem;background:var(--panel);
+  border:1px solid var(--line);border-top:3px solid var(--s2);
+  border-radius:10px;padding:1.4rem;box-shadow:var(--shadow);
+  text-decoration:none;color:inherit;
+  transition:transform .12s ease,box-shadow .12s ease}
+.fourth:hover{transform:translateY(-2px);
+  box-shadow:0 2px 4px rgba(40,35,32,.08),0 14px 34px rgba(40,35,32,.14)}
+.fourth .eyebrow{font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--s2);font-weight:600;margin:0 0 .35rem}
+.fourth h2{font-family:var(--serif);font-size:1.35rem;margin:0 0 .15rem;
+  font-weight:600}
+.fourth p{margin:0 0 1rem;font-size:.93rem}
+.fourth .stats{margin-top:0}
+
 /* The working note. Deliberately NOT a .card and NOT inside .cards.two: it is
    not a third proposal, and a reader who counts three cards will read it as
    one. Full width, quieter, and it says what it is in its own eyebrow. */
@@ -131,13 +151,30 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
   <h1>Purāṇa Atlas</h1>
   <p class="sub">Three Sanskrit texts, each verse tied to the second it is chanted
   in a recorded <i>upanyāsam</i>. Click a verse, hear it. <a href="#soon">Five
-  more are in hand.</a></p>
+  more are in hand</a>, and <a href="#fourth">a fourth text has no edition to
+  hang it on</a>.</p>
   <p class="sub why">They are built to argue for two things the Purāṇas still
   lack: recitation that is <i>addressable</i> at the verse, and an <i>index of
   names</i> across the corpus. <a href="#why">Read the two proposals →</a></p>
 </header>
 
 <div class="cards" id="cards"></div>
+
+<a class="fourth" href="tulakaveri-witness.html" id="fourth">
+  <p class="eyebrow">Not an atlas · a text with no edition</p>
+  <h2>तुलाकावेरीमाहात्म्यम्</h2>
+  <p class="rom">Tulā Kāverī Māhātmya · Āgneya Purāṇa</p>
+  <p>Two reciters, recorded years apart, chant <b id="w-shared">141</b> of the
+  same verses in the same order — and those verses appear in none of the
+  <span id="w-index">488,149</span> we index. No printed or digital exemplar
+  has been found, so there is nothing here to align a recording <i>to</i>. The
+  page therefore does what is left, and it turns out to be the more interesting
+  thing: it sets <b>one recording against the other</b>, prints both decodes
+  where they differ, and lets you hear the same verse in two mouths.</p>
+  <div class="stats" id="w-stats"></div>
+  <p class="who" id="w-who"></p>
+  <div class="go">Open the two witnesses →</div>
+</a>
 
 <section>
   <h3>How the timings were made</h3>
@@ -206,10 +243,14 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
     Vaisampayanar</span></li>
   </ul>
   <div class="note">
-    <p>A <i>Tulā Kāverī</i> māhātmya is not on that list, and the reason is
-    worth stating rather than leaving as a silence: the verses it turns on
-    already stand in the Kārtika atlas, at adhyāya 4. It may prove to be a
-    reading of what is published here rather than a text of its own.</p>
+    <p>A <i>Tulā Kāverī</i> māhātmya is not on that list either, and it is not
+    waiting for the alignment pass. This page used to say it might prove to be
+    a reading of what is already published here rather than a text of its own.
+    That is now settled, and the other way: it names itself in its own
+    colophons, its chapters run 1 to 15 in order, and 141 of the verses its two
+    reciters share appear in no text we hold. It has a
+    <a href="tulakaveri-witness.html">page of its own</a>, which is not an
+    atlas, because the thing it is missing is the printed edition.</p>
   </div>
 </section>
 
@@ -321,6 +362,23 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
   const k = S.atlases.kartika;
   if (k && k.both_lanes) {
     document.getElementById('both').textContent = n(k.both_lanes) + ' verses';
+  }
+  // The fourth text's figures come from the same file, and are deliberately
+  // NOT coverage: a percentage needs a denominator, and the denominator here
+  // would be a count of verses in a text nobody has. Correspondences, decodes
+  // that agree, and hours are all things we can actually count.
+  const W = S.witness;
+  if (W && W.shared) {
+    document.getElementById('w-shared').textContent = n(W.shared);
+    document.getElementById('w-index').textContent = n(W.index_verses);
+    document.getElementById('w-stats').innerHTML =
+        '<span class="stat"><b>' + n(W.shared) + '</b>attested twice</span>'
+      + '<span class="stat"><b>0</b>found in the index</span>'
+      + '<span class="stat"><b>' + n(W.identical) + '</b>decodes agreeing</span>'
+      + '<span class="stat"><b>' + W.hours + ' h</b>in '
+      +   W.recordings + ' recordings</span>';
+    document.getElementById('w-who').textContent =
+        'Expounded by ' + W.speakers.join(' · ');
   }
   const ar = S.atlases.adhyatma;
   if (ar && ar.both_lanes) {
