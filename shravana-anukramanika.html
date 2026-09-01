@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Same reason as index.html: a page of Devanagari must not depend on the
+     server appending charset=utf-8 to text/html. -->
+<meta charset="utf-8">
+<title>Śrāvaṇa Māsa Māhātmya — an anukramaṇikā</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A month of recorded chant on a text that is
+ in no corpus we hold: 959 passages, each locatable to the second, none of them
+ from an edition.">
+<style>
+@font-face{
+  font-family:"Noto Serif Devanagari";
+  src:url("fonts/NotoSerifDevanagari.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;
+  unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,
+                U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09;
+}
+:root{
+  --bg:#f7f4ee;--panel:#fffdf9;--sunk:#f1ece2;--line:#e2dace;
+  --ink:#282320;--ink2:#4a423b;--muted:#857a6e;--faint:#a99e90;
+  --accent:#8b3a2e;--s1:#a8362b;--s2:#2e6b8b;--ok:#4f7a45;
+  --shadow:0 1px 2px rgba(40,35,32,.06),0 8px 26px rgba(40,35,32,.10);
+  --serif:"Noto Serif Devanagari","Sanskrit 2003",Georgia,serif;
+  --ui:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#16140f;--panel:#1e1b16;--sunk:#242019;--line:#332d24;
+  --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
+  --accent:#d98a72;--s1:#e08878;--s2:#6fa8cc;--ok:#8fbd83;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 26px rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --bg:#16140f;--panel:#1e1b16;--sunk:#242019;--line:#332d24;
+  --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
+  --accent:#d98a72;--s1:#e08878;--s2:#6fa8cc;--ok:#8fbd83;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 26px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);
+     line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:58rem;margin:0 auto;padding:3rem 1.25rem 5rem}
+a{color:var(--accent)}
+header{border-bottom:1px solid var(--line);padding-bottom:1.5rem;margin-bottom:1.5rem}
+.back{font-size:.85rem;color:var(--muted);text-decoration:none;display:inline-block;
+      margin-bottom:1rem}
+.back:hover{color:var(--accent)}
+h1{font-family:var(--serif);font-size:2.1rem;line-height:1.25;margin:0 0 .3rem;
+   font-weight:600}
+.rom{color:var(--muted);font-size:.9rem;letter-spacing:.02em;margin:0 0 1rem}
+.claim{color:var(--ink2);font-size:1.02rem;max-width:46rem;margin:0}
+.claim b{color:var(--ink)}
+h3{font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+   margin:0 0 .7rem;font-weight:600}
+p{font-size:.95rem;color:var(--ink2)}
+section{margin:2.25rem 0}
+code{font-family:var(--mono);font-size:.86em;background:var(--sunk);
+     padding:.1em .35em;border-radius:3px}
+
+/* ---- the number band -------------------------------------------------- */
+.band{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));
+      gap:.9rem;margin:1.5rem 0}
+.num{background:var(--panel);border:1px solid var(--line);border-radius:9px;
+     padding:.8rem .9rem;box-shadow:var(--shadow)}
+.num b{display:block;font-family:var(--mono);font-size:1.35rem;color:var(--ink);
+       font-weight:600;letter-spacing:-.02em;line-height:1.2}
+.num span{font-size:.78rem;color:var(--muted);display:block;margin-top:.15rem}
+
+/* ---- the reciter ------------------------------------------------------ */
+.wit{background:var(--panel);border:1px solid var(--line);border-radius:9px;
+     padding:1rem 1.1rem;box-shadow:var(--shadow);border-top:3px solid var(--s2)}
+.wit h4{margin:0 0 .1rem;font-size:1rem;font-weight:600}
+.wit .sr{color:var(--muted);font-size:.8rem;margin:0 0 .5rem}
+.wit p{margin:0;font-size:.88rem}
+
+/* ---- player ------------------------------------------------------------ */
+.player{position:sticky;top:0;z-index:30;background:var(--bg);
+        padding:.6rem 0 .7rem;border-bottom:1px solid var(--line);margin-bottom:1rem}
+.player.idle .frame{display:none}
+.frame{position:relative;width:100%;max-width:32rem;aspect-ratio:16/9;
+       border-radius:9px;overflow:hidden;background:#000;margin:0 auto .5rem}
+.frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.nowbar{font-size:.83rem;color:var(--muted);text-align:center;min-height:1.3em}
+.nowbar b{color:var(--ink);font-weight:600}
+.nowbar .stop{margin-left:.6rem;background:none;border:0;color:var(--accent);
+      font:inherit;cursor:pointer;text-decoration:underline}
+
+/* ---- the probe comparison ----------------------------------------------
+   Two small multiples: one row per division the probe picked, one column per
+   day. The reader's question is "does the same answer keep coming back", so
+   the encoding is emphasis -- the row that IS the text in the accent, every
+   other row de-emphasised -- and NOT seventeen categorical hues, which would
+   spend the only free channel on identities nobody needs to tell apart.
+   Slot-1 blue: validated against both surfaces in both modes. */
+.viz{--mark:#2a78d6;--mark-off:#857a6e;background:var(--panel);
+     border:1px solid var(--line);border-radius:9px;box-shadow:var(--shadow);
+     padding:1rem 1.1rem;margin-bottom:.9rem}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .viz{
+  --mark:#3987e5;--mark-off:#948a7c}}
+:root[data-theme="dark"] .viz{--mark:#3987e5;--mark-off:#948a7c}
+.viz h4{margin:0 0 .1rem;font-size:.95rem;font-weight:600}
+.viz .sub{margin:0 0 .8rem;font-size:.82rem;color:var(--muted)}
+.viz .scroll{overflow-x:auto}
+.viz svg{display:block}
+.viz .rule{stroke:var(--line);stroke-width:1}
+.viz .lbl{font-size:11px;fill:var(--muted);font-family:var(--serif)}
+.viz .lbl.on{fill:var(--ink)}
+.viz .xlbl{font-size:10px;fill:var(--faint);font-family:var(--mono)}
+.viz circle{stroke:var(--panel);stroke-width:2}
+.viz circle.on{fill:var(--mark)}
+.viz circle.off{fill:var(--mark-off)}
+.viz .key{margin:.7rem 0 0;font-size:.8rem;color:var(--muted)}
+.viz .key i{display:inline-block;width:.62rem;height:.62rem;border-radius:50%;
+     vertical-align:baseline;margin:0 .25rem 0 .1rem}
+.viz .key i.on{background:var(--mark)}
+.viz .key i.off{background:var(--mark-off)}
+.viz .tip{position:fixed;z-index:50;pointer-events:none;background:var(--ink);
+     color:var(--bg);font-size:.78rem;padding:.3rem .5rem;border-radius:6px;
+     max-width:18rem;line-height:1.4}
+
+/* ---- filter ------------------------------------------------------------ */
+.filter{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;margin:0 0 1rem}
+.filter button{font:inherit;font-size:.83rem;padding:.32rem .75rem;cursor:pointer;
+    background:var(--panel);color:var(--ink2);border:1px solid var(--line);
+    border-radius:99px}
+.filter button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);
+    color:#fff}
+.filter .count{font-size:.8rem;color:var(--muted);margin-left:auto}
+.find{display:flex;gap:.5rem;align-items:center;margin:0 0 1.25rem}
+.find input{font:inherit;font-family:var(--serif);font-size:1rem;flex:1;
+    padding:.45rem .7rem;border-radius:8px;border:1px solid var(--line);
+    background:var(--panel);color:var(--ink);min-width:0}
+.find input::placeholder{font-family:var(--ui);font-size:.85rem;color:var(--faint)}
+
+/* ---- days and rows ------------------------------------------------------ */
+.chap{margin:2rem 0 .8rem;padding-bottom:.35rem;border-bottom:1px solid var(--line);
+      display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+.chap h2{margin:0;font-size:1.02rem;font-weight:600;font-family:var(--serif);
+      line-height:1.5}
+.chap .ep{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.chap .cite{font-size:.78rem;color:var(--faint)}
+.chap .whole{font:inherit;font-size:.78rem;padding:.2rem .6rem;cursor:pointer;
+      border-radius:99px;border:1px solid var(--line);background:var(--panel);
+      color:var(--ink2);margin-left:auto}
+.chap .whole:hover{border-color:var(--accent);color:var(--accent)}
+.row{background:var(--panel);border:1px solid var(--line);border-radius:9px;
+     padding:.7rem .9rem;margin-bottom:.55rem;box-shadow:var(--shadow)}
+.row.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow)}
+.row .head{display:flex;align-items:baseline;gap:.55rem;margin-bottom:.4rem;
+     flex-wrap:wrap}
+.row .n{font-family:var(--mono);font-size:.76rem;color:var(--faint)}
+.tag{font-size:.7rem;letter-spacing:.05em;padding:.1rem .45rem;border-radius:99px;
+     border:1px solid var(--line);color:var(--muted);text-decoration:none;
+     white-space:nowrap}
+.tag.q{color:var(--s2);border-color:color-mix(in srgb,var(--s2) 40%,transparent)}
+.tag.run{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,transparent)}
+.tag.scr{color:var(--s1);border-color:color-mix(in srgb,var(--s1) 40%,transparent)}
+.read{font-family:var(--serif);font-size:1.1rem;line-height:1.75;margin:0}
+.plays{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.55rem;align-items:center}
+.plays button{font:inherit;font-size:.82rem;padding:.28rem .7rem;cursor:pointer;
+     border-radius:7px;border:1px solid var(--line);border-left:3px solid var(--s2);
+     background:var(--sunk);color:var(--ink2);display:inline-flex;gap:.35rem;
+     align-items:center}
+.plays button:hover{border-color:var(--accent);color:var(--accent)}
+.plays button .t{font-family:var(--mono);font-size:.76rem;color:var(--faint)}
+.dur{font-family:var(--mono);font-size:.75rem;color:var(--faint);margin-left:auto}
+.empty{color:var(--faint);font-size:.88rem;margin:.2rem 0 1rem}
+footer{margin-top:3rem;padding-top:1.25rem;border-top:1px solid var(--line);
+       color:var(--faint);font-size:.82rem;display:flex;flex-wrap:wrap;
+       gap:.4rem 1.2rem;justify-content:space-between}
+.err{background:var(--sunk);border:1px solid var(--line);border-left:3px solid var(--accent);
+     padding:1rem;border-radius:0 8px 8px 0}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <a class="back" href="index.html">&larr; Pur&#0257;&#07751;a Atlas</a>
+  <h1 id="title">श्रीश्रावणमासमाहात्म्यम्</h1>
+  <p class="rom" id="rom">Śrāvaṇa Māsa Māhātmya</p>
+  <p class="claim">A month of daily recordings on a text that appears in
+  <b>none</b> of the <span id="nindex">488,149</span> verses we index, and of
+  which no digital exemplar has been found. There is no edition here to read
+  along with, and no second reciter to check against. What there is:
+  <b id="nchant">959</b> passages of chant, each one placed in its recording to
+  the second, so that a month of Śrāvaṇa can be <b>heard</b> without being
+  read.</p>
+</header>
+
+<div class="player idle" id="player">
+  <div class="frame"><div id="yt"></div></div>
+  <div class="nowbar" id="nowbar"></div>
+</div>
+
+<section>
+  <h3>What this page is, and is not</h3>
+  <p>The atlases on this site are text-first: a printed edition is the spine, a
+  recording is hung on it, and the point worth making is that the two were
+  authenticated separately. The Tulā Kāverī page had no edition either, and
+  answered that with a second reciter — two witnesses agreeing verse for verse
+  is evidence about a text produced without the text. Here there is
+  <i>one</i> witness, so neither answer is available.</p>
+  <p>So this is an <b>anukramaṇikā</b>: an index to a recording rather than to
+  a book. The Devanagari below is one transcription pass's decode of what was
+  chanted — a finding aid, not a reading text, and not an edition of anything.
+  Read it to recognise a verse and press the button; do not cite it.</p>
+  <p id="scriptnote"></p>
+</section>
+
+<section>
+  <h3>The reciter</h3>
+  <div class="wit" id="who"></div>
+</section>
+
+<div class="band" id="band"></div>
+
+<section>
+  <h3>Why we say the text is not in the index</h3>
+  <p id="probeclaim"></p>
+  <div id="probe"></div>
+  <p class="empty">Both panels are the same probe
+  (<code>scripts/attribute.py</code>), the same reciter and the same evidence —
+  each day's transcript asked, on its own, which of the indexed divisions it
+  most resembles. The <i>strength</i> of the winning match does not separate
+  the two series and is deliberately not drawn: Kārtika's median best rate is
+  0.63% of a day's segments and Śrāvaṇa's is 0.28%, which would tell a reader
+  nothing. What separates them is whether the same answer comes back
+  tomorrow.</p>
+</section>
+
+<section>
+  <h3>Where the reciter steps into a text we do hold</h3>
+  <p id="runclaim"></p>
+  <div id="runs"></div>
+  <p id="ordercheck"></p>
+</section>
+
+<section>
+  <h3>The month, day by day</h3>
+  <p>Each heading is one recording, titled by the reciter himself with the
+  tithi and the vrata of that day. Under it, in the order they are chanted, the
+  Sanskrit passages of that day. Press one to hear it.</p>
+  <div class="filter" id="filter">
+    <button data-f="all" aria-pressed="true">All</button>
+    <button data-f="q" aria-pressed="false">In the index</button>
+    <button data-f="run" aria-pressed="false">Part of a run</button>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="find">
+    <input id="find" type="search"
+           placeholder="Find a passage - type Devanagari, e.g. गौरी">
+  </div>
+  <div id="rows"></div>
+</section>
+
+<footer>
+  <span>Timings are CTC forced alignment against the waveform. No timestamp on
+  this page was typed, and none came from a transcription model. A passage
+  whose alignment scored under <span id="floor">0.40</span> is not shown at
+  all, rather than shown with a button that would play the wrong seconds.</span>
+  <span id="built"></span>
+</footer>
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+// ---------------------------------------------------------------------------
+// One player for the whole page. A day's chant is a queue of spans through a
+// single iframe rather than an iframe per row, so "play the whole day's chant"
+// is the ordinary case of a long queue rather than a separate mode.
+// ---------------------------------------------------------------------------
+var PAD_IN = 0.5, PAD_OUT = 0.4;   // forced-alignment onsets are tight; a beat
+                                   // of lead-in keeps the first syllable whole
+var DATA = null, player = null, ready = false, queue = [], qi = -1, tick = null;
+
+function fmt(s){
+  s = Math.max(0, Math.round(s));
+  var m = Math.floor(s / 60), h = Math.floor(m / 60);
+  return h ? h + ':' + String(m % 60).padStart(2, '0') + ':' +
+             String(s % 60).padStart(2, '0')
+           : m + ':' + String(s % 60).padStart(2, '0');
+}
+
+function onYouTubeIframeAPIReady(){
+  player = new YT.Player('yt', {
+    height: '100%', width: '100%',
+    playerVars: {playsinline: 1, rel: 0, modestbranding: 1},
+    events: {onReady: function(){ ready = true; if (queue.length) step(0); }}
+  });
+}
+window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+
+function play(spans, label){
+  queue = spans; qi = -1;
+  document.getElementById('player').classList.remove('idle');
+  setNow(label);
+  if (ready) step(0);          // otherwise onReady picks the queue up
+}
+
+function step(i){
+  if (i >= queue.length) { stop(); return; }
+  qi = i;
+  var s = queue[i];
+  markRow(s.row);
+  setNow(s.label + (queue.length > 1 ? ' (' + (i + 1) + ' of ' +
+                                        queue.length + ')' : ''));
+  player.loadVideoById({videoId: s.yt,
+                        startSeconds: Math.max(0, s.t - PAD_IN)});
+  watch(s);
+}
+
+function watch(s){
+  if (tick) clearInterval(tick);
+  tick = setInterval(function(){
+    if (!player || !player.getCurrentTime) return;
+    var st = player.getPlayerState ? player.getPlayerState() : 1;
+    if (st !== 1) return;                       // only judge while PLAYING
+    if (player.getCurrentTime() >= s.e + PAD_OUT) step(qi + 1);
+  }, 200);
+}
+
+function stop(){
+  if (tick) { clearInterval(tick); tick = null; }
+  if (player && player.pauseVideo) player.pauseVideo();
+  queue = []; qi = -1; markRow(null); setNow(null);
+}
+
+function setNow(label){
+  var bar = document.getElementById('nowbar');
+  bar.textContent = '';
+  if (!label) return;
+  var b = document.createElement('b'); b.textContent = label;
+  bar.appendChild(b);
+  var x = document.createElement('button');
+  x.className = 'stop'; x.textContent = 'stop';
+  x.addEventListener('click', stop);
+  bar.appendChild(x);
+}
+
+function markRow(n){
+  var on = document.querySelectorAll('.row.on');
+  for (var i = 0; i < on.length; i++) on[i].classList.remove('on');
+  if (n == null) return;
+  var el = document.getElementById('row-' + n);
+  if (el) el.classList.add('on');
+}
+
+// ---------------------------------------------------------------------------
+// Render
+// ---------------------------------------------------------------------------
+function el(tag, cls, text){
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+}
+
+function dayLabel(ep){
+  var e = DATA.episodes[ep];
+  return (e.day ? e.day + '. ' : '') + (e.title || ep);
+}
+
+function span(r){
+  // A row is a play button and nothing else, so an episode with no video id
+  // must never reach this function. refresh.py refuses to publish data where
+  // one is missing; this is that contract's other end, not a fallback.
+  return {yt: DATA.episodes[r.ep].yt, t: r.t, e: r.e,
+          label: r.ep + ' · ' + fmt(r.t), row: r.n};
+}
+
+function citeNode(q){
+  var txt = q.division + (q.part && q.site !== 'stotra' ? ' ' + q.part : '') +
+            (q.verse != null ? '.' + q.verse : '');
+  var a = el(q.url ? 'a' : 'span', 'tag ' + (q.run ? 'run' : 'q'), txt);
+  if (q.url) { a.href = q.url; a.target = '_blank'; a.rel = 'noopener'; }
+  return a;
+}
+
+function rowNode(r){
+  var box = el('div', 'row'); box.id = 'row-' + r.n;
+
+  var head = el('div', 'head');
+  head.appendChild(el('span', 'n', '#' + r.n));
+  if (r.q) {
+    head.appendChild(citeNode(r.q));
+    if (r.q.run) head.appendChild(el('span', 'tag run', 'in a run'));
+  }
+  // Sanskrit chant that the pass wrote in Tamil script. Left as decoded and
+  // labelled, because Tamil script does not carry ka/kha/ga/gha and any
+  // conversion to Devanagari would invent the distinction.
+  if (r.script === 'tamil')
+    head.appendChild(el('span', 'tag scr', 'decoded in Tamil script'));
+  head.appendChild(el('span', 'dur', (r.e - r.t).toFixed(1) + 's'));
+  box.appendChild(head);
+  box.appendChild(el('p', 'read', r.text));
+
+  var plays = el('div', 'plays');
+  var b = el('button');
+  b.appendChild(el('span', null, '▶ chant'));
+  b.appendChild(el('span', 't', fmt(r.t)));
+  b.addEventListener('click', function(){ play([span(r)], dayLabel(r.ep)); });
+  plays.appendChild(b);
+  box.appendChild(plays);
+  return box;
+}
+
+var FILTER = 'all', FIND = '';
+
+function keep(r){
+  if (FILTER === 'q' && !r.q) return false;
+  if (FILTER === 'run' && !(r.q && r.q.run)) return false;
+  if (FIND && r.text.indexOf(FIND) < 0) return false;
+  return true;
+}
+
+function draw(){
+  var host = document.getElementById('rows');
+  host.textContent = '';
+  var shown = 0;
+  Object.keys(DATA.episodes).sort().forEach(function(ep){
+    var mine = DATA.rows.filter(function(r){ return r.ep === ep && keep(r); });
+    // A day with nothing under the current filter is dropped whole. An empty
+    // heading reads as a day with no chant in it, which is a different claim
+    // and a false one.
+    if (!mine.length && (FILTER !== 'all' || FIND)) return;
+    var e = DATA.episodes[ep];
+    var h = el('div', 'chap');
+    h.appendChild(el('h2', null, dayLabel(ep)));
+    h.appendChild(el('span', 'ep', ep));
+    h.appendChild(el('span', 'cite',
+        (e.date ? e.date + ' · ' : '') + fmt(e.dur) + ' · ' +
+        e.chant + ' chanted'));
+    if (mine.length) {
+      var w = el('button', 'whole', '▶ the day’s chant, in order');
+      w.addEventListener('click', function(){
+        play(mine.map(span), dayLabel(ep));
+      });
+      h.appendChild(w);
+    }
+    host.appendChild(h);
+    if (!mine.length) {
+      host.appendChild(el('p', 'empty',
+          e.units ? 'No passage of this recording passed the alignment floor.'
+                  : 'This recording was not transcribed: at ' + fmt(e.dur) +
+                    ' it is a partial send, and it repeats the title of the ' +
+                    'day before.'));
+      return;
+    }
+    mine.forEach(function(r){ host.appendChild(rowNode(r)); shown++; });
+  });
+  document.getElementById('count').textContent =
+      shown + ' of ' + DATA.rows.length + ' shown';
+}
+
+var SVGNS = 'http://www.w3.org/2000/svg';
+function svg(tag, attrs){
+  var e = document.createElementNS(SVGNS, tag);
+  for (var k in attrs) e.setAttribute(k, attrs[k]);
+  return e;
+}
+
+var TIP = null;
+function tip(text, ev){
+  if (!TIP) {
+    TIP = el('div', 'tip');
+    document.body.appendChild(TIP);
+  }
+  if (!text) { TIP.style.display = 'none'; return; }
+  TIP.textContent = text;
+  TIP.style.display = 'block';
+  TIP.style.left = Math.min(ev.clientX + 12, window.innerWidth - 300) + 'px';
+  TIP.style.top = (ev.clientY + 14) + 'px';
+}
+
+function panel(c){
+  // Rows are the divisions this series' days actually landed on, commonest
+  // first; columns are the days in order. One dot per day. The row that is the
+  // text the series expounds carries the accent; every other row is
+  // de-emphasised. Śrāvaṇa has no such row, and its absence is the point.
+  var LBL = 190, TOP = 22, RH = 22, CW = 20, PAD = 14;
+  var order = [], seen = {}, nameFor = {};
+  c.days.forEach(function(d){
+    if (!(d.key in seen)) { seen[d.key] = 0; }
+    seen[d.key]++;
+    nameFor[d.key] = d.division;
+  });
+  // Commonest first, and ties broken by NAME rather than by first appearance.
+  // First-appearance ties put 22 single-day rows in day order, which draws a
+  // clean diagonal across the Śrāvaṇa panel — a trend the eye reads as
+  // structure when the finding is that there is none.
+  Object.keys(seen).sort(function(a, b){
+      return (seen[b] - seen[a]) ||
+             (nameFor[a] < nameFor[b] ? -1 : nameFor[a] > nameFor[b] ? 1 : 0);
+    }).forEach(function(k){ order.push(k); });
+  var rowOf = {}; order.forEach(function(k, i){ rowOf[k] = i; });
+  var nameOf = {}; c.days.forEach(function(d){ nameOf[d.key] = d.division; });
+
+  var W = LBL + c.days.length * CW + PAD;
+  var H = TOP + order.length * RH + PAD;
+  var box = el('div', 'viz');
+  box.appendChild(el('h4', null, c.label));
+  box.appendChild(el('p', 'sub', c.note + ' · ' + c.days.length +
+      ' days landed on ' + c.divisions +
+      (c.divisions === 1 ? ' division' : ' different divisions')));
+
+  var wrap = el('div', 'scroll');
+  var s = svg('svg', {width: W, height: H, viewBox: '0 0 ' + W + ' ' + H,
+                      role: 'img',
+                      'aria-label': c.label + ': ' + c.days.length +
+                        ' days across ' + c.divisions + ' divisions'});
+
+  order.forEach(function(k, i){
+    var y = TOP + i * RH + RH / 2;
+    var on = c.expect && k === c.expect;
+    // A hairline row rule, solid and one step off the surface. Never dashed.
+    s.appendChild(svg('line', {'class': 'rule', x1: LBL - 6, x2: W - PAD,
+                               y1: y, y2: y}));
+    var t = svg('text', {'class': 'lbl' + (on ? ' on' : ''), x: LBL - 12,
+                         y: y + 4, 'text-anchor': 'end'});
+    t.textContent = nameOf[k];
+    s.appendChild(t);
+  });
+
+  c.days.forEach(function(d, j){
+    var x = LBL + j * CW + CW / 2;
+    var y = TOP + rowOf[d.key] * RH + RH / 2;
+    var on = c.expect && d.key === c.expect;
+    var dot = svg('circle', {'class': on ? 'on' : 'off', cx: x, cy: y, r: 4.5});
+    dot.addEventListener('mouseenter', function(ev){
+      tip(d.ep + ' — ' + d.division, ev); });
+    dot.addEventListener('mousemove', function(ev){
+      tip(d.ep + ' — ' + d.division, ev); });
+    dot.addEventListener('mouseleave', function(){ tip(null); });
+    s.appendChild(dot);
+  });
+  // Only the first and last day are labelled: a number under every dot is
+  // noise, and the axis is "the days, in order" rather than a scale.
+  [[0, 'start'], [c.days.length - 1, 'end']].forEach(function(p){
+    var x = LBL + p[0] * CW + CW / 2;
+    var t = svg('text', {'class': 'xlbl', x: x, y: TOP - 8,
+                         'text-anchor': p[1] === 'start' ? 'start' : 'end'});
+    t.textContent = c.days[p[0]].ep;
+    s.appendChild(t);
+  });
+
+  wrap.appendChild(s);
+  box.appendChild(wrap);
+
+  var key = el('p', 'key');
+  if (c.expect) {
+    key.appendChild(el('i', 'on'));
+    key.appendChild(document.createTextNode(
+        ' the day landed on ' + c.modal_name + ', which is the text this '
+      + 'series expounds — ' + c.expect_days + ' of ' + c.days.length
+      + ' days did.  '));
+    key.appendChild(el('i', 'off'));
+    key.appendChild(document.createTextNode(' it landed somewhere else.'));
+  } else {
+    key.appendChild(el('i', 'off'));
+    key.appendChild(document.createTextNode(
+        ' every day is grey: no row here is the Śrāvaṇa Māsa Māhātmya, '
+      + 'because the index holds no such text. The commonest answer, '
+      + c.modal_name + ', takes only ' + c.modal_days + ' of '
+      + c.days.length + ' days, and the winners include the māhātmyas of '
+      + 'other months — Kārtika, Mārgaśīrṣa — reached for by a vrata '
+      + 'vocabulary they share with the month that is missing.'));
+  }
+  box.appendChild(key);
+  return box;
+}
+
+function drawProbe(D){
+  var host = document.getElementById('probe');
+  D.probe_compare.forEach(function(c){ host.appendChild(panel(c)); });
+}
+
+function drawRuns(D){
+  // A run is one decision, not a pile of pieces, so it gets one card and one
+  // button. [[contiguity-decides-the-run-not-the-piece]]
+  var g = {}, ordered = {};
+  D.runs.forEach(function(x){
+    ordered[[x.ep, x.division, x.part].join(' ')] = x.ordered;
+  });
+  D.rows.forEach(function(r){
+    if (!(r.q && r.q.run)) return;
+    var k = [r.ep, r.q.division, r.q.part].join(' ');
+    (g[k] = g[k] || []).push(r);
+  });
+  var host = document.getElementById('runs');
+  Object.keys(g).sort(function(a, b){ return g[b].length - g[a].length; })
+    .forEach(function(k){
+      var rs = g[k], q = rs[0].q, ep = rs[0].ep;
+      var vs = rs.map(function(r){ return r.q.verse; })
+                 .sort(function(a, b){ return a - b; });
+      var box = el('div', 'row');
+      var head = el('div', 'head');
+      head.appendChild(el('span', 'n', ep));
+      head.appendChild(citeNode(q));
+      // Printed on the card whichever way it came out. A run that did NOT
+      // come out in order is the more interesting card of the two, and hiding
+      // it would turn this check into a decoration.
+      head.appendChild(el('span', 'tag ' + (ordered[k] ? 'run' : 'scr'),
+          ordered[k] ? 'chanted in index order' : 'not in index order'));
+      head.appendChild(el('span', 'dur', rs.length + ' passages · verses '
+          + vs[0] + '–' + vs[vs.length - 1]));
+      box.appendChild(head);
+      box.appendChild(el('p', 'read', dayLabel(ep)));
+      var plays = el('div', 'plays');
+      var b = el('button');
+      b.appendChild(el('span', null, '▶ the run, in order'));
+      b.appendChild(el('span', 't', fmt(rs[0].t)));
+      b.addEventListener('click', function(){
+        play(rs.slice().sort(function(a, c){ return a.t - c.t; }).map(span),
+             dayLabel(ep));
+      });
+      plays.appendChild(b);
+      box.appendChild(plays);
+      host.appendChild(box);
+    });
+}
+
+function render(D){
+  DATA = D;
+  var s = D.stats;
+  document.getElementById('title').textContent = D.title;
+  document.getElementById('rom').textContent = D.rom + ' · ' + D.kind;
+  document.getElementById('nindex').textContent =
+      s.index_verses.toLocaleString('en-IN');
+  document.getElementById('nchant').textContent = s.chant;
+  document.getElementById('floor').textContent = s.score_floor.toFixed(2);
+  document.getElementById('built').textContent = 'Built ' + D.built;
+
+  var w = document.getElementById('who');
+  w.appendChild(el('h4', null, D.speaker.name));
+  w.appendChild(el('p', 'sr', D.speaker.series + ' · ' + s.episodes +
+                              ' recordings · ' + s.hours + ' h'));
+  w.appendChild(el('p', null, D.speaker.shape));
+
+  var band = [
+    [s.episodes, 'daily recordings, all playable'],
+    [s.hours + ' h', 'of discourse'],
+    [s.chant, 'passages of chant located in it'],
+    [s.chant_hours + ' h', 'of that is chant, the rest Tamil exposition'],
+    ['0', 'of them from an edition of this text'],
+    [s.quoted, 'verbatim in ' + s.index_verses.toLocaleString('en-IN') +
+               ' indexed verses'],
+  ];
+  var bh = document.getElementById('band');
+  band.forEach(function(p){
+    var d = el('div', 'num');
+    d.appendChild(el('b', null, String(p[0])));
+    d.appendChild(el('span', null, p[1]));
+    bh.appendChild(d);
+  });
+
+  document.getElementById('scriptnote').textContent =
+      'On one day — the Somavāra vrata — the pass wrote ' + s.tamil_script
+    + ' passages of the Sundareśvara upacāra sequence in Tamil script rather '
+    + 'than Devanagari. They are chant, they are aligned, and they are kept as '
+    + 'they were decoded: Tamil script does not distinguish ka from kha from '
+    + 'ga, so converting them would invent the distinction rather than recover '
+    + 'it. Those rows are marked.';
+
+  var ctl = D.probe_compare[0], sub = D.probe_compare[1];
+  document.getElementById('probeclaim').textContent =
+      'Each day was asked, on its own, which division of the index its '
+    + 'transcript most resembles. On its own that question always has an '
+    + 'answer, so a single day’s answer is worth nothing — what is worth '
+    + 'something is whether the answer holds. The control below is the same '
+    + 'reciter’s Kārtika series, whose text the index certainly does hold: '
+    + ctl.expect_days + ' of its ' + ctl.days.length + ' days come back with '
+    + ctl.modal_name + ', the right text, by name. Śrāvaṇa’s '
+    + sub.days.length + ' days come back with ' + sub.divisions
+    + ' different divisions, the commonest taking ' + sub.modal_days
+    + ', and not one of them is a Śrāvaṇa māhātmya. That is the difference '
+    + 'between a text the index has and a text it does not.';
+
+  document.getElementById('runclaim').textContent =
+      'The māhātmya is not in the index, but on '
+    + s.quoted_episodes.length + ' of the ' + s.episodes + ' days the reciter '
+    + 'quotes something that is. ' + s.quoted + ' passages carry a stretch of '
+    + 'at least 40 characters that occurs verbatim — phonetically — '
+    + 'in an indexed verse. A single shared pāda proves nothing, so the '
+    + 'ones that count are the runs: consecutive verses of one division, '
+    + 'chanted in order on one day. ' + s.quoted_in_runs + ' of the ' + s.quoted
+    + ' sit in such a run, and those runs are the cards below.';
+
+  document.getElementById('ordercheck').textContent =
+      'These runs are also the one check on this page that neither side could '
+    + 'have arranged. The verse numbers come from the index, reached by '
+    + 'phonetic match with no reference to time. The seconds come from forced '
+    + 'alignment against the waveform, with no reference to the index. If the '
+    + 'alignment were putting chant in the wrong seconds, a run’s verse '
+    + 'numbers would not come out sorted when its passages are sorted by their '
+    + 'onsets. ' + s.runs_ordered + ' of the ' + s.runs + ' runs do — the Gaurī '
+    + 'Daśakam arrives as verses 1 to 11 in sequence, each about fifteen '
+    + 'seconds after the last.';
+
+  drawProbe(D);
+  drawRuns(D);
+
+  var f = document.getElementById('filter');
+  f.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click', function(){
+      FILTER = b.dataset.f;
+      f.querySelectorAll('button').forEach(function(o){
+        o.setAttribute('aria-pressed', String(o === b)); });
+      draw();
+    });
+  });
+  document.getElementById('find').addEventListener('input', function(ev){
+    FIND = ev.target.value.trim();
+    draw();
+  });
+  draw();
+}
+
+fetch('data/shravana_anukramanika.json')
+  .then(function(r){ return r.json(); })
+  .then(render)
+  .catch(function(){
+    document.getElementById('rows').innerHTML =
+      '<div class="err">The page data did not load, so nothing below can be ' +
+      'played. Run <code>./refresh.py --check</code>.</div>';
+  });
+</script>
+</body>
+</html>

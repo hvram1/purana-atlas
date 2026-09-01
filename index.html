@@ -151,8 +151,8 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
   <h1>Purāṇa Atlas</h1>
   <p class="sub">Three Sanskrit texts, each verse tied to the second it is chanted
   in a recorded <i>upanyāsam</i>. Click a verse, hear it. <a href="#soon">Five
-  more are in hand</a>, and <a href="#fourth">a fourth text has no edition to
-  hang it on</a>.</p>
+  more are in hand</a>, and <a href="#fourth">two further texts have no edition
+  to hang them on</a>.</p>
   <p class="sub why">They are built to argue for two things the Purāṇas still
   lack: recitation that is <i>addressable</i> at the verse, and an <i>index of
   names</i> across the corpus. <a href="#why">Read the two proposals →</a></p>
@@ -174,6 +174,29 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
   <div class="stats" id="w-stats"></div>
   <p class="who" id="w-who"></p>
   <div class="go">Open the two witnesses →</div>
+</a>
+
+<!-- The same shape as the Tulā Kāverī block above, and for the same reason: a
+     .card on this page opens an atlas and an atlas has a printed edition
+     behind it. This text has none either. What it also has none of is a second
+     reciter, so it cannot make the two-witness argument and does not pretend
+     to -- it is the smaller, honest thing, an index to a recording. -->
+<a class="fourth" href="shravana-anukramanika.html" id="anuk">
+  <p class="eyebrow">Not an atlas · an index to a recording</p>
+  <h2>श्रीश्रावणमासमाहात्म्यम्</h2>
+  <p class="rom">Śrāvaṇa Māsa Māhātmya · one reciter, a month of days</p>
+  <p>A vrata a day for a whole month, on a text that is in none of the
+  <span id="a-index">488,149</span> verses we index and has no second reciter to
+  set against it. So there is neither an edition to align to nor a witness to
+  compare with, and what is left is an <b>anukramaṇikā</b>: <b id="a-chant">959</b>
+  passages of chant, each placed in its recording to the second by forced
+  alignment, so a month of Śrāvaṇa can be heard without being read. On
+  <span id="a-days">15</span> of the days the reciter steps into a text we
+  <i>do</i> hold — a stotra entire, a consecutive run of the Kāśīkhaṇḍa — and
+  those are marked and cited.</p>
+  <div class="stats" id="a-stats"></div>
+  <p class="who" id="a-who"></p>
+  <div class="go">Open the anukramaṇikā →</div>
 </a>
 
 <section>
@@ -379,6 +402,23 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
       +   W.recordings + ' recordings</span>';
     document.getElementById('w-who').textContent =
         'Expounded by ' + W.speakers.join(' · ');
+  }
+  // The anukramaṇikā's figures, from the same file and for the same reason as
+  // the block above: no percentage, because the denominator would be a count
+  // of verses in a text nobody has. Passages, hours and days are countable.
+  const A = S.anukramanika;
+  if (A && A.chant) {
+    document.getElementById('a-index').textContent = n(A.index_verses);
+    document.getElementById('a-chant').textContent = n(A.chant);
+    document.getElementById('a-days').textContent = A.quoted_days;
+    document.getElementById('a-stats').innerHTML =
+        '<span class="stat"><b>' + n(A.chant) + '</b>passages of chant</span>'
+      + '<span class="stat"><b>0</b>from an edition</span>'
+      + '<span class="stat"><b>' + A.quoted + '</b>verbatim in the index</span>'
+      + '<span class="stat"><b>' + A.hours + ' h</b>in '
+      +   A.recordings + ' recordings</span>';
+    document.getElementById('a-who').textContent =
+        'Expounded by ' + A.speakers.join(' · ');
   }
   const ar = S.atlases.adhyatma;
   if (ar && ar.both_lanes) {

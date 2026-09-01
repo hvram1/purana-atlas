@@ -8,12 +8,14 @@ the workbench and copied in by this script:
     dharmasastra-gcp/workbench/virata-atlas.html   + data/virata_*.json
     dharmasastra-gcp/workbench/kartika-atlas.html  + data/kartika_*.json
     audio-ingest/tulakaveri-witness.html           + data/tulakaveri_*.json
+    audio-ingest/shravana-anukramanika.html        + data/shravana_*.json
 
 The atlases come from the workbench because that is where the corpus and the
-entity substrate they read live. The Tulā Kāverī page comes from audio-ingest
-because that is where ITS inputs live -- the cross-series matches, the forced
-alignments, the colophons -- and it reads nothing from the workbench at all.
-The source of a page follows its inputs, not the habit of the page beside it.
+entity substrate they read live. The two pages with no edition behind them come
+from audio-ingest because that is where THEIR inputs live -- the cross-series
+matches, the forced alignments, the colophons, the whole-index probes -- and
+they read nothing from the workbench at all. The source of a page follows its
+inputs, not the habit of the page beside it.
 
 So the loop is: rebuild there, refresh here, commit here.
 
@@ -21,8 +23,9 @@ So the loop is: rebuild there, refresh here, commit here.
     purana-atlas$ ./refresh.py
     purana-atlas$ git commit -am "refresh atlases" && git push
 
-Each page fetches exactly two JSON files by *relative* path, so the whole site
-is six files and works from any subdirectory -- including a GitHub Pages
+Each atlas fetches exactly two JSON files by *relative* path and each of the
+two edition-less pages fetches one, so the whole site is a handful of files and
+works from any subdirectory -- including a GitHub Pages
 project site at https://<user>.github.io/<repo>/. The only off-site request
 either page makes is https://www.youtube.com/iframe_api.
 
@@ -93,6 +96,15 @@ ATLASES = [
 # each half is found rather than inheriting the ATLASES layout.
 WITNESS = ("tulakaveri-witness.html", "tulakaveri_witness.json")
 WITNESS_SRC = ("", os.path.join("build", "witness"))   # page dir, data dir
+
+# The Śrāvaṇa page is the same kind of thing one witness short. That text has
+# no edition EITHER, and unlike the Tulā Kāverī there is no second reciter to
+# set against the first, so the page cannot be a two-witness page and is not
+# built as one: it is an anukramaṇikā, an index to a recording, whose rows are
+# passages of chant placed by forced alignment. Different claim, different
+# shape check -- but the same repo, the same build/witness directory, and the
+# same copy-then-verify loop.
+ANUK = ("shravana-anukramanika.html", "shravana_anukramanika.json")
 
 # Shape contract of the substrate. Getting one of these wrong does not degrade
 # the page, it blanks it.
@@ -309,6 +321,103 @@ def check_witness(path):
     if st.get("in_index") != 0:
         bad += fail("%s: in_index is %r -- the page's whole claim is that it "
                     "is nought" % (os.path.basename(path), st.get("in_index")))
+    return bad, d
+
+
+def check_anukramanika(path):
+    """The anukramaṇikā's failure is a row that cannot be heard.
+
+    This page offers exactly one thing per row -- a button. It carries no
+    printed text to fall back on and makes no coverage claim, so a row whose
+    episode has no video id is not a degraded row, it is the whole row gone
+    while still looking present. Same reasoning as check_witness, one side
+    instead of two.
+
+    The other two checks are the page's two honest negatives. `quoted` counts
+    passages found verbatim in the index and must agree with the rows, because
+    the page prints it as a headline. And a row that reaches the page in a
+    script other than Devanagari must SAY so -- the markup labels it from
+    `script`, so a row missing that field would render a second script silently.
+    """
+    d = json.load(open(path, encoding="utf-8"))
+    bad = 0
+    rows = d.get("rows")
+    if not isinstance(rows, list) or not rows:
+        return fail("%s has no rows" % os.path.basename(path)), {}
+    eps = d.get("episodes") or {}
+    if not isinstance(eps, dict) or not eps:
+        return fail("%s has no episodes to play" % os.path.basename(path)), {}
+    # The section that argues the text is not in the index is a control and a
+    # subject drawn side by side, and it is worthless without the control: a
+    # single panel of scatter proves nothing, because a reader has no way to
+    # know what the same probe looks like when it HAS found the text. So the
+    # check is on the pair, and on the control still naming the right text.
+    cmp_ = d.get("probe_compare")
+    if not isinstance(cmp_, list) or len(cmp_) != 2:
+        bad += fail("%s: the probe comparison needs both a control and the "
+                    "subject; it has %s"
+                    % (os.path.basename(path),
+                       len(cmp_) if isinstance(cmp_, list) else cmp_))
+    else:
+        ctl, sub = cmp_
+        if not ctl.get("expect") or not ctl.get("expect_days"):
+            bad += fail("%s: the control names no expected text, or never "
+                        "reaches it -- then it is not a control"
+                        % os.path.basename(path))
+        if sub.get("expect"):
+            bad += fail("%s: the subject panel claims an expected division; "
+                        "the whole page says there is none"
+                        % os.path.basename(path))
+        for c in cmp_:
+            if not c.get("days") or any(not x.get("division")
+                                        for x in c["days"]):
+                bad += fail("%s: a probe day has no division to label its row"
+                            % os.path.basename(path))
+                break
+    silent, malformed, unscripted = set(), 0, 0
+    for r in rows:
+        if not all(k in r for k in ("ep", "t", "e", "text")):
+            malformed += 1
+            continue
+        if r["e"] <= r["t"]:
+            malformed += 1
+        if not r.get("script"):
+            unscripted += 1
+        if not (eps.get(r["ep"]) or {}).get("yt"):
+            silent.add(r["ep"])
+    if malformed:
+        bad += fail("%s: %d rows are malformed or end before they start"
+                    % (os.path.basename(path), malformed))
+    if unscripted:
+        bad += fail("%s: %d rows do not name the script they were decoded in"
+                    % (os.path.basename(path), unscripted))
+    if silent:
+        bad += fail("%s: no video id for %s -- those rows would offer a play "
+                    "button that does nothing"
+                    % (os.path.basename(path), ", ".join(sorted(silent))))
+    st = d.get("stats") or {}
+    if st.get("chant") != len(rows):
+        bad += fail("%s: stats say %s chanted passages, rows say %d"
+                    % (os.path.basename(path), st.get("chant"), len(rows)))
+    quoted = sum(1 for r in rows if r.get("q"))
+    if st.get("quoted") != quoted:
+        bad += fail("%s: stats say %s passages are in the index, rows say %d"
+                    % (os.path.basename(path), st.get("quoted"), quoted))
+    # Each run card prints whether that run came out of the audio in the order
+    # the index numbers it. A run with no verdict renders as agreement, which
+    # would turn the page's only independent check into a decoration.
+    runs = d.get("runs")
+    if not isinstance(runs, list) or len(runs) != st.get("runs"):
+        bad += fail("%s: stats say %s runs, the file carries %s"
+                    % (os.path.basename(path), st.get("runs"),
+                       len(runs) if isinstance(runs, list) else runs))
+    elif any(r.get("ordered") is None for r in runs):
+        bad += fail("%s: a run does not say whether it came out in index order"
+                    % os.path.basename(path))
+    elif sum(1 for r in runs if r["ordered"]) != st.get("runs_ordered"):
+        bad += fail("%s: stats say %s runs are in index order, the runs say %d"
+                    % (os.path.basename(path), st.get("runs_ordered"),
+                       sum(1 for r in runs if r["ordered"])))
     return bad, d
 
 
@@ -593,13 +702,62 @@ def main():
         for u in cites:
             print("      %-32s cites %s" % ("", u))
 
+    # The anukramaṇikā. Same loop again, and deliberately not folded into the
+    # one above: the two pages differ in what they claim, and it is the CHECK,
+    # not the copy, that is worth keeping separate.
+    print("\n%s" % ANUK[0])
+    anuk = {}
+    page_dst = os.path.join(HERE, ANUK[0])
+    data_dst = os.path.join(data_dir, ANUK[1])
+    if not a.check:
+        for name, sub_dir, dst in ((ANUK[0], WITNESS_SRC[0], page_dst),
+                                   (ANUK[1], WITNESS_SRC[1], data_dst)):
+            src = os.path.join(a.ingest, sub_dir, name)
+            if not os.path.exists(src):
+                bad += fail("missing in audio-ingest: %s -- run "
+                            "scripts/shravana_anukramanika.py there" % src)
+                continue
+            shutil.copyfile(src, dst)
+    if not os.path.exists(page_dst):
+        bad += fail("%s is not here" % ANUK[0])
+    else:
+        bad += check_fetches(page_dst, (ANUK[1],))
+        b, cites = check_selfcontained(page_dst); bad += b
+        b, ad = check_anukramanika(data_dst); bad += b
+        if ad:
+            st = ad["stats"]
+            anuk = {
+                "recordings": st["episodes"], "hours": st["hours"],
+                "chant": st["chant"], "chant_hours": st["chant_hours"],
+                "index_verses": st["index_verses"], "quoted": st["quoted"],
+                "quoted_in_runs": st["quoted_in_runs"],
+                "runs": st["runs"], "runs_ordered": st["runs_ordered"],
+                "quoted_days": len(st["quoted_episodes"]),
+                "divisions": st["probe_divisions"],
+                "puranas": st["probe_puranas"],
+                "speakers": [ad["speaker"]["name"]],
+            }
+            print("  %d recordings, %.1f h · %d chanted passages (%.2f h) · "
+                  "%d verbatim in %s indexed verses, %d of them in a run"
+                  % (anuk["recordings"], anuk["hours"], anuk["chant"],
+                     anuk["chant_hours"], anuk["quoted"],
+                     format(anuk["index_verses"], ","),
+                     anuk["quoted_in_runs"]))
+        for pth in (page_dst, data_dst):
+            raw, gz = sizes(pth)
+            total_raw += raw; total_gz += gz
+            print("    %-34s %7.2f MB raw  %6.2f MB gzip"
+                  % (os.path.basename(pth), raw / 1e6, gz / 1e6))
+        for u in cites:
+            print("      %-32s cites %s" % ("", u))
+
     # index.html renders its figures from this file rather than carrying them
     # in the markup, so coverage printed on the landing page cannot drift away
     # from the coverage in the data. [[derive-do-not-ask-the-human]]
     if not a.check:
         json.dump({"built": datetime.date.today().isoformat(),
                    "simulated_lanes": bool(a.with_sim), "atlases": stats,
-                   "witness": wit},
+                   "witness": wit, "anukramanika": anuk},
                   open(os.path.join(data_dir, "stats.json"), "w",
                        encoding="utf-8"),
                   ensure_ascii=False, indent=1)

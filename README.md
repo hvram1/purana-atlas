@@ -1,12 +1,14 @@
 # Purāṇa Atlas — deployment
 
-Two Sanskrit texts, each verse tied to the second it is chanted in a recorded
-*upanyāsam*. This repository is the **published site**, not the source: it holds
-the built pages and their data, and one script that refreshes them.
+Three Sanskrit texts, each verse tied to the second it is chanted in a recorded
+*upanyāsam*, and two further texts that have no edition to hang a verse on.
+This repository is the **published site**, not the source: it holds the built
+pages and their data, and one script that refreshes them.
 
 The pages themselves and the JSON they read are produced in
-`dharmasastra-gcp/workbench` and copied here by `refresh.py`. Do not edit them
-in place — the next refresh will overwrite them.
+`dharmasastra-gcp/workbench` (the atlases) and in `audio-ingest` (the two
+edition-less pages, whose inputs live there), and copied here by `refresh.py`.
+Do not edit them in place — the next refresh will overwrite them.
 
 ## What is here
 
@@ -14,7 +16,13 @@ in place — the next refresh will overwrite them.
 index.html                 landing page; its figures come from data/stats.json
 virata-atlas.html          Virāṭa Parva, Mahābhārata book 4
 kartika-atlas.html         Kārtika Māsa Māhātmya, Skanda Purāṇa
-data/*.json                one 4lang + one substrate file per atlas, + stats.json
+adhyatma-atlas.html        Adhyātma Rāmāyaṇa
+tulakaveri-witness.html    Tulā Kāverī Māhātmya — no edition, so two reciters
+                           are set against each other instead
+shravana-anukramanika.html Śrāvaṇa Māsa Māhātmya — no edition and no second
+                           reciter, so an index to the recording itself
+data/*.json                one 4lang + one substrate file per atlas, one file
+                           for each edition-less page, + stats.json
 docs/purana-audio.html     proposal — commission verse-addressable recitation
 docs/purana-nama-kosa.html proposal — a Sorensen-style index of Paurāṇic names
 docs/purana-audio-pitch.md plain-text source of the first, for reading on GitHub
@@ -24,10 +32,11 @@ refresh.py                 rebuild-and-verify; the only script here
 
 Every path in the site is **relative**, so it works from any subdirectory —
 including a GitHub Pages project site at `https://<user>.github.io/<repo>/`.
-Each atlas fetches exactly two JSON files; the only off-site request any page
-makes is `https://www.youtube.com/iframe_api`, on the two atlases alone.
+Each atlas fetches exactly two JSON files and each edition-less page fetches
+one; the only off-site request any page makes is
+`https://www.youtube.com/iframe_api`, on the pages that play audio.
 
-About 13 MB on disk, **≈2.1 MB over the wire** once gzipped.
+About 20 MB on disk, **≈3.1 MB over the wire** once gzipped.
 
 ## Publishing it
 
