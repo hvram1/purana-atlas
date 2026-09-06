@@ -163,6 +163,8 @@ code{font-family:var(--mono);font-size:.86em;background:var(--sunk);
 .row.q-exposition .dev{font-family:var(--ui);font-size:.95rem;line-height:1.6;
   color:var(--ink2)}
 .near{font-size:.78rem;color:var(--muted);margin-top:.35rem}
+.onsets{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.5rem}
+.onsets .pl{font-size:.68rem}
 .near b{color:var(--ink2);font-weight:600}
 a.chip:hover{box-shadow:0 0 0 2px currentColor inset}
 .empty-note{color:var(--muted);font-size:.92rem;padding:1.5rem 0}
@@ -185,10 +187,10 @@ footer b{color:var(--ink2);font-weight:600}
      stretch of chant located to the second by forced alignment — carrying every
      source that can name it. The talks follow the digest's itinerary and chant
      the purāṇa and Veda verses underneath it, so the quotations outnumber the
-     digest's own citations six to one. <b>Every passage here carries a
-     source</b> — a verse of the digest, a purāṇa, the Veda, or the named
-     invocation. Chant that nothing could identify is counted below but not
-     shown, because a passage you cannot check is one you cannot trust.</p>
+     digest's own citations six to one. <b>Every passage here is corroborated</b>
+     — by a source that names it, or, where nothing can, by the speaker chanting
+     it again in another recording weeks later. Chant heard once and named by
+     nothing is counted below and not shown.</p>
   <div class="pair" id="pair"></div>
 </header>
 
@@ -246,12 +248,13 @@ footer b{color:var(--ink2);font-weight:600}
   cited passage whose span it calls Tamil is dropped rather than shown — forced
   alignment must place every word somewhere, so a line the transcript invented
   still gets precise-looking times. <span id="gated"></span></span>
-  <span><b>Chant nothing could name is not shown.</b>
-  <span id="withheld"></span> Such a passage carries no corroboration: a cited
-  one matched a real verse in a real edition, which is only possible if the
-  transcript is genuine, and an unidentified one has passed no such test — the
-  reason nothing could name it is often that it was never said. It stays in the
-  denominator below and off the page.</span>
+  <span><b>Chant nothing could name is shown only when it recurs.</b>
+  A passage cannot be checked against a corpus — that is what unnamed means —
+  but it can be checked against itself: one chanted again in another recording,
+  weeks later, is not a transcription error, because an invented line does not
+  come back in the same words. <span id="recur"></span> A passage heard in a
+  single talk is <span id="withheld"></span> counted here and not shown, because
+  nothing yet corroborates it. Both stay in the denominator.</span>
   <span><b>What the percentage is over.</b> <span id="denom"></span> The
   exposition is the discourse in Tamil, not chant, so counting it as chant we
   failed to name would measure the wrong thing; it has its own tab. Adding the
@@ -339,13 +342,17 @@ function span(row){
 }
 function chips(r){
   var box = el('div','chips'), a;
-  if (r.kind === 'invocation' || r.kind === 'unnamed' || r.kind === 'exposition'){
-    var lab = {invocation:'Invocation', unnamed:'Unnamed', exposition:'Exposition'}[r.kind];
+  if (r.kind === 'invocation' || r.kind === 'unnamed' || r.kind === 'exposition'
+      || r.kind === 'recurring'){
+    var lab = {invocation:'Invocation', unnamed:'Unnamed', exposition:'Exposition',
+               recurring:'Unnamed · recurring'}[r.kind];
     var sp = el('span','chip c-unnamed');
     sp.appendChild(el('span','k', lab));
     sp.appendChild(el('span','v',
       r.kind === 'invocation' ? (D.stats.invocation_label || 'the opening invocation')
       : r.kind === 'exposition' ? 'Tamil — not chant'
+      : r.kind === 'recurring'
+        ? ('chanted in ' + r.in_talks + ' recordings — no source in 488,149 verses')
       : 'no source in 488,149 verses'));
     box.appendChild(sp);
     // An unnamed row has no citation a reader could sanity-check, so it carries
@@ -415,6 +422,22 @@ function renderRows(ids, title, meta){
     // A near miss is not a citation and must never read as one. Shown because
     // "we nearly know" is worth more than silence -- a 0.9 that failed on
     // coverage reads very differently from nothing at all.
+    if (r.kind === 'recurring' && r.onsets){
+      var ob = el('div','onsets');
+      r.onsets.forEach(function(o){
+        var yy = D.episodes[o.ep].yt;
+        var bb = el('button','pl'); bb.type='button';
+        bb.appendChild(document.createTextNode('▶ ' + o.ep.replace('shr-','') +
+                       '  ' + fmt(o.t)));
+        if (!yy){ bb.disabled = true; bb.title = 'not yet uploaded'; }
+        else bb.addEventListener('click', function(){
+          play([{i:r.i, t:o.t, e:o.e, yt:yy, sub:o.ep + '  ' + fmt(o.t)}],
+               'recurring passage');
+        });
+        ob.appendChild(bb);
+      });
+      right.appendChild(ob);
+    }
     if (r.near){
       var nb = el('p','near');
       nb.appendChild(document.createTextNode('nearest, not a citation: '));
@@ -485,9 +508,9 @@ function draw(){
     ids = (e.rows||[]).filter(function(i){ return D.rows[i].kind !== 'exposition'; });
     title = sel;
     var bits = [];
-    ['seat','quote','invocation','unnamed'].forEach(function(kk){
+    ['seat','quote','invocation','recurring'].forEach(function(kk){
       if (e[kk]) bits.push(e[kk] + ' ' + {seat:'seated', quote:'quoted',
-        invocation:'invocation', unnamed:'unnamed'}[kk]);
+        invocation:'invocation', recurring:'recurring'}[kk]);
     });
     meta = (e.date||'') + ' · ' + fmt(e.dur) + ' · ' +
            (bits.length ? bits.join(', ') : 'nothing named') +
@@ -574,9 +597,10 @@ fetch('data/shraddha_atlas.json').then(function(r){ return r.json(); })
   var stl = s.stale_alignment || [];
   document.getElementById('stale').textContent = stl.length
     ? (stl.join(', ') + '.') : '';
-  document.getElementById('withheld').textContent = s.unnamed_withheld
-    ? (s.unnamed_withheld + ' passages of Sanskrit that no source in 488,149 ' +
-       'verses could name are counted and withheld.') : '';
+  document.getElementById('withheld').textContent = s.unnamed_withheld || 0;
+  document.getElementById('recur').textContent = s.recurring
+    ? (s.recurring + ' such passages recur, over ' + s.recurring_recitations +
+       ' recitations, and are shown with every onset.') : '';
   document.getElementById('gated').textContent = dn
     ? ('It dropped ' + dn + ' cited passages here.') : '';
   document.getElementById('prov').textContent =
