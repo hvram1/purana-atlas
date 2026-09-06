@@ -158,6 +158,12 @@ code{font-family:var(--mono);font-size:.86em;background:var(--sunk);
 .c-veda{color:var(--veda);border-color:var(--veda);background:var(--veda-bg)}
 .c-purana{color:var(--purana);border-color:var(--purana);background:var(--purana-bg)}
 .c-ghost{color:var(--muted);border-color:var(--line);background:transparent}
+.c-unnamed{color:var(--muted);border-color:var(--line);background:var(--sunk)}
+.row.q-unnamed .dev,.row.q-invocation .dev{color:var(--ink2)}
+.row.q-exposition .dev{font-family:var(--ui);font-size:.95rem;line-height:1.6;
+  color:var(--ink2)}
+.near{font-size:.78rem;color:var(--muted);margin-top:.35rem}
+.near b{color:var(--ink2);font-weight:600}
 a.chip:hover{box-shadow:0 0 0 2px currentColor inset}
 .empty-note{color:var(--muted);font-size:.92rem;padding:1.5rem 0}
 
@@ -179,7 +185,8 @@ footer b{color:var(--ink2);font-weight:600}
      stretch of chant located to the second by forced alignment — carrying every
      source that can name it. The talks follow the digest's itinerary and chant
      the purāṇa and Veda verses underneath it, so the quotations outnumber the
-     digest's own citations six to one.</p>
+     digest's own citations six to one. <b>Chant nobody could name is here
+     too</b>, in the recording, marked as unnamed rather than left out.</p>
   <div class="pair" id="pair"></div>
 </header>
 
@@ -200,6 +207,7 @@ footer b{color:var(--ink2);font-weight:600}
   <button class="spine" role="tab" id="s-text" aria-selected="true"><span class="n">01</span>By the text</button>
   <button class="spine" role="tab" id="s-rec"  aria-selected="false"><span class="n">02</span>By the recording</button>
   <button class="spine" role="tab" id="s-auth" aria-selected="false"><span class="n">03</span>By the authority</button>
+  <button class="spine" role="tab" id="s-exp" aria-selected="false"><span class="n">04</span>The exposition</button>
 </div>
 <p class="asks" id="asks"></p>
 
@@ -224,6 +232,11 @@ footer b{color:var(--ink2);font-weight:600}
   were seated is <span id="seatpct"></span>, and on its own it would describe
   the wrong thing — the series walks this text and recites the verses beneath
   it.</span>
+  <span><b>What the percentage is over.</b> <span id="denom"></span> The
+  exposition is the discourse in Tamil, not chant, so counting it as chant we
+  failed to name would measure the wrong thing; it has its own tab. Adding the
+  opening invocation — which we can name but not cite, since the verse is in no
+  corpus we hold — places <span id="placed"></span> of the chant.</span>
   <span id="prov"></span>
   <span id="built"></span>
 </footer>
@@ -306,6 +319,17 @@ function span(row){
 }
 function chips(r){
   var box = el('div','chips'), a;
+  if (r.kind === 'invocation' || r.kind === 'unnamed' || r.kind === 'exposition'){
+    var lab = {invocation:'Invocation', unnamed:'Unnamed', exposition:'Exposition'}[r.kind];
+    var sp = el('span','chip c-unnamed');
+    sp.appendChild(el('span','k', lab));
+    sp.appendChild(el('span','v',
+      r.kind === 'invocation' ? (D.stats.invocation_label || 'the opening invocation')
+      : r.kind === 'exposition' ? 'Tamil — not chant'
+      : 'no source in 488,149 verses'));
+    box.appendChild(sp);
+    return box;
+  }
   if (r.kind === 'seat'){
     a = el('a','chip c-digest');
     a.href = D.source_url || '#'; a.target = '_blank'; a.rel = 'noopener';
@@ -346,7 +370,7 @@ function renderRows(ids, title, meta){
   }
   ids.forEach(function(i){
     var r = D.rows[i], yt = D.episodes[r.ep].yt;
-    var row = el('div','row'); row.id = 'r' + i;
+    var row = el('div','row q-' + r.kind); row.id = 'r' + i;
     var b = el('button','pl');
     b.type = 'button';
     b.appendChild(document.createTextNode('▶ ' + fmt(r.t)));
@@ -359,6 +383,17 @@ function renderRows(ids, title, meta){
     var right = el('div');
     right.appendChild(el('p','dev', r.text));
     right.appendChild(chips(r));
+    // A near miss is not a citation and must never read as one. Shown because
+    // "we nearly know" is worth more than silence -- a 0.9 that failed on
+    // coverage reads very differently from nothing at all.
+    if (r.near){
+      var nb = el('p','near');
+      nb.appendChild(document.createTextNode('nearest, not a citation: '));
+      nb.appendChild(el('b', null, r.near.cite));
+      nb.appendChild(document.createTextNode(
+        ' — ' + Math.round(r.near.cover*100) + '% of the words overlap'));
+      right.appendChild(nb);
+    }
     row.appendChild(right);
     host.appendChild(row);
     if (yt) spans.push(span(r));
@@ -387,7 +422,10 @@ var ASKS = {
   rec:'What happens in this talk, and when? The only spine not ordered by a match, ' +
       'so it is the only one that shows chant nothing could name.',
   auth:'Who said this? Only a digest prints the attribution beside the quotation, ' +
-       'so no purāṇa atlas can offer this axis.'
+       'so no purāṇa atlas can offer this axis.',
+  exp:'The discourse itself — Tamil prose, with Sanskrit words in it. This is not ' +
+      'chant and is kept out of the other three spines for that reason, but it is ' +
+      'the majority of what a listener actually hears, so it is not left out either.'
 };
 
 function draw(){
@@ -415,9 +453,24 @@ function draw(){
     });
     if (!sel || !D.episodes[sel]) sel = 'shr-134';
     var e = D.episodes[sel];
-    ids = e.rows; title = sel;
+    ids = (e.rows||[]).filter(function(i){ return D.rows[i].kind !== 'exposition'; });
+    title = sel;
+    var un = ids.filter(function(i){ return D.rows[i].kind==='unnamed'; }).length;
     meta = (e.date||'') + ' · ' + fmt(e.dur) + ' · ' + e.seat +
-           ' seated, ' + e.quote + ' quoted' + (e.yt ? '' : ' · not yet uploaded');
+           ' seated, ' + e.quote + ' quoted, ' + un + ' unnamed' +
+           (e.yt ? '' : ' · not yet uploaded');
+  } else if (spine === 'exp'){
+    Object.keys(D.episodes).sort().forEach(function(k){
+      var e = D.episodes[k];
+      var m = (e.rows||[]).filter(function(i){ return D.rows[i].kind==='exposition'; }).length;
+      items.push({key:k, n:m, nm:k, mt:(e.date||'') + ' · ' + m +
+                  (m===1?' passage':' passages')});
+    });
+    if (!sel || !D.episodes[sel]) sel = 'shr-001';
+    var ee = D.episodes[sel];
+    ids = (ee.rows||[]).filter(function(i){ return D.rows[i].kind==='exposition'; });
+    title = sel; meta = (ee.date||'') + ' · ' + ids.length +
+                        ' stretches of Tamil exposition';
   } else {
     D.authorities.forEach(function(a){
       items.push({key:'a'+a.name, n:a.n, nm:a.name,
@@ -435,7 +488,7 @@ function draw(){
   renderRows(ids, title, meta);
 }
 
-var TABS = [['s-text','text'],['s-rec','rec'],['s-auth','auth']];
+var TABS = [['s-text','text'],['s-rec','rec'],['s-auth','auth'],['s-exp','exp']];
 function setSpine(which, keepSel){
   spine = which; if (!keepSel) sel = null;
   TABS.forEach(function(q){
@@ -455,7 +508,7 @@ function fromHash(){
   var h = decodeURIComponent((location.hash || '').replace(/^#/,''));
   if (!h) return;
   var bits = h.split('/');
-  if (['text','rec','auth'].indexOf(bits[0]) < 0) return;
+  if (['text','rec','auth','exp'].indexOf(bits[0]) < 0) return;
   setSpine(bits[0], true);
   sel = bits[1] || null;
 }
@@ -465,6 +518,7 @@ fetch('data/shraddha_atlas.json').then(function(r){ return r.json(); })
 .then(function(d){
   D = d;
   var s = d.stats;
+  var n = function(x){ return x.toLocaleString('en-IN'); };
   document.getElementById('pair').innerHTML =
     '<span><b>' + s.sections_walked + ' of ' + s.sections_total +
       '</b>sections of the digest walked</span>' +
@@ -476,6 +530,11 @@ fetch('data/shraddha_atlas.json').then(function(r){ return r.json(); })
   document.getElementById('seatpct').textContent =
     s.verses_seated + ' of ' + s.verses_total + ' (' +
     (100*s.verses_seated/s.verses_total).toFixed(1) + '%)';
+  document.getElementById('denom').textContent =
+    s.named_pct + '% is ' + n(s.units_named) + ' named of ' + n(s.units_chant) +
+    ' units of chant. Over all ' + n(s.units_all) + ' units, including ' +
+    n(s.exposition) + ' of Tamil exposition, it would be ' + s.named_pct_all + '%.';
+  document.getElementById('placed').textContent = s.placed_pct + '%';
   document.getElementById('prov').textContent =
     'Seating: ' + d._provenance.seating + '. Quotes: ' + d._provenance.quotes +
     '. Corpus: ' + d._provenance.corpus + '.';
