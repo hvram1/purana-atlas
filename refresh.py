@@ -9,6 +9,7 @@ the workbench and copied in by this script:
     dharmasastra-gcp/workbench/kartika-atlas.html  + data/kartika_*.json
     audio-ingest/tulakaveri-witness.html           + data/tulakaveri_*.json
     audio-ingest/shravana-anukramanika.html        + data/shravana_*.json
+    audio-ingest/shraddha-atlas.html               + data/shraddha_*.json
 
 The atlases come from the workbench because that is where the corpus and the
 entity substrate they read live. The two pages with no edition behind them come
@@ -105,6 +106,18 @@ WITNESS_SRC = ("", os.path.join("build", "witness"))   # page dir, data dir
 # shape check -- but the same repo, the same build/witness directory, and the
 # same copy-then-verify loop.
 ANUK = ("shravana-anukramanika.html", "shravana_anukramanika.json")
+
+# The Śrāddha atlas. Unlike the two above it HAS an edition -- the
+# Smṛtimuktāphalam's śrāddha kāṇḍa -- so it is an atlas and not a witness. It
+# still comes from audio-ingest rather than the workbench, because that is
+# where its inputs are: the seatings, the quote reports and the forced
+# alignments. A page's source follows its inputs.
+#
+# It is also the first page here whose data is one flat `rows` table with three
+# indexes over it (text / recording / authority), so it has a failure mode the
+# others do not and check_shraddha exists for it.
+SRADDHA = ("shraddha-atlas.html", "shraddha_atlas.json")
+SRADDHA_SRC = ("", "build")                            # page dir, data dir
 
 # Shape contract of the substrate. Getting one of these wrong does not degrade
 # the page, it blanks it.
@@ -418,6 +431,85 @@ def check_anukramanika(path):
         bad += fail("%s: stats say %s runs are in index order, the runs say %d"
                     % (os.path.basename(path), st.get("runs_ordered"),
                        sum(1 for r in runs if r["ordered"])))
+    return bad, d
+
+
+def check_shraddha(path):
+    """This page's failure is a spine that points at nothing.
+
+    The data is ONE `rows` table and the three spines are lists of row numbers
+    into it. That is what keeps them from drifting, and it is also the way this
+    page can break silently: a row number that is out of range, or a section
+    whose `rows` list was built against a different table, renders as an empty
+    panel that is indistinguishable from "nobody chanted this section" -- which
+    is a real and common state here, since 50 of 75 sections were never reached.
+    A wrong index therefore does not look wrong. So every index is resolved.
+
+    A missing video id is NOT a failure on this page, which is the difference
+    from check_anukramanika. 18 recordings are not uploaded yet, the page
+    disables their play buttons and says so, and `stats.playable` carries the
+    count. What must not happen is the stats claiming more playable than the
+    episodes support, because the header prints that figure.
+
+    And the page's central discipline is that coverage is a PAIR -- sections
+    walked beside chant named. Either one alone describes the wrong thing. So
+    both must be present and both must agree with the data underneath them.
+    """
+    d = json.load(open(path, encoding="utf-8"))
+    base = os.path.basename(path)
+    bad = 0
+    rows = d.get("rows")
+    if not isinstance(rows, list) or not rows:
+        return fail("%s has no rows" % base), {}
+    eps = d.get("episodes") or {}
+    if not isinstance(eps, dict) or not eps:
+        return fail("%s has no episodes to play" % base), {}
+
+    malformed = sum(1 for r in rows
+                    if not all(k in r for k in ("ep", "t", "e", "text", "kind"))
+                    or r["e"] <= r["t"] or r["ep"] not in eps)
+    if malformed:
+        bad += fail("%s: %d rows are malformed, end before they start, or name "
+                    "an episode that is not here" % (base, malformed))
+
+    # Every index, resolved. An out-of-range row number is the silent one.
+    n = len(rows)
+    for label, groups, key in (("section", d.get("sections") or [], "n"),
+                               ("authority", d.get("authorities") or [], "name"),
+                               ("episode", list(eps.values()), None)):
+        dangling = 0
+        for g in groups:
+            for i in (g.get("rows") or []):
+                if not isinstance(i, int) or i < 0 or i >= n:
+                    dangling += 1
+        if dangling:
+            bad += fail("%s: %d %s row-numbers point outside the %d-row table; "
+                        "those panels would render empty and look like silence"
+                        % (base, dangling, label, n))
+    covered = set()
+    for g in (list(eps.values())):
+        covered |= set(g.get("rows") or [])
+    if len(covered) != n:
+        bad += fail("%s: the recording spine reaches %d of %d rows -- a passage "
+                    "no episode lists can never be played" % (base, len(covered), n))
+
+    st = d.get("stats") or {}
+    seated = sum(1 for r in rows if r["kind"] == "seat")
+    if st.get("rows") != n or st.get("seated") != seated:
+        bad += fail("%s: stats say %s rows / %s seated, the table says %d / %d"
+                    % (base, st.get("rows"), st.get("seated"), n, seated))
+    playable = sum(1 for e in eps.values() if e.get("yt"))
+    if st.get("playable") != playable:
+        bad += fail("%s: stats say %s recordings are online, the episodes say %d"
+                    % (base, st.get("playable"), playable))
+    for k in ("sections_walked", "sections_total", "named_pct"):
+        if st.get(k) in (None, ""):
+            bad += fail("%s: stats carry no %s -- coverage on this page is a "
+                        "pair, and half of it describes the wrong thing" % (base, k))
+    walked = len({r["sec"] for r in rows if r.get("sec")})
+    if st.get("sections_walked") != walked:
+        bad += fail("%s: stats say %s sections walked, the rows reach %d"
+                    % (base, st.get("sections_walked"), walked))
     return bad, d
 
 
@@ -751,13 +843,68 @@ def main():
         for u in cites:
             print("      %-32s cites %s" % ("", u))
 
+    # The Śrāddha atlas. Third time through the same loop, third check, for the
+    # same reason: what this page claims is not what the other two claim.
+    print("\n%s" % SRADDHA[0])
+    srad = {}
+    page_dst = os.path.join(HERE, SRADDHA[0])
+    data_dst = os.path.join(data_dir, SRADDHA[1])
+    if not a.check:
+        for name, sub_dir, dst in ((SRADDHA[0], SRADDHA_SRC[0], page_dst),
+                                   (SRADDHA[1], SRADDHA_SRC[1], data_dst)):
+            src = os.path.join(a.ingest, sub_dir, name)
+            if not os.path.exists(src):
+                bad += fail("missing in audio-ingest: %s -- run "
+                            "scripts/shraddha_atlas.py there" % src)
+                continue
+            shutil.copyfile(src, dst)
+    if not os.path.exists(page_dst):
+        bad += fail("%s is not here" % SRADDHA[0])
+    else:
+        bad += check_fetches(page_dst, (SRADDHA[1],))
+        b, cites = check_selfcontained(page_dst); bad += b
+        b, sd = check_shraddha(data_dst); bad += b
+        if sd:
+            st = sd["stats"]
+            srad = {
+                "recordings": st["episodes"], "playable": st["playable"],
+                "hours": st["hours"], "rows": st["rows"],
+                "seated": st["seated"], "quoted": st["quoted"],
+                "sections_walked": st["sections_walked"],
+                "sections_total": st["sections_total"],
+                "named_pct": st["named_pct"],
+                "verses_seated": st["verses_seated"],
+                "verses_total": st["verses_total"],
+                "authorities": st["authorities"],
+                "corpus": sd["corpus"],
+                "speakers": [sd["speaker"]],
+            }
+            # Both halves of the pair, always, even in the log. Printing the
+            # seated share alone is how "8.6%" would end up quoted as this
+            # page's coverage, and it describes the wrong thing.
+            print("  %d recordings (%d online), %.1f h · %d passages "
+                  "(%d seated, %d quoted)"
+                  % (srad["recordings"], srad["playable"], srad["hours"],
+                     srad["rows"], srad["seated"], srad["quoted"]))
+            print("  %d of %d sections walked · %s%% of chanted Sanskrit named"
+                  % (srad["sections_walked"], srad["sections_total"],
+                     srad["named_pct"]))
+        for pth in (page_dst, data_dst):
+            raw, gz = sizes(pth)
+            total_raw += raw; total_gz += gz
+            print("    %-34s %7.2f MB raw  %6.2f MB gzip"
+                  % (os.path.basename(pth), raw / 1e6, gz / 1e6))
+        for u in cites:
+            print("      %-32s cites %s" % ("", u))
+
     # index.html renders its figures from this file rather than carrying them
     # in the markup, so coverage printed on the landing page cannot drift away
     # from the coverage in the data. [[derive-do-not-ask-the-human]]
     if not a.check:
         json.dump({"built": datetime.date.today().isoformat(),
                    "simulated_lanes": bool(a.with_sim), "atlases": stats,
-                   "witness": wit, "anukramanika": anuk},
+                   "witness": wit, "anukramanika": anuk,
+                   "sraddha": srad},
                   open(os.path.join(data_dir, "stats.json"), "w",
                        encoding="utf-8"),
                   ensure_ascii=False, indent=1)

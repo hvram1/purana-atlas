@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Same reason as index.html: a page of Devanagari must not depend on the
+     server appending charset=utf-8 to text/html. -->
+<meta charset="utf-8">
+<title>Śrāddhakāṇḍa — the Śrāddha atlas</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="134 recorded talks on the Smṛtimuktāphalam's
+ śrāddha kāṇḍa, indexed three ways: by the text, by the recording, and by the
+ authority the digest credits. Every passage plays.">
+<style>
+@font-face{
+  font-family:"Noto Serif Devanagari";
+  src:url("fonts/NotoSerifDevanagari.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;
+  unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,
+                U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09;
+}
+:root{
+  --bg:#f7f4ee;--panel:#fffdf9;--sunk:#f1ece2;--line:#e2dace;
+  --ink:#282320;--ink2:#4a423b;--muted:#857a6e;--faint:#a99e90;
+  --accent:#8b3a2e;
+  /* Provenance is the page's only real colour, and it is semantic:
+     the digest, the Veda, a purana. */
+  --digest:#8a6a2f;--digest-bg:#f4ecdc;
+  --veda:#3d6b52;--veda-bg:#e6efe8;
+  --purana:#2e6b8b;--purana-bg:#e4eef4;
+  --shadow:0 1px 2px rgba(40,35,32,.06),0 8px 26px rgba(40,35,32,.10);
+  --serif:"Noto Serif Devanagari","Sanskrit 2003",Georgia,serif;
+  --ui:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#16140f;--panel:#1e1b16;--sunk:#242019;--line:#332d24;
+  --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
+  --accent:#d98a72;
+  --digest:#d6ab5e;--digest-bg:#2b2317;
+  --veda:#7cbf9c;--veda-bg:#17281f;
+  --purana:#6fa8cc;--purana-bg:#172532;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 26px rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --bg:#16140f;--panel:#1e1b16;--sunk:#242019;--line:#332d24;
+  --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
+  --accent:#d98a72;
+  --digest:#d6ab5e;--digest-bg:#2b2317;
+  --veda:#7cbf9c;--veda-bg:#17281f;
+  --purana:#6fa8cc;--purana-bg:#172532;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 26px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);
+     line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:66rem;margin:0 auto;padding:3rem 1.25rem 5rem}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+header{border-bottom:1px solid var(--line);padding-bottom:1.5rem;margin-bottom:1.5rem}
+.back{font-size:.85rem;color:var(--muted);text-decoration:none;display:inline-block;
+      margin-bottom:1rem}
+.back:hover{color:var(--accent)}
+h1{font-family:var(--serif);font-size:2.1rem;line-height:1.25;margin:0 0 .3rem;
+   font-weight:600}
+.rom{color:var(--muted);font-size:.9rem;letter-spacing:.02em;margin:0 0 1rem}
+.claim{color:var(--ink2);font-size:1.02rem;max-width:48rem;margin:0}
+.claim b{color:var(--ink)}
+h3{font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+   margin:0 0 .7rem;font-weight:600}
+p{font-size:.95rem;color:var(--ink2)}
+code{font-family:var(--mono);font-size:.86em;background:var(--sunk);
+     padding:.1em .35em;border-radius:3px}
+
+.pair{display:flex;flex-wrap:wrap;gap:.5rem 2rem;margin:1.1rem 0 0;
+      font-size:.9rem;color:var(--muted)}
+.pair b{color:var(--ink);font-size:1.5rem;font-weight:600;display:block;
+        line-height:1.1;font-variant-numeric:tabular-nums}
+.pair span{display:block}
+
+/* ------------------------------------------------------------------ player */
+#player{position:sticky;top:0;z-index:20;background:var(--bg);
+        padding:.6rem 0 .7rem;border-bottom:1px solid var(--line);
+        margin-bottom:1.2rem}
+#player.idle .stage{display:none}
+#player .idlehint{display:none;font-size:.85rem;color:var(--muted)}
+#player.idle .idlehint{display:block}
+.stage{display:grid;grid-template-columns:minmax(0,22rem) 1fr;gap:1rem;
+       align-items:start}
+@media(max-width:44rem){.stage{grid-template-columns:1fr}}
+#yt{width:100%;aspect-ratio:16/9;background:#000;border-radius:6px;overflow:hidden}
+.nowbox{font-size:.86rem;color:var(--ink2)}
+.nowbox .lab{font-family:var(--serif);font-size:1.05rem;color:var(--ink);
+             display:block;margin-bottom:.3rem}
+.stopbtn{margin-top:.6rem;font:inherit;font-size:.8rem;cursor:pointer;
+         background:var(--sunk);color:var(--ink2);border:1px solid var(--line);
+         border-radius:4px;padding:.25rem .7rem}
+.hint{font-size:.85rem;color:var(--muted)}
+
+/* ------------------------------------------------------------------ spines */
+.spines{display:flex;gap:0;border-bottom:2px solid var(--line);flex-wrap:wrap}
+.spine{appearance:none;background:none;border:0;cursor:pointer;font:inherit;
+       font-size:.95rem;color:var(--muted);padding:.7rem 1.1rem .6rem;
+       border-bottom:2px solid transparent;margin-bottom:-2px;display:flex;
+       gap:.5rem;align-items:baseline}
+.spine:hover{color:var(--ink)}
+.spine .n{font-family:var(--mono);font-size:.7rem;color:var(--faint)}
+.spine[aria-selected=true]{color:var(--ink);font-weight:600;
+       border-bottom-color:var(--digest)}
+.spine[aria-selected=true] .n{color:var(--digest)}
+.asks{padding:.8rem 0 1rem;color:var(--ink2);font-size:.95rem}
+
+.cols{display:grid;grid-template-columns:15rem 1fr;gap:1.5rem;align-items:start}
+@media(max-width:52rem){.cols{grid-template-columns:1fr}}
+.picker{border:1px solid var(--line);border-radius:6px;background:var(--panel);
+        max-height:34rem;overflow:auto;box-shadow:var(--shadow)}
+.pick{display:block;width:100%;text-align:left;appearance:none;background:none;
+      border:0;border-bottom:1px solid var(--line);cursor:pointer;font:inherit;
+      padding:.5rem .7rem;color:var(--ink2)}
+.pick:last-child{border-bottom:0}
+.pick:hover{background:var(--sunk)}
+.pick[aria-pressed=true]{background:var(--digest-bg);color:var(--digest)}
+.pick .nm{font-family:var(--serif);font-size:.95rem;display:block;line-height:1.35}
+.pick .mt{font-family:var(--mono);font-size:.68rem;color:var(--faint);
+          display:block;margin-top:.1rem}
+.pick[aria-pressed=true] .mt{color:var(--digest);opacity:.85}
+.pick.empty .nm{color:var(--faint)}
+
+/* ------------------------------------------------------------------- rows */
+.head{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;
+      flex-wrap:wrap;margin-bottom:.8rem}
+.head .t{font-family:var(--serif);font-size:1.3rem;font-weight:600}
+.head .m{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.playall{font:inherit;font-size:.8rem;cursor:pointer;background:var(--digest);
+         color:var(--bg);border:0;border-radius:4px;padding:.35rem .9rem}
+.playall[disabled]{opacity:.4;cursor:default}
+.row{border-top:1px solid var(--line);padding:.9rem 0;display:grid;
+     grid-template-columns:5.5rem 1fr;gap:0 1rem}
+.row:first-of-type{border-top:0}
+.row.on{background:var(--digest-bg);border-radius:5px;
+        box-shadow:0 0 0 .55rem var(--digest-bg)}
+.pl{appearance:none;font:inherit;cursor:pointer;background:var(--sunk);
+    border:1px solid var(--line);border-radius:4px;color:var(--ink2);
+    font-family:var(--mono);font-size:.72rem;padding:.25rem .4rem;height:fit-content;
+    font-variant-numeric:tabular-nums;white-space:nowrap}
+.pl:hover:not([disabled]){border-color:var(--digest);color:var(--digest)}
+.pl[disabled]{opacity:.45;cursor:default}
+.pl .ep{display:block;font-size:.66rem;color:var(--faint);margin-top:.15rem}
+.dev{font-family:var(--serif);font-size:1.06rem;line-height:1.75;margin:0 0 .5rem}
+.chips{display:flex;flex-wrap:wrap;gap:.35rem}
+.chip{display:inline-flex;align-items:baseline;gap:.4rem;border:1px solid;
+      border-radius:3px;padding:.1rem .45rem;font-size:.75rem;text-decoration:none}
+.chip .k{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;
+         font-weight:600;opacity:.85}
+.chip .v{font-family:var(--mono);font-size:.72rem}
+.chip .v.dv{font-family:var(--serif);font-size:.82rem}
+.c-digest{color:var(--digest);border-color:var(--digest);background:var(--digest-bg)}
+.c-veda{color:var(--veda);border-color:var(--veda);background:var(--veda-bg)}
+.c-purana{color:var(--purana);border-color:var(--purana);background:var(--purana-bg)}
+.c-ghost{color:var(--muted);border-color:var(--line);background:transparent}
+a.chip:hover{box-shadow:0 0 0 2px currentColor inset}
+.empty-note{color:var(--muted);font-size:.92rem;padding:1.5rem 0}
+
+footer{border-top:1px solid var(--line);margin-top:3rem;padding-top:1.2rem;
+       font-size:.82rem;color:var(--muted);display:grid;gap:.6rem}
+footer b{color:var(--ink2);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <a class="back" href="index.html">← all atlases</a>
+  <h1>श्राद्धकाण्डः</h1>
+  <p class="rom">Śrāddhakāṇḍa uttarabhāga · Smṛtimuktāphalam · Musiri Yagnarama
+     Somayaji Dīkṣitar, 134 talks, 2018–2019</p>
+  <p class="claim">A digest is <b>made of quotations</b>, so this page has no
+     margin to put them in. Every passage below is one <b>chanting</b> — a
+     stretch of chant located to the second by forced alignment — carrying every
+     source that can name it. The talks follow the digest's itinerary and chant
+     the purāṇa and Veda verses underneath it, so the quotations outnumber the
+     digest's own citations six to one.</p>
+  <div class="pair" id="pair"></div>
+</header>
+
+<div id="player" class="idle">
+  <p class="idlehint">Every passage below plays. Pick one, or
+     <b>Play all</b> to hear a whole section, recording or authority in order.</p>
+  <div class="stage">
+    <div id="yt"></div>
+    <div class="nowbox">
+      <span class="lab" id="now"></span>
+      <span id="nowsub"></span>
+      <button class="stopbtn" id="stop" type="button">Stop</button>
+    </div>
+  </div>
+</div>
+
+<div class="spines" role="tablist" aria-label="Spine">
+  <button class="spine" role="tab" id="s-text" aria-selected="true"><span class="n">01</span>By the text</button>
+  <button class="spine" role="tab" id="s-rec"  aria-selected="false"><span class="n">02</span>By the recording</button>
+  <button class="spine" role="tab" id="s-auth" aria-selected="false"><span class="n">03</span>By the authority</button>
+</div>
+<p class="asks" id="asks"></p>
+
+<div class="cols">
+  <div class="picker" id="picker"></div>
+  <div>
+    <div class="head">
+      <div><span class="t" id="h-t"></span> <span class="m" id="h-m"></span></div>
+      <button class="playall" id="playall" type="button">▶ Play all</button>
+    </div>
+    <div id="rows"></div>
+  </div>
+</div>
+
+<footer>
+  <span><b>Timings are CTC forced alignment against the waveform.</b> No
+  timestamp on this page was typed, and none came from a transcription model.
+  A passage whose alignment scored under <span id="floor"></span> is not shown
+  at all, rather than shown with a button that would play the wrong seconds.</span>
+  <span><b>Two numbers, never one.</b> Sections walked measures navigation;
+  chant named measures content. The share of the digest's own quotations that
+  were seated is <span id="seatpct"></span>, and on its own it would describe
+  the wrong thing — the series walks this text and recites the verses beneath
+  it.</span>
+  <span id="prov"></span>
+  <span id="built"></span>
+</footer>
+</div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+// ---------------------------------------------------------------------------
+// One player for the whole page, as in the anukramaṇikā: a selection's chant is
+// a queue of spans through a single iframe, so "play this whole section" is the
+// ordinary case of a long queue rather than a separate mode.
+// ---------------------------------------------------------------------------
+var PAD_IN = 0.5, PAD_OUT = 0.4;   // alignment onsets are tight; a beat of
+                                   // lead-in keeps the first syllable whole
+var D = null, player = null, ready = false, queue = [], qi = -1, tick = null;
+var spine = 'text', sel = null;
+
+function fmt(s){
+  s = Math.max(0, Math.round(s));
+  var m = Math.floor(s / 60), h = Math.floor(m / 60);
+  return h ? h + ':' + String(m % 60).padStart(2,'0') + ':' + String(s % 60).padStart(2,'0')
+           : m + ':' + String(s % 60).padStart(2,'0');
+}
+function el(t, c, txt){ var e = document.createElement(t);
+  if (c) e.className = c; if (txt != null) e.textContent = txt; return e; }
+
+function onYouTubeIframeAPIReady(){
+  player = new YT.Player('yt', {
+    height:'100%', width:'100%',
+    playerVars:{playsinline:1, rel:0, modestbranding:1},
+    events:{onReady:function(){ ready = true; if (queue.length) step(0); }}
+  });
+}
+window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+
+function play(spans, label){
+  if (!spans.length) return;
+  queue = spans; qi = -1;
+  document.getElementById('player').classList.remove('idle');
+  document.getElementById('now').textContent = label;
+  if (ready) step(0);
+}
+function step(i){
+  if (i >= queue.length){ stop(); return; }
+  qi = i;
+  var s = queue[i];
+  mark(s.i);
+  document.getElementById('nowsub').textContent =
+    s.sub + (queue.length > 1 ? '  ·  ' + (i+1) + ' of ' + queue.length : '');
+  player.loadVideoById({videoId:s.yt, startSeconds:Math.max(0, s.t - PAD_IN)});
+  watch(s);
+}
+function watch(s){
+  if (tick) clearInterval(tick);
+  tick = setInterval(function(){
+    if (!player || !player.getCurrentTime) return;
+    if ((player.getPlayerState ? player.getPlayerState() : 1) !== 1) return;
+    if (player.getCurrentTime() >= s.e + PAD_OUT) step(qi + 1);
+  }, 200);
+}
+function stop(){
+  if (tick){ clearInterval(tick); tick = null; }
+  if (player && player.pauseVideo) player.pauseVideo();
+  queue = []; qi = -1; mark(null);
+  document.getElementById('now').textContent = '';
+  document.getElementById('nowsub').textContent = '';
+}
+function mark(i){
+  document.querySelectorAll('.row.on').forEach(function(r){ r.classList.remove('on'); });
+  if (i == null) return;
+  var r = document.getElementById('r' + i);
+  if (r){ r.classList.add('on'); r.scrollIntoView({block:'nearest'}); }
+}
+document.getElementById('stop').addEventListener('click', stop);
+
+// ------------------------------------------------------------------ render
+function span(row){
+  return {i:row.i, t:row.t, e:row.e, yt:D.episodes[row.ep].yt,
+          sub:row.ep + '  ' + fmt(row.t)};
+}
+function chips(r){
+  var box = el('div','chips'), a;
+  if (r.kind === 'seat'){
+    a = el('a','chip c-digest');
+    a.href = D.source_url || '#'; a.target = '_blank'; a.rel = 'noopener';
+    a.appendChild(el('span','k','Digest'));
+    if (r.auth) a.appendChild(el('span','v dv', r.auth));
+    a.appendChild(el('span','v','§' + r.sec + '.' + r.ref.split('.')[1] +
+                                (r.page ? ' · p.' + r.page : '')));
+    box.appendChild(a);
+  } else {
+    var veda = /संहिता|ब्राह्मण|आरण्यक|तैत्तिरीय/.test(r.cite || '');
+    a = r.url ? el('a','chip ' + (veda ? 'c-veda' : 'c-purana'))
+              : el('span','chip ' + (veda ? 'c-veda' : 'c-purana'));
+    if (r.url){ a.href = r.url; a.target = '_blank'; a.rel = 'noopener'; }
+    a.appendChild(el('span','k', veda ? 'Veda' : 'Purāṇa'));
+    a.appendChild(el('span','v', r.cite || '—'));
+    box.appendChild(a);
+    (r.alts || []).slice(0,2).forEach(function(x){
+      var g = el('span','chip c-ghost');
+      g.appendChild(el('span','k','also'));
+      g.appendChild(el('span','v', x));
+      box.appendChild(g);
+    });
+  }
+  return box;
+}
+function renderRows(ids, title, meta){
+  document.getElementById('h-t').textContent = title;
+  document.getElementById('h-m').textContent = meta;
+  var host = document.getElementById('rows');
+  host.textContent = '';
+  var spans = [];
+  if (!ids.length){
+    host.appendChild(el('p','empty-note',
+      'Nothing here was named. The recording exists and was transcribed; no ' +
+      'source in the digest or the 488,149-verse index matched it above the floor.'));
+    document.getElementById('playall').disabled = true;
+    return;
+  }
+  ids.forEach(function(i){
+    var r = D.rows[i], yt = D.episodes[r.ep].yt;
+    var row = el('div','row'); row.id = 'r' + i;
+    var b = el('button','pl');
+    b.type = 'button';
+    b.appendChild(document.createTextNode('▶ ' + fmt(r.t)));
+    b.appendChild(el('span','ep', r.ep.replace('shr-','')));
+    if (!yt){ b.disabled = true; b.title = 'not yet uploaded'; }
+    else b.addEventListener('click', function(){
+      play([span(r)], (r.kind==='seat' ? '§'+r.sec : (r.cite||'')) );
+    });
+    row.appendChild(b);
+    var right = el('div');
+    right.appendChild(el('p','dev', r.text));
+    right.appendChild(chips(r));
+    row.appendChild(right);
+    host.appendChild(row);
+    if (yt) spans.push(span(r));
+  });
+  var pa = document.getElementById('playall');
+  pa.disabled = !spans.length;
+  pa.onclick = function(){ play(spans, title); };
+}
+
+function pickerRender(items){
+  var host = document.getElementById('picker');
+  host.textContent = '';
+  items.forEach(function(it){
+    var b = el('button','pick' + (it.n ? '' : ' empty'));
+    b.type = 'button'; b.setAttribute('aria-pressed', String(it.key === sel));
+    b.appendChild(el('span','nm', it.nm));
+    b.appendChild(el('span','mt', it.mt));
+    b.addEventListener('click', function(){ sel = it.key; draw(); });
+    host.appendChild(b);
+  });
+}
+
+var ASKS = {
+  text:'What does the tradition hold about this step of the rite — and has anyone here taught it? ' +
+       'Sections the talks never reach are shown too: the gap is a finding.',
+  rec:'What happens in this talk, and when? The only spine not ordered by a match, ' +
+      'so it is the only one that shows chant nothing could name.',
+  auth:'Who said this? Only a digest prints the attribution beside the quotation, ' +
+       'so no purāṇa atlas can offer this axis.'
+};
+
+function draw(){
+  document.getElementById('asks').textContent = ASKS[spine];
+  var items = [], ids = [], title = '', meta = '';
+  if (spine === 'text'){
+    D.sections.forEach(function(s){
+      items.push({key:'s'+s.n, n:s.rows.length, nm:'§' + s.n + ' ' + (s.sa||''),
+                  mt:(s.rows.length ? s.rows.length + ' chanted' : 'not reached') +
+                     ' · ' + s.nq + (s.nq===1?' quotation':' quotations') +
+                     ' · p.' + s.page});
+    });
+    if (!sel) sel = 's67';
+    var s = D.sections.filter(function(x){ return 's'+x.n === sel; })[0] || D.sections[0];
+    ids = s.rows; title = '§' + s.n + '  ' + (s.sa || '');
+    meta = 'printed p.' + s.page + ' · ' + s.nq + ' quotations in the digest · ' +
+           s.rows.length + ' chanted here';
+  } else if (spine === 'rec'){
+    Object.keys(D.episodes).sort().forEach(function(k){
+      var e = D.episodes[k];
+      items.push({key:k, n:e.rows.length, nm:k + (e.yt ? '' : ' ·'),
+                  mt:(e.date||'') + ' · ' + e.rows.length +
+                     (e.rows.length===1?' passage':' passages') +
+                     (e.yt ? '' : ' · no video yet')});
+    });
+    if (!sel || !D.episodes[sel]) sel = 'shr-134';
+    var e = D.episodes[sel];
+    ids = e.rows; title = sel;
+    meta = (e.date||'') + ' · ' + fmt(e.dur) + ' · ' + e.seat +
+           ' seated, ' + e.quote + ' quoted' + (e.yt ? '' : ' · not yet uploaded');
+  } else {
+    D.authorities.forEach(function(a){
+      items.push({key:'a'+a.name, n:a.n, nm:a.name,
+                  mt:a.n + ' passage' + (a.n>1?'s':'') + ' · ' + a.eps +
+                     ' recording' + (a.eps>1?'s':'') + ' · ' + a.kind});
+    });
+    if (!sel) sel = 'a' + D.authorities[0].name;
+    var a = D.authorities.filter(function(x){ return 'a'+x.name === sel; })[0]
+            || D.authorities[0];
+    ids = a.rows; title = a.name;
+    meta = a.n + ' passages · ' + a.eps + ' recordings' +
+           (a.secs.length ? ' · §' + a.secs.join(', §') : '');
+  }
+  pickerRender(items);
+  renderRows(ids, title, meta);
+}
+
+var TABS = [['s-text','text'],['s-rec','rec'],['s-auth','auth']];
+function setSpine(which, keepSel){
+  spine = which; if (!keepSel) sel = null;
+  TABS.forEach(function(q){
+    document.getElementById(q[0]).setAttribute('aria-selected',
+      String(q[1] === spine));
+  });
+}
+TABS.forEach(function(p){
+  document.getElementById(p[0]).addEventListener('click', function(){
+    setSpine(p[1]); location.hash = p[1]; draw();
+  });
+});
+
+// `#text`, `#rec/shr-134`, `#auth/मनु`, `#text/s67` -- a section or an
+// authority is a thing worth linking to, and the hash is how you link to it.
+function fromHash(){
+  var h = decodeURIComponent((location.hash || '').replace(/^#/,''));
+  if (!h) return;
+  var bits = h.split('/');
+  if (['text','rec','auth'].indexOf(bits[0]) < 0) return;
+  setSpine(bits[0], true);
+  sel = bits[1] || null;
+}
+window.addEventListener('hashchange', function(){ fromHash(); draw(); });
+
+fetch('data/shraddha_atlas.json').then(function(r){ return r.json(); })
+.then(function(d){
+  D = d;
+  var s = d.stats;
+  document.getElementById('pair').innerHTML =
+    '<span><b>' + s.sections_walked + ' of ' + s.sections_total +
+      '</b>sections of the digest walked</span>' +
+    '<span><b>' + s.named_pct + '%</b>of chanted Sanskrit named</span>' +
+    '<span><b>' + s.rows + '</b>passages, each one plays</span>' +
+    '<span><b>' + s.playable + ' of ' + s.episodes +
+      '</b>recordings online (' + s.hours + ' h)</span>';
+  document.getElementById('floor').textContent = d.floor.toFixed(2);
+  document.getElementById('seatpct').textContent =
+    s.verses_seated + ' of ' + s.verses_total + ' (' +
+    (100*s.verses_seated/s.verses_total).toFixed(1) + '%)';
+  document.getElementById('prov').textContent =
+    'Seating: ' + d._provenance.seating + '. Quotes: ' + d._provenance.quotes +
+    '. Corpus: ' + d._provenance.corpus + '.';
+  document.getElementById('built').textContent = 'Built ' + d.built + '.';
+  fromHash();
+  draw();
+})
+.catch(function(err){
+  document.getElementById('rows').innerHTML =
+    '<p class="empty-note">Could not load <code>data/shraddha_atlas.json</code>: ' +
+    err + '</p>';
+});
+</script>
+</body>
+</html>

@@ -113,8 +113,8 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
    on this page opens an atlas, and an atlas has a printed edition behind it.
    This one has none, so it gets a shape of its own -- full width, its own
    accent, and its numbers counting correspondences rather than coverage.
-   Giving it a card would have said the site holds four atlases. It holds
-   three, and one open question. */
+   Giving it a card would have said the site holds five atlases. It holds
+   four -- three purāṇas and a digest -- and two open questions. */
 .fourth{display:block;margin:0 0 2.5rem;background:var(--panel);
   border:1px solid var(--line);border-top:3px solid var(--s2);
   border-radius:10px;padding:1.4rem;box-shadow:var(--shadow);
@@ -149,10 +149,12 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
 <div class="wrap">
 <header>
   <h1>Purāṇa Atlas</h1>
-  <p class="sub">Three Sanskrit texts, each verse tied to the second it is chanted
-  in a recorded <i>upanyāsam</i>. Click a verse, hear it. <a href="#soon">Five
-  more are in hand</a>, and <a href="#fourth">two further texts have no edition
-  to hang them on</a>.</p>
+  <p class="sub">Four Sanskrit texts, each verse tied to the second it is chanted
+  in a recorded <i>upanyāsam</i>. Click a verse, hear it. Three are purāṇas; the
+  fourth is a <i>nibandha</i>, a digest made of quotations, and it is indexed by
+  the authority it credits as well as by the text. <a href="#soon">Five more are
+  in hand</a>, and <a href="#fourth">two further texts have no edition to hang
+  them on</a>.</p>
   <p class="sub why">They are built to argue for two things the Purāṇas still
   lack: recitation that is <i>addressable</i> at the verse, and an <i>index of
   names</i> across the corpus. <a href="#why">Read the two proposals →</a></p>
@@ -382,6 +384,40 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
       + '<div class="go">Open the atlas →</div>';
     box.appendChild(a);
   }
+  // The Śrāddha atlas is an atlas -- it has an edition -- so it belongs in the
+  // grid above. It is built here rather than in that loop because its coverage
+  // is a PAIR and the loop's shape is a single reached_pct. Sections walked
+  // measures navigation, chant named measures content, and either one alone
+  // describes the wrong thing: the talks walk this digest's itinerary and chant
+  // the purāṇa and Veda verses underneath it, so the share of the digest's own
+  // quotations that were seated is not what the page is about.
+  const R = S.sraddha;
+  if (R && R.rows) {
+    const a = document.createElement('a');
+    a.className = 'card'; a.href = 'shraddha-atlas.html';
+    a.innerHTML =
+      '<h2>श्राद्धकाण्डः</h2>'
+      + '<p class="rom">Smṛtimuktāphalam · the śrāddha kāṇḍa · a digest, not a purāṇa</p>'
+      + '<p>A 1930s Tamil <i>nibandha</i> on the rites for the ancestors, and '
+      + '134 near-daily talks that walk it. Because a digest is made of '
+      + 'quotations, the talks chant the Manu, Yājñavalkya, Garuḍa and '
+      + 'Taittirīya verses underneath it — so this atlas is also indexed by '
+      + '<b>who said it</b>, which no purāṇa atlas can offer.</p>'
+      + '<div class="stats">'
+      +   '<span class="stat"><b>' + R.sections_walked + ' of '
+      +     R.sections_total + '</b>sections walked</span>'
+      +   '<span class="stat"><b>' + R.named_pct + '%</b>of chant named</span>'
+      +   '<span class="stat"><b>' + n(R.rows) + '</b>passages</span>'
+      +   '<span class="stat"><b>' + R.playable + ' of ' + R.recordings
+      +     '</b>recordings online</span>'
+      + '</div>'
+      + ((R.speakers && R.speakers.length)
+          ? '<p class="who">Expounded by ' + R.speakers.join(' · ') + '</p>'
+          : '')
+      + '<div class="go">Open the atlas →</div>';
+    box.appendChild(a);
+  }
+
   const k = S.atlases.kartika;
   if (k && k.both_lanes) {
     document.getElementById('both').textContent = n(k.both_lanes) + ' verses';
@@ -435,6 +471,8 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
     + '<a class="card" href="kartika-atlas.html"><h2>कार्तिकमासमाहात्म्यम्</h2>'
     + '<div class="go">Open the atlas →</div></a>'
     + '<a class="card" href="adhyatma-atlas.html"><h2>अध्यात्मरामायणम्</h2>'
+    + '<div class="go">Open the atlas →</div></a>'
+    + '<a class="card" href="shraddha-atlas.html"><h2>श्राद्धकाण्डः</h2>'
     + '<div class="go">Open the atlas →</div></a>';
 });
 </script>
