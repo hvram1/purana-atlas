@@ -185,8 +185,10 @@ footer b{color:var(--ink2);font-weight:600}
      stretch of chant located to the second by forced alignment — carrying every
      source that can name it. The talks follow the digest's itinerary and chant
      the purāṇa and Veda verses underneath it, so the quotations outnumber the
-     digest's own citations six to one. <b>Chant nobody could name is here
-     too</b>, in the recording, marked as unnamed rather than left out.</p>
+     digest's own citations six to one. <b>Every passage here carries a
+     source</b> — a verse of the digest, a purāṇa, the Veda, or the named
+     invocation. Chant that nothing could identify is counted below but not
+     shown, because a passage you cannot check is one you cannot trust.</p>
   <div class="pair" id="pair"></div>
 </header>
 
@@ -241,11 +243,15 @@ footer b{color:var(--ink2);font-weight:600}
   alignment is redone.</span>
   <span><b>Chant is checked against the waveform, not just the transcript.</b>
   mms-lid labels each second of audio independently of the transcription, and a
-  passage whose span it calls Tamil is dropped rather than shown — forced
+  cited passage whose span it calls Tamil is dropped rather than shown — forced
   alignment must place every word somewhere, so a line the transcript invented
-  still gets precise-looking times. <span id="gated"></span> An unnamed passage
-  carries what was heard, because unlike a cited one it offers the reader
-  nothing else to check it against.</span>
+  still gets precise-looking times. <span id="gated"></span></span>
+  <span><b>Chant nothing could name is not shown.</b>
+  <span id="withheld"></span> Such a passage carries no corroboration: a cited
+  one matched a real verse in a real edition, which is only possible if the
+  transcript is genuine, and an unidentified one has passed no such test — the
+  reason nothing could name it is often that it was never said. It stays in the
+  denominator below and off the page.</span>
   <span><b>What the percentage is over.</b> <span id="denom"></span> The
   exposition is the discourse in Tamil, not chant, so counting it as chant we
   failed to name would measure the wrong thing; it has its own tab. Adding the
@@ -442,8 +448,8 @@ function pickerRender(items){
 var ASKS = {
   text:'What does the tradition hold about this step of the rite — and has anyone here taught it? ' +
        'Sections the talks never reach are shown too: the gap is a finding.',
-  rec:'What happens in this talk, and when? The only spine not ordered by a match, ' +
-      'so it is the only one that shows chant nothing could name.',
+  rec:'What happens in this talk, and when? Time order, so a rule and the mantra ' +
+      'it names stay next to each other.',
   auth:'Who said this? Only a digest prints the attribution beside the quotation, ' +
        'so no purāṇa atlas can offer this axis.',
   exp:'The discourse itself — Tamil prose, with Sanskrit words in it. This is not ' +
@@ -560,17 +566,19 @@ fetch('data/shraddha_atlas.json').then(function(r){ return r.json(); })
     (100*s.verses_seated/s.verses_total).toFixed(1) + '%)';
   document.getElementById('denom').textContent =
     s.named_pct + '% is ' + n(s.units_named) + ' named of ' + n(s.units_chant) +
-    ' units of chant. Over all ' + n(s.units_all) + ' units, including ' +
+    ' units of chant — the unnamed ones are counted here even though they are ' +
+    'not shown. Over all ' + n(s.units_all) + ' units, including ' +
     n(s.exposition) + ' of Tamil exposition, it would be ' + s.named_pct_all + '%.';
   document.getElementById('placed').textContent = s.placed_pct + '%';
   var dt = s.dropped_tamil || {}, dn = Object.keys(dt).reduce(function(a,k){ return a+dt[k]; },0);
   var stl = s.stale_alignment || [];
   document.getElementById('stale').textContent = stl.length
     ? (stl.join(', ') + '.') : '';
+  document.getElementById('withheld').textContent = s.unnamed_withheld
+    ? (s.unnamed_withheld + ' passages of Sanskrit that no source in 488,149 ' +
+       'verses could name are counted and withheld.') : '';
   document.getElementById('gated').textContent = dn
-    ? ('It dropped ' + dn + ' passages here — ' + (dt.unnamed||0) +
-       ' unnamed and ' + ((dt.seat||0)+(dt.quote||0)) + ' that carried a citation.')
-    : '';
+    ? ('It dropped ' + dn + ' cited passages here.') : '';
   document.getElementById('prov').textContent =
     'Seating: ' + d._provenance.seating + '. Quotes: ' + d._provenance.quotes +
     '. Corpus: ' + d._provenance.corpus + '.';
