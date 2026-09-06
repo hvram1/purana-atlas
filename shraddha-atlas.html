@@ -232,6 +232,13 @@ footer b{color:var(--ink2);font-weight:600}
   were seated is <span id="seatpct"></span>, and on its own it would describe
   the wrong thing — the series walks this text and recites the verses beneath
   it.</span>
+  <span><b>Chant is checked against the waveform, not just the transcript.</b>
+  mms-lid labels each second of audio independently of the transcription, and a
+  passage whose span it calls Tamil is dropped rather than shown — forced
+  alignment must place every word somewhere, so a line the transcript invented
+  still gets precise-looking times. <span id="gated"></span> An unnamed passage
+  carries what was heard, because unlike a cited one it offers the reader
+  nothing else to check it against.</span>
   <span><b>What the percentage is over.</b> <span id="denom"></span> The
   exposition is the discourse in Tamil, not chant, so counting it as chant we
   failed to name would measure the wrong thing; it has its own tab. Adding the
@@ -328,6 +335,15 @@ function chips(r){
       : r.kind === 'exposition' ? 'Tamil — not chant'
       : 'no source in 488,149 verses'));
     box.appendChild(sp);
+    // An unnamed row has no citation a reader could sanity-check, so it carries
+    // the one independent measurement there is: what mms-lid heard on the
+    // waveform over that span. `mixed` means it could not decide.
+    if (r.kind === 'unnamed' && r.heard){
+      var h = el('span','chip c-ghost');
+      h.appendChild(el('span','k','heard'));
+      h.appendChild(el('span','v', r.heard + ' on the waveform'));
+      box.appendChild(h);
+    }
     return box;
   }
   if (r.kind === 'seat'){
@@ -455,9 +471,13 @@ function draw(){
     var e = D.episodes[sel];
     ids = (e.rows||[]).filter(function(i){ return D.rows[i].kind !== 'exposition'; });
     title = sel;
-    var un = ids.filter(function(i){ return D.rows[i].kind==='unnamed'; }).length;
-    meta = (e.date||'') + ' · ' + fmt(e.dur) + ' · ' + e.seat +
-           ' seated, ' + e.quote + ' quoted, ' + un + ' unnamed' +
+    var bits = [];
+    ['seat','quote','invocation','unnamed'].forEach(function(kk){
+      if (e[kk]) bits.push(e[kk] + ' ' + {seat:'seated', quote:'quoted',
+        invocation:'invocation', unnamed:'unnamed'}[kk]);
+    });
+    meta = (e.date||'') + ' · ' + fmt(e.dur) + ' · ' +
+           (bits.length ? bits.join(', ') : 'nothing named') +
            (e.yt ? '' : ' · not yet uploaded');
   } else if (spine === 'exp'){
     Object.keys(D.episodes).sort().forEach(function(k){
@@ -535,6 +555,11 @@ fetch('data/shraddha_atlas.json').then(function(r){ return r.json(); })
     ' units of chant. Over all ' + n(s.units_all) + ' units, including ' +
     n(s.exposition) + ' of Tamil exposition, it would be ' + s.named_pct_all + '%.';
   document.getElementById('placed').textContent = s.placed_pct + '%';
+  var dt = s.dropped_tamil || {}, dn = Object.keys(dt).reduce(function(a,k){ return a+dt[k]; },0);
+  document.getElementById('gated').textContent = dn
+    ? ('It dropped ' + dn + ' passages here — ' + (dt.unnamed||0) +
+       ' unnamed and ' + ((dt.seat||0)+(dt.quote||0)) + ' that carried a citation.')
+    : '';
   document.getElementById('prov').textContent =
     'Seating: ' + d._provenance.seating + '. Quotes: ' + d._provenance.quotes +
     '. Corpus: ' + d._provenance.corpus + '.';
