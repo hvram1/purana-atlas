@@ -232,6 +232,13 @@ footer b{color:var(--ink2);font-weight:600}
   were seated is <span id="seatpct"></span>, and on its own it would describe
   the wrong thing — the series walks this text and recites the verses beneath
   it.</span>
+  <span><b>Six recordings show only their seated verses.</b>
+  <span id="stale"></span> In those, <code>build/reftext</code> and
+  <code>build/aligned</code> disagree about which unit is which, so a passage's
+  text is right and its timestamp is not. Seated verses are unaffected — those
+  are located by searching the aligned audio for the verse itself, never by unit
+  number — so they are kept and everything else there is withheld until the
+  alignment is redone.</span>
   <span><b>Chant is checked against the waveform, not just the transcript.</b>
   mms-lid labels each second of audio independently of the transcription, and a
   passage whose span it calls Tamil is dropped rather than shown — forced
@@ -462,7 +469,7 @@ function draw(){
   } else if (spine === 'rec'){
     Object.keys(D.episodes).sort().forEach(function(k){
       var e = D.episodes[k];
-      items.push({key:k, n:e.rows.length, nm:k + (e.yt ? '' : ' ·'),
+      items.push({key:k, n:e.rows.length, nm:k + (e.yt ? '' : ' ·') + (e.stale ? ' ⚠' : ''),
                   mt:(e.date||'') + ' · ' + e.rows.length +
                      (e.rows.length===1?' passage':' passages') +
                      (e.yt ? '' : ' · no video yet')});
@@ -478,7 +485,8 @@ function draw(){
     });
     meta = (e.date||'') + ' · ' + fmt(e.dur) + ' · ' +
            (bits.length ? bits.join(', ') : 'nothing named') +
-           (e.yt ? '' : ' · not yet uploaded');
+           (e.yt ? '' : ' · not yet uploaded') +
+           (e.stale ? ' · alignment stale, only seated verses shown' : '');
   } else if (spine === 'exp'){
     Object.keys(D.episodes).sort().forEach(function(k){
       var e = D.episodes[k];
@@ -556,6 +564,9 @@ fetch('data/shraddha_atlas.json').then(function(r){ return r.json(); })
     n(s.exposition) + ' of Tamil exposition, it would be ' + s.named_pct_all + '%.';
   document.getElementById('placed').textContent = s.placed_pct + '%';
   var dt = s.dropped_tamil || {}, dn = Object.keys(dt).reduce(function(a,k){ return a+dt[k]; },0);
+  var stl = s.stale_alignment || [];
+  document.getElementById('stale').textContent = stl.length
+    ? (stl.join(', ') + '.') : '';
   document.getElementById('gated').textContent = dn
     ? ('It dropped ' + dn + ' passages here — ' + (dt.unnamed||0) +
        ' unnamed and ' + ((dt.seat||0)+(dt.quote||0)) + ' that carried a citation.')
