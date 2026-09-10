@@ -1,5 +1,5 @@
 {
- "built": "2026-09-06",
+ "built": "2026-09-10",
  "simulated_lanes": false,
  "atlases": {
   "virata": {
@@ -80,18 +80,18 @@
   ]
  },
  "sraddha": {
-  "recordings": 134,
-  "playable": 116,
-  "hours": 21.2,
-  "rows": 1404,
-  "seated": 100,
-  "quoted": 616,
+  "recordings": 137,
+  "playable": 137,
+  "hours": 21.7,
+  "rows": 1514,
+  "seated": 412,
+  "quoted": 414,
   "sections_walked": 25,
   "sections_total": 75,
-  "named_pct": 62.5,
+  "named_pct": 66.1,
   "verses_seated": 54,
   "verses_total": 625,
-  "authorities": 59,
+  "authorities": 57,
   "corpus": "श्राद्धकाण्ड: - उत्तरभाग:",
   "speakers": [
    "Musiri Yagnarama Somayaji Dīkṣitar"

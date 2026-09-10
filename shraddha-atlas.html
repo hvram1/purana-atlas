@@ -236,6 +236,23 @@ footer b{color:var(--ink2);font-weight:600}
   were seated is <span id="seatpct"></span>, and on its own it would describe
   the wrong thing — the series walks this text and recites the verses beneath
   it.</span>
+  <span><b>A seated verse carries a Digest chip or a Purāṇa chip, and the
+  difference is which book the words are in.</b> The digest is a nibandha: it
+  quotes. So a verse chanted at a step of the rite is frequently the
+  Garuḍapurāṇa's own, printed in the digest as evidence — <span
+  id="purseat"></span> of the seated passages here are placed against Garuḍa
+  rather than against the digest's text. Both are located the same way, by
+  searching the aligned audio for the verse itself; what differs is the book
+  that names it.</span>
+  <span><b>Where both books carry the same words, both are shown.</b> One
+  stretch of audio was chanted once, so it gets one row, and the purāṇa leads
+  because that is where the words are — the same rule that puts the Ṛgveda
+  ahead of a purāṇa quoting it. The digest's claim on the same line then
+  follows as <i>also · digest</i>, carrying the section and the author the
+  nibandha credits: <span id="recov"></span> of the purāṇa passages here are
+  named by both. That attribution — मनु, याज्ञवल्क्य, शङ्ख — is the one axis a
+  purāṇa index cannot supply, and a verse the digest does not print has no
+  section, which is the honest answer rather than a missing one.</span>
   <span><b>Six recordings show only their seated verses.</b>
   <span id="stale"></span> In those, <code>build/reftext</code> and
   <code>build/aligned</code> disagree about which unit is which, so a passage's
@@ -366,7 +383,7 @@ function chips(r){
     }
     return box;
   }
-  if (r.kind === 'seat'){
+  if (r.kind === 'seat' && r.src === 'smp6'){
     a = el('a','chip c-digest');
     a.href = D.source_url || '#'; a.target = '_blank'; a.rel = 'noopener';
     a.appendChild(el('span','k','Digest'));
@@ -374,6 +391,28 @@ function chips(r){
     a.appendChild(el('span','v','§' + r.sec + '.' + r.ref.split('.')[1] +
                                 (r.page ? ' · p.' + r.page : '')));
     box.appendChild(a);
+  } else if (r.kind === 'seat'){
+    // A purana verse seated on the clock. It leads with the Purana chip
+    // because the purana is where the words ARE -- the same provenance rule
+    // that puts the Rgveda ahead of a purana quoting it.
+    a = r.url ? el('a','chip c-purana') : el('span','chip c-purana');
+    if (r.url){ a.href = r.url; a.target = '_blank'; a.rel = 'noopener'; }
+    a.appendChild(el('span','k','Purāṇa'));
+    a.appendChild(el('span','v', r.cite || '—'));
+    box.appendChild(a);
+    // ...and the digest's own claim on the same words follows it, when the
+    // digest has one. This is the demoted witness, not a second guess: the
+    // nibandha prints this verse at this step and credits it to this author,
+    // which is the only axis a purana index cannot supply. Ghost styling says
+    // it did not name the text on screen; it is a citation, not a near miss.
+    if (r.dref){
+      var g = el('span','chip c-ghost');
+      g.appendChild(el('span','k','also · digest'));
+      if (r.dauth) g.appendChild(el('span','v dv', r.dauth));
+      g.appendChild(el('span','v','§' + r.dref +
+                                  (r.dpage ? ' · p.' + r.dpage : '')));
+      box.appendChild(g);
+    }
   } else {
     var veda = /संहिता|ब्राह्मण|आरण्यक|तैत्तिरीय/.test(r.cite || '');
     a = r.url ? el('a','chip ' + (veda ? 'c-veda' : 'c-purana'))
@@ -413,7 +452,9 @@ function renderRows(ids, title, meta){
     b.appendChild(el('span','ep', r.ep.replace('shr-','')));
     if (!yt){ b.disabled = true; b.title = 'not yet uploaded'; }
     else b.addEventListener('click', function(){
-      play([span(r)], (r.kind==='seat' ? '§'+r.sec : (r.cite||'')) );
+      // `'§'+r.sec` on a purana row reads "§null" -- it has no section.
+      play([span(r)], (r.kind==='seat' && r.src==='smp6'
+                       ? '§'+r.sec : (r.cite||'')) );
     });
     row.appendChild(b);
     var right = el('div');
@@ -587,6 +628,11 @@ fetch('data/shraddha_atlas.json').then(function(r){ return r.json(); })
   document.getElementById('seatpct').textContent =
     s.verses_seated + ' of ' + s.verses_total + ' (' +
     (100*s.verses_seated/s.verses_total).toFixed(1) + '%)';
+  document.getElementById('purseat').textContent =
+    s.seated_purana + ' of ' + s.seated + ' (' + s.purana_verses +
+    ' distinct verses)';
+  document.getElementById('recov').textContent =
+    s.recovered_digest + ' of ' + s.seated_purana;
   document.getElementById('denom').textContent =
     s.named_pct + '% is ' + n(s.units_named) + ' named of ' + n(s.units_chant) +
     ' units of chant — the unnamed ones are counted here even though they are ' +
