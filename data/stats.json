@@ -81,7 +81,7 @@
  },
  "sraddha": {
   "recordings": 208,
-  "playable": 153,
+  "playable": 171,
   "hours": 41.8,
   "rows": 2801,
   "seated": 1265,
@@ -127,7 +127,7 @@
  "kandas": [
   {
    "recordings": 208,
-   "playable": 153,
+   "playable": 171,
    "hours": 41.8,
    "rows": 2801,
    "seated": 1265,
@@ -172,7 +172,7 @@
   },
   {
    "recordings": 16,
-   "playable": 6,
+   "playable": 16,
    "hours": 2.5,
    "rows": 92,
    "seated": 43,
