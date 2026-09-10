@@ -6,7 +6,7 @@
 <meta charset="utf-8">
 <title>Śrāddhakāṇḍa — the Śrāddha atlas</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="134 recorded talks on the Smṛtimuktāphalam's
+<meta name="description" content="Recorded talks on the Smṛtimuktāphalam's
  śrāddha kāṇḍa, indexed three ways: by the text, by the recording, and by the
  authority the digest credits. Every passage plays.">
 <style>
@@ -181,7 +181,7 @@ footer b{color:var(--ink2);font-weight:600}
   <a class="back" href="index.html">← all atlases</a>
   <h1>श्राद्धकाण्डः</h1>
   <p class="rom">Śrāddhakāṇḍa uttarabhāga · Smṛtimuktāphalam · Musiri Yagnarama
-     Somayaji Dīkṣitar, 134 talks, 2018–2019</p>
+     Somayaji Dīkṣitar, <span id="talks">…</span></p>
   <p class="claim">A digest is <b>made of quotations</b>, so this page has no
      margin to put them in. Every passage below is one <b>chanting</b> — a
      stretch of chant located to the second by forced alignment — carrying every
@@ -624,6 +624,14 @@ fetch('data/shraddha_atlas.json').then(function(r){ return r.json(); })
     '<span><b>' + s.rows + '</b>passages, each one plays</span>' +
     '<span><b>' + s.playable + ' of ' + s.episodes +
       '</b>recordings online (' + s.hours + ' h)</span>';
+  // The subtitle used to carry a hand-typed "134 talks" and the series grew to
+  // 137, so the page contradicted its own stat block. Derived from the episodes
+  // it actually holds; two of them are undated, so the range is over the rest.
+  var yrs = Object.keys(d.episodes).map(function(k){return d.episodes[k].date;})
+              .filter(Boolean).map(function(x){return x.slice(0,4);}).sort();
+  document.getElementById('talks').textContent =
+    s.episodes + ' talks' + (yrs.length ? ', ' + yrs[0] +
+      (yrs[yrs.length-1] !== yrs[0] ? '\u2013' + yrs[yrs.length-1] : '') : '');
   document.getElementById('floor').textContent = d.floor.toFixed(2);
   document.getElementById('seatpct').textContent =
     s.verses_seated + ' of ' + s.verses_total + ' (' +
