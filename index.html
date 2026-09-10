@@ -398,8 +398,12 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
     a.innerHTML =
       '<h2>श्राद्धकाण्डः</h2>'
       + '<p class="rom">Smṛtimuktāphalam · the śrāddha kāṇḍa · a digest, not a purāṇa</p>'
+      // The count and the number of runs are read from the data. This said
+      // "134 near-daily talks" while the atlas published 208 in five runs by
+      // two reciters, and "near-daily" was only ever true of one of them.
       + '<p>A 1930s Tamil <i>nibandha</i> on the rites for the ancestors, and '
-      + '134 near-daily talks that walk it. Because a digest is made of '
+      + n(R.recordings) + ' talks in ' + (R.series ? R.series.length : 1)
+      + ' runs that walk it. Because a digest is made of '
       + 'quotations, the talks chant the Manu, Yājñavalkya, Garuḍa and '
       + 'Taittirīya verses underneath it — so this atlas is also indexed by '
       + '<b>who said it</b>, which no purāṇa atlas can offer.</p>'

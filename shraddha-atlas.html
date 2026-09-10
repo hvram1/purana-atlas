@@ -112,6 +112,10 @@ code{font-family:var(--mono);font-size:.86em;background:var(--sunk);
 
 .cols{display:grid;grid-template-columns:15rem 1fr;gap:1.5rem;align-items:start}
 @media(max-width:52rem){.cols{grid-template-columns:1fr}}
+.pickhead{padding:9px 11px 7px;border-bottom:1px solid var(--line);
+  background:var(--sunk);position:sticky;top:0;z-index:1}
+.pickhead .hn{display:block;font-weight:600;font-size:12.5px}
+.pickhead .hs{display:block;font-size:10.5px;color:var(--muted);margin-top:2px}
 .picker{border:1px solid var(--line);border-radius:6px;background:var(--panel);
         max-height:34rem;overflow:auto;box-shadow:var(--shadow)}
 .pick{display:block;width:100%;text-align:left;appearance:none;background:none;
@@ -180,8 +184,9 @@ footer b{color:var(--ink2);font-weight:600}
 <header>
   <a class="back" href="index.html">← all atlases</a>
   <h1>श्राद्धकाण्डः</h1>
-  <p class="rom">Śrāddhakāṇḍa uttarabhāga · Smṛtimuktāphalam · Musiri Yagnarama
-     Somayaji Dīkṣitar, <span id="talks">…</span></p>
+  <p class="rom">Śrāddhakāṇḍa uttarabhāga · Smṛtimuktāphalam · <span
+     id="talks">…</span></p>
+  <p class="rom" id="whom">…</p>
   <p class="claim">A digest is <b>made of quotations</b>, so this page has no
      margin to put them in. Every passage below is one <b>chanting</b> — a
      stretch of chant located to the second by forced alignment — carrying every
@@ -190,7 +195,10 @@ footer b{color:var(--ink2);font-weight:600}
      digest's own citations six to one. <b>Every passage here is corroborated</b>
      — by a source that names it, or, where nothing can, by the speaker chanting
      it again in another recording weeks later. Chant heard once and named by
-     nothing is counted below and not shown.</p>
+     nothing is counted below and not shown. <b>Five runs by two upanyāsakars
+     walk this one volume</b>, and they walk different parts of it — the run
+     named after §36 महालयश्राद्धम् is the reason that step is on the page at
+     all.</p>
   <div class="pair" id="pair"></div>
 </header>
 
@@ -231,6 +239,16 @@ footer b{color:var(--ink2);font-weight:600}
   timestamp on this page was typed, and none came from a transcription model.
   A passage whose alignment scored under <span id="floor"></span> is not shown
   at all, rather than shown with a button that would play the wrong seconds.</span>
+  <span><b>Five runs, one volume, two upanyāsakars.</b> smp6 is not the
+  Śrāddham series' alone: both years of Musiri's Mahālaya, his Tarpaṇam run and
+  the Pondicherry Vaiśampāyanar's Pakṣamahālaya were each measured to walk the
+  same digest, so they are on the same spine rather than on pages of their own.
+  They walk <i>different</i> steps of it, which is the point — §36
+  महालयश्राद्धम् is named after the observance the Mahālaya runs expound, and
+  no talk in the Śrāddham series reaches it. The recording and exposition
+  spines group by run; the text and authority spines do not, because a step of
+  the rite and the author of a verse are facts about the digest and owe nothing
+  to which run happened to chant them.</span>
   <span><b>Two numbers, never one.</b> Sections walked measures navigation;
   chant named measures content. The share of the digest's own quotations that
   were seated is <span id="seatpct"></span>, and on its own it would describe
@@ -500,6 +518,15 @@ function pickerRender(items){
   var host = document.getElementById('picker');
   host.textContent = '';
   items.forEach(function(it){
+    // A group heading, not a choice. Five runs share this picker and without
+    // them 208 recordings read as one undifferentiated list.
+    if (it.head){
+      var h = el('div','pickhead');
+      h.appendChild(el('span','hn', it.head));
+      if (it.sub) h.appendChild(el('span','hs', it.sub));
+      host.appendChild(h);
+      return;
+    }
     var b = el('button','pick' + (it.n ? '' : ' empty'));
     b.type = 'button'; b.setAttribute('aria-pressed', String(it.key === sel));
     b.appendChild(el('span','nm', it.nm));
@@ -521,6 +548,32 @@ var ASKS = {
       'the majority of what a listener actually hears, so it is not left out either.'
 };
 
+// The five runs, in the order the builder emits them, each with its own
+// recordings. Series membership is read off the episode -- never inferred from
+// the shape of its key, which would put the builder's SERIES table in a second
+// place and let the two disagree.
+function eachSeries(fn){
+  D.series.forEach(function(x){
+    var keys = Object.keys(D.episodes).filter(function(k){
+      return D.episodes[k].series === x.id;
+    }).sort();
+    if (keys.length) fn(x, keys);
+  });
+}
+function seriesHead(x){
+  var who = (D.speakers[x.speaker]||{}).name || x.speaker;
+  return {head: x.dev + ' · ' + x.rom,
+          sub: who + ' · ' + x.episodes + ' talk' + (x.episodes===1?'':'s') +
+               ' · ' + x.hours + ' h' +
+               (x.playable === x.episodes ? '' :
+                ' · ' + (x.episodes - x.playable) + ' with no video yet')};
+}
+function seriesOf(ep){
+  var id = (D.episodes[ep]||{}).series;
+  for (var i=0;i<D.series.length;i++) if (D.series[i].id===id) return D.series[i];
+  return null;
+}
+
 function draw(){
   document.getElementById('asks').textContent = ASKS[spine];
   var items = [], ids = [], title = '', meta = '';
@@ -537,12 +590,15 @@ function draw(){
     meta = 'printed p.' + s.page + ' · ' + s.nq + ' quotations in the digest · ' +
            s.rows.length + ' chanted here';
   } else if (spine === 'rec'){
-    Object.keys(D.episodes).sort().forEach(function(k){
-      var e = D.episodes[k];
-      items.push({key:k, n:e.rows.length, nm:k + (e.yt ? '' : ' ·') + (e.stale ? ' ⚠' : ''),
-                  mt:(e.date||'') + ' · ' + e.rows.length +
-                     (e.rows.length===1?' passage':' passages') +
-                     (e.yt ? '' : ' · no video yet')});
+    eachSeries(function(x, keys){
+      items.push(seriesHead(x));
+      keys.forEach(function(k){
+        var e = D.episodes[k];
+        items.push({key:k, n:e.rows.length, nm:k + (e.yt ? '' : ' ·') + (e.stale ? ' ⚠' : ''),
+                    mt:(e.date||'no date') + ' · ' + e.rows.length +
+                       (e.rows.length===1?' passage':' passages') +
+                       (e.yt ? '' : ' · no video yet')});
+      });
     });
     if (!sel || !D.episodes[sel]) sel = 'shr-134';
     var e = D.episodes[sel];
@@ -553,16 +609,21 @@ function draw(){
       if (e[kk]) bits.push(e[kk] + ' ' + {seat:'seated', quote:'quoted',
         invocation:'invocation', recurring:'recurring'}[kk]);
     });
-    meta = (e.date||'') + ' · ' + fmt(e.dur) + ' · ' +
+    var sx = seriesOf(sel);
+    meta = (sx ? sx.rom + ' · ' + ((D.speakers[sx.speaker]||{}).name || '') + ' · ' : '') +
+           (e.date||'date unknown') + ' · ' + fmt(e.dur) + ' · ' +
            (bits.length ? bits.join(', ') : 'nothing named') +
            (e.yt ? '' : ' · not yet uploaded') +
            (e.stale ? ' · alignment stale, only seated verses shown' : '');
   } else if (spine === 'exp'){
-    Object.keys(D.episodes).sort().forEach(function(k){
-      var e = D.episodes[k];
-      var m = (e.rows||[]).filter(function(i){ return D.rows[i].kind==='exposition'; }).length;
-      items.push({key:k, n:m, nm:k, mt:(e.date||'') + ' · ' + m +
-                  (m===1?' passage':' passages')});
+    eachSeries(function(x, keys){
+      items.push(seriesHead(x));
+      keys.forEach(function(k){
+        var e = D.episodes[k];
+        var m = (e.rows||[]).filter(function(i){ return D.rows[i].kind==='exposition'; }).length;
+        items.push({key:k, n:m, nm:k, mt:(e.date||'no date') + ' · ' + m +
+                    (m===1?' passage':' passages')});
+      });
     });
     if (!sel || !D.episodes[sel]) sel = 'shr-001';
     var ee = D.episodes[sel];
@@ -624,14 +685,24 @@ fetch('data/shraddha_atlas.json').then(function(r){ return r.json(); })
     '<span><b>' + s.rows + '</b>passages, each one plays</span>' +
     '<span><b>' + s.playable + ' of ' + s.episodes +
       '</b>recordings online (' + s.hours + ' h)</span>';
-  // The subtitle used to carry a hand-typed "134 talks" and the series grew to
-  // 137, so the page contradicted its own stat block. Derived from the episodes
-  // it actually holds; two of them are undated, so the range is over the rest.
+  // The subtitle used to carry a hand-typed "134 talks" by one named speaker.
+  // The series grew to 137 and then to five runs by two upanyāsakars, so both
+  // halves are derived: a typed count contradicted the stat block once already,
+  // and a typed name would now be wrong about 17 of the recordings.
+  // 56 talks carry no date at all (the Mahālaya and Tarpaṇam runs), so the
+  // range is over those that do and says so.
   var yrs = Object.keys(d.episodes).map(function(k){return d.episodes[k].date;})
               .filter(Boolean).map(function(x){return x.slice(0,4);}).sort();
   document.getElementById('talks').textContent =
-    s.episodes + ' talks' + (yrs.length ? ', ' + yrs[0] +
+    s.episodes + ' talks in ' + s.series + ' runs' +
+    (yrs.length ? ', ' + yrs[0] +
       (yrs[yrs.length-1] !== yrs[0] ? '\u2013' + yrs[yrs.length-1] : '') : '');
+  document.getElementById('whom').textContent =
+    d.series.map(function(x){ return x.rom; }).join(' · ') + '  —  ' +
+    Object.keys(d.speakers).map(function(k){
+      var v = d.speakers[k];
+      return v.name + ' (' + v.episodes + ' talks, ' + v.hours + ' h)';
+    }).join(' · ');
   document.getElementById('floor').textContent = d.floor.toFixed(2);
   document.getElementById('seatpct').textContent =
     s.verses_seated + ' of ' + s.verses_total + ' (' +

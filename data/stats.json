@@ -80,21 +80,44 @@
   ]
  },
  "sraddha": {
-  "recordings": 137,
-  "playable": 137,
-  "hours": 21.7,
-  "rows": 1514,
-  "seated": 412,
-  "quoted": 414,
-  "sections_walked": 25,
+  "recordings": 208,
+  "playable": 153,
+  "hours": 41.8,
+  "rows": 2801,
+  "seated": 1265,
+  "quoted": 688,
+  "sections_walked": 36,
   "sections_total": 75,
-  "named_pct": 66.1,
-  "verses_seated": 54,
+  "named_pct": 64.6,
+  "verses_seated": 102,
   "verses_total": 625,
-  "authorities": 57,
+  "authorities": 84,
   "corpus": "श्राद्धकाण्ड: - उत्तरभाग:",
   "speakers": [
-   "Musiri Yagnarama Somayaji Dīkṣitar"
+   "Musiri Yagnarama Somayaji Dīkṣitar",
+   "Pondicherry Vaisampayanar"
+  ],
+  "series": [
+   {
+    "rom": "Śrāddham",
+    "episodes": 137
+   },
+   {
+    "rom": "Mahālaya 2019",
+    "episodes": 17
+   },
+   {
+    "rom": "Mahālaya 2020",
+    "episodes": 4
+   },
+   {
+    "rom": "Tarpaṇam",
+    "episodes": 33
+   },
+   {
+    "rom": "Pakṣamahālaya",
+    "episodes": 17
+   }
   ]
  }
 }

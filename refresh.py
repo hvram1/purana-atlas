@@ -446,10 +446,17 @@ def check_shraddha(path):
     A wrong index therefore does not look wrong. So every index is resolved.
 
     A missing video id is NOT a failure on this page, which is the difference
-    from check_anukramanika. 18 recordings are not uploaded yet, the page
-    disables their play buttons and says so, and `stats.playable` carries the
-    count. What must not happen is the stats claiming more playable than the
-    episodes support, because the header prints that figure.
+    from check_anukramanika. 55 recordings are not uploaded yet -- the whole
+    Mahālaya and Tarpaṇam runs -- the page disables their play buttons and says
+    so, and `stats.playable` carries the count. What must not happen is the
+    stats claiming more playable than the episodes support, because the header
+    prints that figure.
+
+    SINCE 2026-09-10 THE PAGE CARRIES FIVE RUNS BY TWO SPEAKERS, and that adds
+    one more way to render silence: the recording and exposition spines group
+    their pickers by `series`, so an episode whose `series` is absent from the
+    `series` table falls into no group and disappears from both -- while still
+    being counted in every total. Resolved here like any other index.
 
     And the page's central discipline is that coverage is a PAIR -- sections
     walked beside chant named. Either one alone describes the wrong thing. So
@@ -492,6 +499,35 @@ def check_shraddha(path):
     if len(covered) != n:
         bad += fail("%s: the recording spine reaches %d of %d rows -- a passage "
                     "no episode lists can never be played" % (base, len(covered), n))
+
+    # The series table, and every episode's place in it. An episode outside it
+    # is invisible on two of the four spines; a series with no episodes renders
+    # a heading over nothing.
+    series = d.get("series") or []
+    speakers = d.get("speakers") or {}
+    if not series or not speakers:
+        bad += fail("%s carries no series/speakers table -- the recording and "
+                    "exposition pickers group by it" % base)
+    else:
+        sids = {x.get("id") for x in series}
+        orphan = sorted(k for k, e in eps.items() if e.get("series") not in sids)
+        if orphan:
+            bad += fail("%s: %d episode(s) name a series that is not in the "
+                        "table (%s) -- they vanish from the recording and "
+                        "exposition spines while still counting in the totals"
+                        % (base, len(orphan), ', '.join(orphan[:6])))
+        for x in series:
+            mine = sum(1 for e in eps.values() if e.get("series") == x.get("id"))
+            if mine != x.get("episodes"):
+                bad += fail("%s: series %s claims %s recordings, the episodes "
+                            "say %d" % (base, x.get("id"), x.get("episodes"), mine))
+            if x.get("speaker") not in speakers:
+                bad += fail("%s: series %s names speaker %r, who is not in the "
+                            "speakers table" % (base, x.get("id"), x.get("speaker")))
+        tot = sum(v.get("episodes") or 0 for v in speakers.values())
+        if tot != len(eps):
+            bad += fail("%s: the speakers account for %d of %d recordings"
+                        % (base, tot, len(eps)))
 
     st = d.get("stats") or {}
     seated = sum(1 for r in rows if r["kind"] == "seat")
@@ -877,7 +913,12 @@ def main():
                 "verses_total": st["verses_total"],
                 "authorities": st["authorities"],
                 "corpus": sd["corpus"],
-                "speakers": [sd["speaker"]],
+                # Two of them now, and the landing page prints whatever is
+                # here -- so it comes from the table rather than a single key
+                # that used to hold the only speaker there was.
+                "speakers": [v["name"] for v in sd["speakers"].values()],
+                "series": [{"rom": x["rom"], "episodes": x["episodes"]}
+                           for x in sd["series"]],
             }
             # Both halves of the pair, always, even in the log. Printing the
             # seated share alone is how "8.6%" would end up quoted as this
@@ -889,6 +930,10 @@ def main():
             print("  %d of %d sections walked · %s%% of chanted Sanskrit named"
                   % (srad["sections_walked"], srad["sections_total"],
                      srad["named_pct"]))
+            print("  %d runs, %d speaker(s): %s"
+                  % (len(srad["series"]), len(srad["speakers"]),
+                     ", ".join("%s %d" % (x["rom"], x["episodes"])
+                               for x in srad["series"])))
         for pth in (page_dst, data_dst):
             raw, gz = sizes(pth)
             total_raw += raw; total_gz += gz
