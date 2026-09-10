@@ -65,20 +65,20 @@
 body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
   height:100vh;display:grid;grid-template-rows:auto 1fr auto;overflow:hidden;-webkit-font-smoothing:antialiased}
 
-.top{display:flex;align-items:center;gap:15px;padding:9px 18px;background:var(--panel);
+.top{display:flex;align-items:center;gap:12px;row-gap:6px;padding:9px 18px;background:var(--panel);
   border-bottom:1px solid var(--line);flex-wrap:wrap}
 .brand{font-family:var(--serif);font-size:18px;font-weight:600}
 .brand small{font-family:var(--ui);font-size:10px;color:var(--muted);margin-left:8px;
   letter-spacing:.09em;text-transform:uppercase}
 .spacer{flex:1}
-.tog{display:flex;gap:2px;background:var(--sunk);padding:2px;border-radius:7px}
-.tog button{font:inherit;font-size:12px;padding:5px 11px;border:0;border-radius:5px;
+.tog{display:flex;flex-wrap:wrap;gap:2px;background:var(--sunk);padding:2px;border-radius:7px}
+.tog button{font:inherit;font-size:12px;padding:5px 9px;border:0;border-radius:5px;
   background:none;color:var(--muted);cursor:pointer}
 .tog button.on{background:var(--panel);color:var(--ink);box-shadow:var(--shadow);font-weight:500}
 /* Nothing of this kind in the adhyāya on screen. A control that cannot change
    anything must say so, or it reads as broken. */
 .tog button.none{opacity:.35;cursor:default}
-.jump{font:inherit;font-size:13px;font-family:var(--mono);width:92px;padding:5px 9px;
+.jump{font:inherit;font-size:13px;font-family:var(--mono);width:80px;padding:5px 9px;
   border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
 .iconbtn{font:inherit;font-size:14px;padding:5px 9px;border:1px solid var(--line);
   border-radius:6px;background:var(--bg);color:var(--muted);cursor:pointer}
@@ -88,8 +88,59 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
 .rail{border-right:1px solid var(--line)}
 .ctx{border-left:1px solid var(--line)}
 .stage{overflow-y:auto;padding-bottom:40px}
-@media (max-width:1180px){.main{grid-template-columns:210px minmax(0,1fr)}.ctx{display:none}}
-@media (max-width:820px){.main{grid-template-columns:1fr}.rail{display:none}}
+/* --- panels-as-sheets, and the controls that open them --------------------
+   `.sheetbtn` and `.panelclose` exist only under the breakpoints above; at
+   desktop width both panels are always on screen and a control to reveal them
+   would be a control that does nothing. */
+.sheetbtn{display:none;align-items:center;gap:6px}
+.sheetbtn[aria-expanded="true"]{border-color:var(--accent);color:var(--accent)}
+.panelclose{font:inherit;font-size:15px;line-height:1;border:0;background:none;
+  color:var(--muted);cursor:pointer;padding:0 2px;margin:-2px 0 -2px 8px}
+.togs{display:flex;flex-wrap:wrap;align-items:center;gap:11px}
+/* Each toggle row is a different question -- what to show, how good the
+   evidence is, which text layer, which names. Unlabelled they read as one
+   undifferentiated row of chips. */
+.toglbl{font-size:9.5px;letter-spacing:.085em;text-transform:uppercase;
+  color:var(--faint);font-weight:600;align-self:center;padding:0 5px 0 3px;
+  white-space:nowrap}
+.toglbl i{font-style:normal;opacity:.8}
+
+/* THE TWO SIDE COLUMNS BELOW THEIR BREAKPOINTS.
+   They used to be `display:none`. That is why the atlas was unusable on a
+   phone: `.rail` is the ONLY chapter navigation, so a phone reader landed on
+   adhyāya 1 and could not leave it, and `.ctx` carries content that stands
+   nowhere else -- the story-unit summary here, the topic headings and the
+   missing-cards notice on the other two. Hidden, not moved.
+   They are sheets now: the same element, the same builder, slid over the stage
+   by a button that exists only at these widths. Nothing is dropped. */
+@media (max-width:1180px){
+  .main{grid-template-columns:210px minmax(0,1fr)}
+  .ctx{position:fixed;top:0;right:0;bottom:0;width:min(330px,86vw);z-index:42;
+    transform:translateX(101%);transition:transform .22s;box-shadow:var(--shadow);
+    border-left:1px solid var(--line)}
+  .ctx.open{transform:none}
+  #ctxbtn{display:inline-flex}
+}
+@media (max-width:820px){
+  .main{grid-template-columns:1fr}
+  .rail{position:fixed;top:0;left:0;bottom:0;width:min(300px,86vw);z-index:42;
+    transform:translateX(-101%);transition:transform .22s;box-shadow:var(--shadow)}
+  .rail.open{transform:none}
+  #railbtn,#filterbtn{display:inline-flex}
+  /* The filter groups are four axes and a dozen buttons. Left open they ate
+     half a phone screen before a verse appeared, so on narrow widths they
+     fold behind their own button and the toolbar stays one row. */
+  .togs{display:none;flex-basis:100%}
+  .togs.open{display:flex}
+  .verses{padding:0 16px}
+  .chaphead{padding:15px 16px 12px}
+  /* one row per thing, rather than four things fighting for 390px */
+  .transport{grid-template-columns:auto 1fr;gap:9px 10px;padding:8px 12px}
+  .tswitch,.tctl{grid-column:1/-1}
+  .tctl{justify-content:space-between}
+  #ytwrap{width:84px;height:48px}
+}
+@media (prefers-reduced-motion:reduce){.rail,.ctx{transition:none}}
 
 .railhead,.ctxhead{position:sticky;top:0;z-index:2;background:var(--panel);
   border-bottom:1px solid var(--line);padding:8px 13px 7px;font-size:10px;
@@ -132,6 +183,13 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
   padding:3px 7px;border-radius:9px;border:1px solid var(--line);background:var(--bg);
   color:var(--faint);cursor:pointer;opacity:0;transition:opacity .12s}
 .v:hover .vplay,.v.cue .vplay,.vplay:focus{opacity:1}
+/* `.vplay` is revealed by `.v:hover`, and a touch screen has no hover: on a
+   phone the per-verse play button simply never appeared. */
+@media (hover:none){.vplay{opacity:1}}
+/* and by width as well as by pointer: `hover:none` is the right question but
+   a narrow window on a desktop asks it and gets `hover:hover`, so the chip
+   would still hide from anyone reading in a phone-sized window. */
+@media (max-width:820px){.vplay{opacity:1}}
 .vplay:hover{border-color:var(--accent);color:var(--accent)}
 .layer{margin:0 0 11px;padding-left:13px;border-left:2px solid var(--line)}
 .layer.sa{border-left-color:var(--sa)}.layer.en{border-left-color:var(--en)}
@@ -330,14 +388,19 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
 .tctl #tfollow.on{border-color:var(--accent);color:var(--accent)}
 .tctl .t{font-family:var(--mono);font-size:11px;color:var(--muted);min-width:78px;text-align:right;
   font-variant-numeric:tabular-nums}
+/* `⇅` alone named nothing. The word is the control; the glyph is decoration. */
+.tctl #tfollow{width:auto;height:34px;padding:0 13px;border-radius:17px;
+  display:inline-flex;align-items:center;gap:6px;font-size:12px}
 .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);
   color:var(--bg);font-size:12.5px;padding:9px 16px;border-radius:8px;box-shadow:var(--shadow);
   opacity:0;pointer-events:none;transition:opacity .18s;z-index:50;max-width:min(520px,88vw)}
 .toast.show{opacity:1}
 .loading{padding:60px 30px;text-align:center;color:var(--muted)}
 /* A control over a layer that does not exist must not look operable. */
-.tog.nolayer{opacity:.42;position:relative}
-.tog.nolayer button{cursor:not-allowed}
+.tog.nolayer{position:relative}
+/* was `opacity:.42` on the group, which dimmed `Exposition` too -- the one
+   button here that is live. The dead ones carry the dimming now. */
+.tog.nolayer button:disabled{opacity:.42;cursor:not-allowed}
 .gapsec{padding:13px 14px;border-bottom:1px solid var(--line2);
   background:var(--miss-bg);border-left:3px solid var(--miss)}
 .gapsec h4{margin:0 0 7px;font-size:10px;letter-spacing:.09em;text-transform:uppercase;
@@ -360,28 +423,35 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
 
 <div class="top">
   <div class="brand">कार्तिकमासमाहात्म्यम् <small>atlas</small></div>
-  <div class="tog nolayer" id="showtog" title="No entity layer exists for this corpus — see the notice on the right">
-    <button data-k="person" class="on" disabled>Characters</button>
-    <button data-k="people" class="on" disabled>Peoples</button>
-    <button data-k="place" class="on" disabled>Places</button>
-    <button data-k="divine" class="on" disabled>Divine</button>
-    <button data-k="unknown" class="on" disabled>Unclassified</button>
-    <button data-k="band" class="on">Exposition</button>
-  </div>
-  <!-- Evidence grade. An annotation is only as good as what put it there, and
-       the substrate emits all of it: `scan` is a string match with no index
-       behind it, so it is off by default. Turning it on is a deliberate act. -->
-  <div class="tog nolayer" id="gradetog" title="Evidence behind each annotation">
-    <button data-g="index-verse" class="on" disabled>Indexed</button>
-    <button data-g="translation" class="on" disabled>Translated</button>
-    <button data-g="scan" disabled>Scanned</button>
-  </div>
-  <div class="tog nolayer" id="ambtog" title="Mark names that could denote more than one entity">
-    <button data-k="amb" class="on" disabled>Ambiguity</button>
+  <button class="iconbtn sheetbtn" id="railbtn" aria-expanded="false" aria-controls="rail">☰ Adhyāyas</button>
+  <button class="iconbtn sheetbtn" id="ctxbtn" aria-expanded="false" aria-controls="ctx">◧ In this adhyāya</button>
+  <button class="iconbtn sheetbtn" id="filterbtn" aria-expanded="false" aria-controls="togs">⚙ Filters</button>
+  <div class="togs" id="togs">
+    <div class="tog nolayer" id="showtog" title="No entity layer exists for this corpus — see the notice under In this adhyāya">
+      <span class="toglbl">Show <i>· no name layer</i></span>
+      <button data-k="person" class="on" disabled>Characters</button>
+      <button data-k="people" class="on" disabled>Peoples</button>
+      <button data-k="place" class="on" disabled>Places</button>
+      <button data-k="divine" class="on" disabled>Divine</button>
+      <button data-k="unknown" class="on" disabled>Unclassified</button>
+      <button data-k="band" class="on">Exposition</button>
+    </div>
+    <!-- Evidence grade. An annotation is only as good as what put it there, and
+         the substrate emits all of it: `scan` is a string match with no index
+         behind it, so it is off by default. Turning it on is a deliberate act. -->
+    <div class="tog nolayer" id="gradetog" title="Evidence behind each annotation">
+      <span class="toglbl">Evidence <i>· none</i></span>
+      <button data-g="index-verse" class="on" disabled>Indexed</button>
+      <button data-g="translation" class="on" disabled>Translated</button>
+      <button data-g="scan" disabled>Scanned</button>
+    </div>
+    <div class="tog nolayer" id="ambtog" title="Mark names that could denote more than one entity">
+      <button data-k="amb" class="on" disabled>Ambiguity</button>
+    </div>
   </div>
   <div class="spacer"></div>
-  <input class="jump" id="jump" placeholder="1.12">
-  <button class="iconbtn" id="theme" title="Toggle theme">◐</button>
+  <input class="jump" id="jump" placeholder="1.12" aria-label="Jump to a verse, e.g. 1.12" title="Jump to a verse, e.g. 1.12">
+  <button class="iconbtn" id="theme" title="Switch between light and dark">◐ Theme</button>
 </div>
 
 <div class="main">
@@ -399,8 +469,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
   </div>
   <div class="tswitch" id="tswitch"></div>
   <div class="tctl"><span class="t" id="ttime">–:– / –:–</span>
-    <button id="tfollow" class="on" title="Follow the recitation: as the audio reaches each verse, scroll to it and switch adhyāya">⇅</button>
-    <button id="tplay" title="Play / pause">▶</button></div>
+    <button id="tfollow" class="on" title="Follow the recitation: as the audio reaches each verse, scroll to it and switch adhyāya"><span aria-hidden="true">⇅</span> Auto-scroll</button>
+    <button id="tplay" title="Play / pause" aria-label="Play or pause">▶</button></div>
 </div>
 <div class="toast" id="toast"></div>
 <div class="scrim" id="scrim"></div>
@@ -594,7 +664,8 @@ function buildRail(){
 }
 
 function showChapter(ch){
-  curChap=ch;
+  curChap=ch;closePanels();   // the rail is a sheet on a phone; a pick dismisses it
+
   document.querySelectorAll('.chap').forEach(r=>r.classList.toggle('on',+r.dataset.ch===ch));
   const c=V.chapters[ch],stage=$('#stage');stage.innerHTML='';
   const refs=Object.keys(V.verses).filter(r=>V.verses[r].ch===ch).sort(cmpRef);
@@ -1088,12 +1159,45 @@ function openCard(cid,alt){
     body.appendChild(sh);
   }
   box.querySelector('.closebtn').onclick=closeCard;
-  box.classList.add('show');$('#scrim').classList.add('show');
+  closePanels();box.classList.add('show');syncScrim();
   box.querySelector('.closebtn').focus();
 }
-function closeCard(){$('#card').classList.remove('show');$('#scrim').classList.remove('show');}
-$('#scrim').onclick=closeCard;
-addEventListener('keydown',e=>{if(e.key==='Escape')closeCard();});
+function closeCard(){$('#card').classList.remove('show');syncScrim();}
+
+/* ---------------- the side panels as sheets ----------------
+   One scrim serves the card and both panels, so whether it is up is a question
+   about all three and not a line in whichever handler ran last. */
+function syncScrim(){
+  const on=$('#card').classList.contains('show')||document.querySelector('.rail.open,.ctx.open');
+  $('#scrim').classList.toggle('show',!!on);
+}
+function closePanels(){
+  document.querySelectorAll('.rail.open,.ctx.open').forEach(p=>p.classList.remove('open'));
+  document.querySelectorAll('.sheetbtn[aria-expanded]').forEach(b=>b.setAttribute('aria-expanded','false'));
+  syncScrim();
+}
+function togglePanel(id,btn){
+  const p=$('#'+id),wasOpen=p.classList.contains('open');
+  closePanels();
+  if(wasOpen)return;
+  // `.ctx` is rebuilt for every adhyāya, so its head is a new element each
+  // time and the dismissal has to be attached on the way in, not once at load.
+  const head=p.querySelector('.railhead,.ctxhead');
+  if(head&&!head.querySelector('.panelclose')){
+    const x=el('button','panelclose','✕');
+    x.setAttribute('aria-label','Close this panel');
+    x.onclick=closePanels;head.appendChild(x);
+  }
+  p.classList.add('open');btn.setAttribute('aria-expanded','true');syncScrim();
+}
+$('#railbtn').onclick=()=>togglePanel('rail',$('#railbtn'));
+$('#ctxbtn').onclick=()=>togglePanel('ctx',$('#ctxbtn'));
+$('#filterbtn').onclick=()=>{
+  const open=$('#togs').classList.toggle('open');
+  $('#filterbtn').setAttribute('aria-expanded',open?'true':'false');
+};
+$('#scrim').onclick=()=>{closeCard();closePanels();};
+addEventListener('keydown',e=>{if(e.key==='Escape'){closeCard();closePanels();}});
 
 // Three generations around the focus: parents above, focus and spouse in the
 // middle, children below. Dashed edges are pinned by spec rather than asserted
