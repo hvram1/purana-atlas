@@ -118,6 +118,113 @@
     "rom": "Pakṣamahālaya",
     "episodes": 17
    }
-  ]
- }
+  ],
+  "volume": "smp6",
+  "slug": "shraddha",
+  "rom": "Śrāddhakāṇḍa",
+  "page": "shraddha-atlas.html"
+ },
+ "kandas": [
+  {
+   "recordings": 208,
+   "playable": 153,
+   "hours": 41.8,
+   "rows": 2801,
+   "seated": 1265,
+   "quoted": 688,
+   "sections_walked": 36,
+   "sections_total": 75,
+   "named_pct": 64.6,
+   "verses_seated": 102,
+   "verses_total": 625,
+   "authorities": 84,
+   "corpus": "श्राद्धकाण्ड: - उत्तरभाग:",
+   "speakers": [
+    "Musiri Yagnarama Somayaji Dīkṣitar",
+    "Pondicherry Vaisampayanar"
+   ],
+   "series": [
+    {
+     "rom": "Śrāddham",
+     "episodes": 137
+    },
+    {
+     "rom": "Mahālaya 2019",
+     "episodes": 17
+    },
+    {
+     "rom": "Mahālaya 2020",
+     "episodes": 4
+    },
+    {
+     "rom": "Tarpaṇam",
+     "episodes": 33
+    },
+    {
+     "rom": "Pakṣamahālaya",
+     "episodes": 17
+    }
+   ],
+   "volume": "smp6",
+   "slug": "shraddha",
+   "rom": "Śrāddhakāṇḍa",
+   "page": "shraddha-atlas.html"
+  },
+  {
+   "recordings": 16,
+   "playable": 6,
+   "hours": 2.5,
+   "rows": 92,
+   "seated": 43,
+   "quoted": 22,
+   "sections_walked": 15,
+   "sections_total": 64,
+   "named_pct": 48.9,
+   "verses_seated": 24,
+   "verses_total": 667,
+   "authorities": 27,
+   "corpus": "श्राद्धकाण्ड: - पूर्वभाग:",
+   "speakers": [
+    "Musiri Yagnarama Somayaji Dīkṣitar"
+   ],
+   "series": [
+    {
+     "rom": "Aparakāryam",
+     "episodes": 16
+    }
+   ],
+   "volume": "smp5",
+   "slug": "aparakarya",
+   "rom": "Śrāddhakāṇḍa pūrvabhāga",
+   "page": "aparakarya-atlas.html"
+  },
+  {
+   "recordings": 23,
+   "playable": 23,
+   "hours": 3.6,
+   "rows": 121,
+   "seated": 29,
+   "quoted": 47,
+   "sections_walked": 11,
+   "sections_total": 193,
+   "named_pct": 53.9,
+   "verses_seated": 17,
+   "verses_total": 1300,
+   "authorities": 23,
+   "corpus": "वर्णाश्रमधर्मकाण्डः",
+   "speakers": [
+    "Musiri Yagnarama Somayaji Dīkṣitar"
+   ],
+   "series": [
+    {
+     "rom": "Yugadharma",
+     "episodes": 23
+    }
+   ],
+   "volume": "smp1",
+   "slug": "varnasrama",
+   "rom": "Varṇāśramadharmakāṇḍa",
+   "page": "varnasrama-atlas.html"
+  }
+ ]
 }

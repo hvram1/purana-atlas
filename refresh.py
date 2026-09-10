@@ -117,6 +117,14 @@ ANUK = ("shravana-anukramanika.html", "shravana_anukramanika.json")
 # indexes over it (text / recording / authority), so it has a failure mode the
 # others do not and check_shraddha exists for it.
 SRADDHA = ("shraddha-atlas.html", "shraddha_atlas.json")
+# THE DIGEST IS SEVEN VOLUMES AND THREE OF THEM HAVE RECORDINGS. One page
+# template in audio-ingest serves all three: it derives its data file from its
+# own filename, so it is published under each name and fetches its own kāṇḍa.
+# Publishing it three times is a copy, never a rewrite -- the bytes are
+# identical and `check_kandas` asserts it, so the three pages cannot drift.
+KANDAS = [("shraddha-atlas.html", "shraddha_atlas.json"),
+          ("aparakarya-atlas.html", "aparakarya_atlas.json"),
+          ("varnasrama-atlas.html", "varnasrama_atlas.json")]
 SRADDHA_SRC = ("", "build")                            # page dir, data dir
 
 # Shape contract of the substrate. Getting one of these wrong does not degrade
@@ -128,6 +136,40 @@ LISTS = ("kin", "spouse", "sib", "events")
 def fail(msg):
     print("  FAIL  " + msg)
     return 1
+
+
+def check_kandas(page_path, data_path, data_name):
+    """One template published under three names, each fetching its own kāṇḍa.
+
+    `check_fetches` cannot be used here: the page builds its data path from its
+    own filename rather than spelling it, which is what lets three volumes of
+    the digest share one file instead of drifting apart as three copies. So the
+    two halves of that arrangement are checked instead -- that the derivation is
+    still in the page, and that the file it will derive is actually here.
+
+    The failure this catches is a page published under a name whose data file
+    was never built: it renders "Could not load ..." and nothing else, which
+    looks like a broken site rather than a missing volume.
+    """
+    bad = 0
+    html = open(page_path, encoding="utf-8").read()
+    base = os.path.basename(page_path)
+    if "charset=utf-8" not in html.lower() and 'charset="utf-8"' not in html.lower():
+        bad += fail("%s declares no charset; Devanagari will mojibake" % base)
+    if "location.pathname" not in html or "_atlas.json" not in html:
+        bad += fail("%s no longer derives its data file from its own name -- "
+                    "the three kāṇḍa pages would all load the same volume" % base)
+    if not os.path.exists(data_path):
+        bad += fail("%s would fetch data/%s, which is not here -- run "
+                    "scripts/shraddha_atlas.py --all in audio-ingest"
+                    % (base, data_name))
+        return bad
+    # The name the page will actually derive, computed the same way it does.
+    want = base[:-len("-atlas.html")].replace("-", "_") + "_atlas.json"
+    if want != data_name:
+        bad += fail("%s will derive data/%s but is being shipped data/%s"
+                    % (base, want, data_name))
+    return bad
 
 
 def check_fetches(page_path, expect):
@@ -881,23 +923,26 @@ def main():
 
     # The Śrāddha atlas. Third time through the same loop, third check, for the
     # same reason: what this page claims is not what the other two claim.
-    print("\n%s" % SRADDHA[0])
-    srad = {}
-    page_dst = os.path.join(HERE, SRADDHA[0])
-    data_dst = os.path.join(data_dir, SRADDHA[1])
-    if not a.check:
-        for name, sub_dir, dst in ((SRADDHA[0], SRADDHA_SRC[0], page_dst),
-                                   (SRADDHA[1], SRADDHA_SRC[1], data_dst)):
-            src = os.path.join(a.ingest, sub_dir, name)
-            if not os.path.exists(src):
-                bad += fail("missing in audio-ingest: %s -- run "
-                            "scripts/shraddha_atlas.py there" % src)
-                continue
-            shutil.copyfile(src, dst)
-    if not os.path.exists(page_dst):
-        bad += fail("%s is not here" % SRADDHA[0])
-    else:
-        bad += check_fetches(page_dst, (SRADDHA[1],))
+    kandas = []
+    for page_name, data_name in KANDAS:
+        print("\n%s" % page_name)
+        srad = {}
+        page_dst = os.path.join(HERE, page_name)
+        data_dst = os.path.join(data_dir, data_name)
+        if not a.check:
+            # The PAGE always comes from the one template; only the name differs.
+            for src_name, sub_dir, dst in ((SRADDHA[0], SRADDHA_SRC[0], page_dst),
+                                           (data_name, SRADDHA_SRC[1], data_dst)):
+                src = os.path.join(a.ingest, sub_dir, src_name)
+                if not os.path.exists(src):
+                    bad += fail("missing in audio-ingest: %s -- run "
+                                "scripts/shraddha_atlas.py --all there" % src)
+                    continue
+                shutil.copyfile(src, dst)
+        if not os.path.exists(page_dst):
+            bad += fail("%s is not here" % page_name)
+            continue
+        bad += check_kandas(page_dst, data_dst, data_name)
         b, cites = check_selfcontained(page_dst); bad += b
         b, sd = check_shraddha(data_dst); bad += b
         if sd:
@@ -919,7 +964,10 @@ def main():
                 "speakers": [v["name"] for v in sd["speakers"].values()],
                 "series": [{"rom": x["rom"], "episodes": x["episodes"]}
                            for x in sd["series"]],
+                "volume": sd.get("volume"), "slug": sd.get("slug"),
+                "rom": sd.get("rom"), "page": page_name,
             }
+            kandas.append(srad)
             # Both halves of the pair, always, even in the log. Printing the
             # seated share alone is how "8.6%" would end up quoted as this
             # page's coverage, and it describes the wrong thing.
@@ -949,7 +997,12 @@ def main():
         json.dump({"built": datetime.date.today().isoformat(),
                    "simulated_lanes": bool(a.with_sim), "atlases": stats,
                    "witness": wit, "anukramanika": anuk,
-                   "sraddha": srad},
+                   # `sraddha` stays the smp6 kāṇḍa so index.html's existing
+                   # card is untouched; `kandas` is all three, for the
+                   # Smṛtimuktāphalam grouping.
+                   "sraddha": next((k for k in kandas
+                                    if k.get("volume") == "smp6"), {}),
+                   "kandas": kandas},
                   open(os.path.join(data_dir, "stats.json"), "w",
                        encoding="utf-8"),
                   ensure_ascii=False, indent=1)
