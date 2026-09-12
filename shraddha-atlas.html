@@ -122,6 +122,12 @@ code{font-family:var(--mono);font-size:.86em;background:var(--sunk);
 .pickhead .hs{display:block;font-size:10.5px;color:var(--muted);margin-top:2px}
 .picker{border:1px solid var(--line);border-radius:6px;background:var(--panel);
         max-height:34rem;overflow:auto;box-shadow:var(--shadow)}
+/* Stacked on a phone, a 34rem picker puts the passages it selects most of a
+   screen BELOW the fold: the tap highlights a section and nothing else appears
+   to happen. Half the height here -- and it must come after the rule above,
+   which would otherwise win on source order -- with reveal() scrolling the
+   panel up on every pick. */
+@media(max-width:52rem){.picker{max-height:15rem}}
 .pick{display:block;width:100%;text-align:left;appearance:none;background:none;
       border:0;border-bottom:1px solid var(--line);cursor:pointer;font:inherit;
       padding:.5rem .7rem;color:var(--ink2)}
@@ -532,6 +538,25 @@ function renderRows(ids, title, meta){
   pa.onclick = function(){ play(spans, title); };
 }
 
+// When the two columns stack -- a phone -- the panel a pick redraws is below
+// the picker and off the screen, so the tap reads as a dead control. Whether
+// they are stacked is MEASURED (the panel starts at the picker's own left edge)
+// rather than restated as a second copy of the 52rem breakpoint, which would be
+// free to disagree with the stylesheet. The sticky player would otherwise sit
+// on top of the heading, so the margin is its current height.
+function reveal(){
+  var pick = document.getElementById('picker'),
+      head = document.querySelector('.cols .head'),
+      bar  = document.getElementById('player');
+  if (!pick || !head) return;
+  if (Math.abs(head.getBoundingClientRect().left -
+               pick.getBoundingClientRect().left) > 2) return;   // side by side
+  head.style.scrollMarginTop = ((bar ? bar.offsetHeight : 0) + 10) + 'px';
+  head.scrollIntoView({block:'start', behavior:
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ? 'auto' : 'smooth'});
+}
+
 function pickerRender(items){
   var host = document.getElementById('picker');
   host.textContent = '';
@@ -549,7 +574,7 @@ function pickerRender(items){
     b.type = 'button'; b.setAttribute('aria-pressed', String(it.key === sel));
     b.appendChild(el('span','nm', it.nm));
     b.appendChild(el('span','mt', it.mt));
-    b.addEventListener('click', function(){ sel = it.key; draw(); });
+    b.addEventListener('click', function(){ sel = it.key; draw(); reveal(); });
     host.appendChild(b);
   });
 }
