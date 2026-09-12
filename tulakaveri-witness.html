@@ -224,7 +224,6 @@ footer{margin-top:3rem;padding-top:1.25rem;border-top:1px solid var(--line);
 </footer>
 </div>
 
-<script src="https://www.youtube.com/iframe_api"></script>
 <script>
 // ---------------------------------------------------------------------------
 // One player for the whole page. Two recordings of one verse cannot be heard
@@ -253,10 +252,24 @@ function onYouTubeIframeAPIReady(){
 }
 window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
 
+// The API script is fetched HERE, after the callback above exists -- never from
+// a <script src> tag earlier in the page. YouTube's iframe_api fires
+// onYouTubeIframeAPIReady once, whenever its widget script finishes; if the
+// HTML arrives in two pieces (a phone, and the widget script already warm in
+// cache from another atlas on this site) that can happen BEFORE this script has
+// run, the callback is then undefined, and nothing ever builds the player: the
+// page renders in full and every row is silent. Measured in Firefox with the
+// page served in two chunks.
+(function(){ var t = document.createElement('script');
+  t.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(t); })();
+
 function play(spans, label){
   queue = spans; qi = -1;
   document.getElementById('player').classList.remove('idle');
-  setNow(label);
+  // A tap before the player exists must still answer: onReady picks the queue
+  // up a moment later, but a row that goes quiet reads as a broken page.
+  setNow(ready ? label : label + ' — starting the player…');
   if (ready) step(0);          // otherwise onReady picks the queue up
 }
 
