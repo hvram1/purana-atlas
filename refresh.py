@@ -274,6 +274,11 @@ def check_selfcontained(path):
     return 0, sorted(scan.links)
 
 
+# captions.py's `low-confidence` floor. Kept here as well as in the builders
+# because a publish gate is the only place it cannot be forgotten.
+CONF_FLOOR = 0.40
+
+
 def check_4lang(path):
     d = json.load(open(path, encoding="utf-8"))
     bad = 0
@@ -299,6 +304,43 @@ def check_4lang(path):
         bad += fail("real occurrences reference episodes with no row: %s -- "
                     "those verses can never find a URL" % sorted(orphan)[:4])
 
+    # ---- NO PUBLISHED MARK IS BELOW THE CONFIDENCE FLOOR.
+    #
+    # A mark claims a verse is chanted at a second. Below ~0.40 mean per-word
+    # CTC score that claim is not a measurement, and captions.py has called
+    # that `low-confidence` since it was written.
+    #
+    # This is checked HERE, at the publish gate, and not left to each builder,
+    # because leaving it to each builder is exactly how it went wrong.
+    # build_adhyatma_audio.py reads build/seated/*.json directly instead of
+    # going through build_kartika_audio.load_occurrences, where the gate lives
+    # -- so six of the seven code paths gated and the seventh silently did not.
+    # It cost nothing while that lane held one good episode (ar-03, 0.70); when
+    # six more arrived, ar-01's seating was 59% below the floor and 276 bad
+    # marks reached the page, where clicking a verse jumped to unrelated audio.
+    # Nothing in this file noticed, because every check here was structural:
+    # 404s, blank pages, orphan episodes, quote accounting. None asked whether
+    # a mark was the verse it claimed.
+    #
+    # A builder may still choose a stricter floor. What it may not do is
+    # publish a mark it cannot stand behind.
+    name = os.path.basename(path)
+    bad_conf = []
+    for ref, v in (d.get("verses") or {}).items():
+        for lid, rec in (v.get("lang") or {}).items():
+            for o in rec.get("occ") or []:
+                c = o.get("conf")
+                if c is not None and c < CONF_FLOOR:
+                    bad_conf.append((ref, lid, o.get("ep"), c))
+    if bad_conf:
+        worst = sorted(bad_conf, key=lambda x: x[3])[:4]
+        bad += fail("%s publishes %d mark(s) below the %.2f confidence floor "
+                    "-- a mark that cannot be trusted to be the verse is worse "
+                    "than no mark. Worst: %s"
+                    % (name, len(bad_conf), CONF_FLOOR,
+                       ", ".join("%s %s/%s %.2f" % (r, l, e, c)
+                                 for r, l, e, c in worst)))
+
     # ---- the quotation layer accounts for itself, or the build fails.
     #
     # A verse-spined atlas has no row for a verse of another work, so before
@@ -313,7 +355,6 @@ def check_4lang(path):
     #   every named quotation is in exactly one bucket  (the sum identity)
     #   none of them is in no bucket                    (unplaced == 0)
     q = d.get("quote_stats")
-    name = os.path.basename(path)
     if q is None:
         # Absence is only acceptable for a page with no quotation layer at
         # all. An `opening` block or a `q` on any verse means the layer ran
