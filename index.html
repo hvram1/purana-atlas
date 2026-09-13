@@ -112,13 +112,19 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
 .soon .who,.card .who{display:block;color:var(--muted);font-size:.8rem;
   letter-spacing:.02em;margin-top:.3rem}
 .card .who{margin-top:.55rem}
+/* The scope of a scoped atlas, under its numbers. Muted and small
+   because it is a qualifier, not a headline -- but never absent, or
+   the verse count reads as the size of the Purāṇa. */
+.card .scope{margin:.5rem 0 0;color:var(--muted);font-size:.78rem;
+  line-height:1.45}
 .card h2.pitch{font-family:var(--ui);font-size:1.08rem;letter-spacing:-.01em}
 /* The fourth text. NOT a .card, and the difference is the argument: a card
    on this page opens an atlas, and an atlas has a printed edition behind it.
    This one has none, so it gets a shape of its own -- full width, its own
    accent, and its numbers counting correspondences rather than coverage.
-   Giving it a card would have said the site holds five atlases. It holds
-   four -- three purāṇas and a digest -- and two open questions. */
+   Giving it a card would have said the site holds ten atlases. It holds
+   nine -- six texts on their own editions and three kāṇḍas of one digest --
+   and two open questions. */
 .fourth{display:block;margin:0 0 2.5rem;background:var(--panel);
   border:1px solid var(--line);border-top:3px solid var(--s2);
   border-radius:10px;padding:1.4rem;box-shadow:var(--shadow);
@@ -153,12 +159,12 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
 <div class="wrap">
 <header>
   <h1>Purāṇa Atlas</h1>
-  <p class="sub">Six Sanskrit texts, each verse tied to the second it is chanted
-  in a recorded <i>upanyāsam</i>. Click a verse, hear it. Three are purāṇas; the
-  other three are <i>kāṇḍa</i>s of one <i>nibandha</i> — a digest made of
-  quotations, indexed by the authority it credits as well as by the text.
-  <a href="#soon">Five more are in hand</a>, and <a href="#fourth">two further
-  texts have no edition to hang them on</a>.</p>
+  <p class="sub">Nine Sanskrit texts, each verse tied to the second it is chanted
+  in a recorded <i>upanyāsam</i>. Click a verse, hear it. Six stand on editions
+  of their own; the other three are <i>kāṇḍa</i>s of one <i>nibandha</i> — a
+  digest made of quotations, indexed by the authority it credits as well as by
+  the text. <a href="#soon">Two more are in hand</a>, and <a href="#fourth">two
+  further texts have no edition to hang them on</a>.</p>
   <p class="sub why">They are built to argue for two things the Purāṇas still
   lack: recitation that is <i>addressable</i> at the verse, and an <i>index of
   names</i> across the corpus. <a href="#why">Read the two proposals →</a></p>
@@ -249,16 +255,12 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
 
 <section id="soon">
   <h3>What is coming</h3>
-  <p>Five more recordings are in hand. None has been through the alignment pass
-  yet, so nothing below is an atlas — each is a recording and a printed text
-  that have not been put against each other. They are listed because the method
-  above is what they are waiting for, not because a date has been set.</p>
+  <p>Two more recordings are in hand, and they are at different stages. Neither
+  is an atlas yet: one has not been aligned at all, the other has been aligned
+  and has no page. They are listed because that is what they are waiting for,
+  not because a date has been set. The Varāha, Viṣṇu and Garuḍa Purāṇas were on
+  this list until September 2026 and are now atlases above.</p>
   <ul class="soon">
-    <li><b>Varāha</b>, <b>Viṣṇu</b> and <b>Garuḍa Purāṇas</b> — whole Purāṇas
-    rather than a single māhātmya, so each will divide by <i>aṃśa</i> or
-    <i>kāṇḍa</i> the way Virāṭa divides by <i>upaparva</i>, and each will reach
-    a smaller share of its text than a month's māhātmya does.
-    <span class="who">Expounded by Musiri Yagnarama Somayaji Dīkṣitar</span></li>
     <li><b>Vaiśākha Māsa Māhātmya</b> — Skanda Purāṇa, and the near twin of the
     Kārtika atlas already here: a month's māhātmya of comparable length, in the
     same corpus. Expounded by <i>both</i> reciters, so it should carry two lanes
@@ -285,7 +287,7 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
 
 <section id="why">
   <h3>Why this exists</h3>
-  <p>These three atlases are the working proof behind two proposals. They share a
+  <p>These atlases are the working proof behind two proposals. They share a
   corpus, and each is worth more with the other: one would make the Purāṇas
   <i>audible</i> at the verse, the other would make them <i>searchable</i> by
   name.</p>
@@ -358,13 +360,41 @@ const CARDS = {
     blurb: 'Rāma\'s story told by Śiva to Pārvatī, in two lanes that are the '
          + 'same voice on two occasions — seven days of discourse, and one '
          + 'day of continuous recitation. Text from sanskritdocuments.org.'
+  },
+  // The three whole-Purāṇa parāyaṇas. Each is SCOPED to the adhyāyas its
+  // reciter actually walked, which is why every one of them carries a scope
+  // line under its numbers: see the `scope` block in the card builder.
+  varaha: {
+    href: 'varaha-atlas.html',
+    title: 'वराहपुराणम्',
+    rom: 'Varāha Purāṇa · adhyāyas 1–7',
+    blurb: 'Eleven parts walking the opening of the Purāṇa one adhyāya at a '
+         + 'time, in order — the densest recitation on this site, and it '
+         + 'stops at the seventh. Adhyāya 4 is never opened.'
+  },
+  garuda: {
+    href: 'garuda-atlas.html',
+    title: 'गरुडपुराणे ब्रह्मकाण्डः',
+    rom: 'Garuḍa Purāṇa · Brahmakāṇḍa, selected adhyāyas',
+    blurb: 'Seven parts on the Brahma–Mokṣa kāṇḍa, choosing chapters rather '
+         + 'than reading straight through. The first part expounds the '
+         + 'Ācārakāṇḍa instead and is not on this spine.'
+  },
+  vishnu: {
+    href: 'vishnu-atlas.html',
+    title: 'विष्णुपुराणे प्रथमोंऽशः',
+    rom: 'Viṣṇu Purāṇa · first aṃśa, selected adhyāyas',
+    blurb: 'Six parts inside the first aṃśa alone, four of its adhyāyas '
+         + 'expounded at length. The published series is missing its second '
+         + 'part, and the first chants no verse of the text at all.'
   }
 };
 const n = x => x.toLocaleString('en-IN');
 
 fetch('data/stats.json').then(r => r.json()).then(S => {
   const box = document.getElementById('cards');
-  for (const key of ['virata', 'kartika', 'adhyatma']) {
+  for (const key of ['virata', 'kartika', 'adhyatma',
+                     'varaha', 'garuda', 'vishnu']) {
     const c = CARDS[key], s = S.atlases[key];
     if (!s) continue;
     const a = document.createElement('a');
@@ -380,6 +410,19 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
       +     (key === 'adhyatma' ? 'sargas' : 'adhyāyas') + '</span>'
       +   '<span class="stat"><b>' + s.recordings + '</b>recordings</span>'
       + '</div>'
+      // WHAT THE NUMBERS ARE ABOUT. A scoped atlas holds only the adhyāyas its
+      // reciter walked, so "313 verses · 74.8% heard" is true of the page and
+      // says something false about the book: the Varāha Purāṇa is 10,258
+      // verses in 218 adhyāyas, not 313 in 7. Printing the scope beside the
+      // figure is the same rule the Śrāddha card follows in carrying a pair --
+      // a coverage number travelling alone describes the wrong thing.
+      + (s.scope
+          ? '<p class="scope">' + (s.scope === 'run'
+              ? 'Adhyāyas ' + s.span[0] + '–' + s.span[s.span.length - 1]
+              : 'Adhyāyas ' + s.walk.join(', '))
+            + ' of ' + n(s.book_chapters) + ' — '
+            + n(s.book_verses) + ' verses in the whole Purāṇa</p>'
+          : '')
       // Named from stats.json, which reads them off the lanes -- so a page
       // that gains a reciter says so without anyone editing this file.
       + ((s.speakers && s.speakers.length)

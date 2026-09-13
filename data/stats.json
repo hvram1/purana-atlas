@@ -1,5 +1,5 @@
 {
- "built": "2026-09-12",
+ "built": "2026-09-13",
  "simulated_lanes": false,
  "atlases": {
   "virata": {
@@ -47,6 +47,103 @@
     "Ayngarai Rangaswamy Deekshithar"
    ],
    "lane_axis": "mode"
+  },
+  "varaha": {
+   "verses": 313,
+   "chapters": 7,
+   "reached": 234,
+   "reached_pct": 74.8,
+   "lanes": 1,
+   "real_lanes": 1,
+   "recordings": 11,
+   "parts": 11,
+   "both_lanes": 0,
+   "speakers": [
+    "Musiri Yagnarama Somayaji Dīkṣitar"
+   ],
+   "lane_axis": "",
+   "scope": "run",
+   "walk": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+   ],
+   "span": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "book_chapters": 218,
+   "book_verses": 10258
+  },
+  "garuda": {
+   "verses": 452,
+   "chapters": 5,
+   "reached": 239,
+   "reached_pct": 52.9,
+   "lanes": 1,
+   "real_lanes": 1,
+   "recordings": 7,
+   "parts": 7,
+   "both_lanes": 0,
+   "speakers": [
+    "Musiri Yagnarama Somayaji Dīkṣitar"
+   ],
+   "lane_axis": "",
+   "scope": "selected",
+   "walk": [
+    5,
+    7,
+    9,
+    10,
+    17
+   ],
+   "span": [
+    5,
+    7,
+    9,
+    10,
+    17
+   ],
+   "book_chapters": 49,
+   "book_verses": 2895
+  },
+  "vishnu": {
+   "verses": 338,
+   "chapters": 4,
+   "reached": 154,
+   "reached_pct": 45.6,
+   "lanes": 1,
+   "real_lanes": 1,
+   "recordings": 6,
+   "parts": 6,
+   "both_lanes": 0,
+   "speakers": [
+    "Musiri Yagnarama Somayaji Dīkṣitar"
+   ],
+   "lane_axis": "",
+   "scope": "selected",
+   "walk": [
+    9,
+    16,
+    17,
+    19
+   ],
+   "span": [
+    9,
+    16,
+    17,
+    19
+   ],
+   "book_chapters": 22,
+   "book_verses": 1400
   }
  },
  "witness": {

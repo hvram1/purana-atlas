@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>विराटपर्व · Atlas</title>
+<title>Garuḍa Purāṇa · Brahmakāṇḍa atlas</title>
 <style>
 /* Noto Serif Devanagari, SELF-HOSTED. The Sanskrit must not depend on a
    font the visitor happens to have installed, and it must not depend on a
@@ -23,11 +23,12 @@
 }
 
 :root{
+  --miss:#a8562b;--miss-bg:#fbf1ea;
   --bg:#f7f4ee;--panel:#fffdf9;--sunk:#f1ece2;--line:#e2dace;--line2:#efe9dd;
   --ink:#282320;--ink2:#4a423b;--muted:#857a6e;--faint:#a99e90;
   --accent:#8b3a2e;--accent-bg:#f7ebe6;
-  --sa:#7a4a1e;--en:#2e5a8b;--bd:#4a6b32;--pc:#6b4a7a;--an:#8b5a2e;
-  --ta:#a8362b;--kn:#3b5ba5;--te:#2e7d6b;--bn:#7a4e9e;
+  --sa:#7a4a1e;--en:#2e5a8b;--bd:#4a6b32;
+  --s1:#a8362b;--s2:#2e6b8b;--s3:#5d7a3a;   /* two speakers, three series, one text */
   --person:#8b3a2e;--person-bg:#f7ebe6;--place:#2e6b5a;--place-bg:#e6f2ee;
   --people:#8a6d1f;--people-bg:#f5efdd;--divine:#54509b;--divine-bg:#ebeaf6;
   --unknown:#8b8178;--unknown-bg:#efebe6;
@@ -37,22 +38,24 @@
   --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --miss:#e0a072;--miss-bg:#2b2018;
   --bg:#16140f;--panel:#1e1b16;--sunk:#242019;--line:#332d24;--line2:#2a251d;
   --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
   --accent:#d98a72;--accent-bg:#2c211c;
-  --sa:#d4a574;--en:#7fb0dd;--bd:#9ec87a;--pc:#c2a0d4;--an:#d9a878;
-  --ta:#e08878;--kn:#8fa9e8;--te:#6cc4ae;--bn:#b98fdb;
+  --sa:#d4a574;--en:#7fb0dd;--bd:#9ec87a;
+  --s1:#e08878;--s2:#6fa8cc;--s3:#9dbf72;
   --person:#e0a08e;--person-bg:#33201c;--place:#6cc4ae;--place-bg:#12302a;
   --people:#d3b562;--people-bg:#302816;--divine:#a6a2e8;--divine-bg:#232140;
   --unknown:#9a9088;--unknown-bg:#2a2724;
   --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 26px rgba(0,0,0,.4);
 }}
 :root[data-theme="dark"]{
+  --miss:#e0a072;--miss-bg:#2b2018;
   --bg:#16140f;--panel:#1e1b16;--sunk:#242019;--line:#332d24;--line2:#2a251d;
   --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
   --accent:#d98a72;--accent-bg:#2c211c;
-  --sa:#d4a574;--en:#7fb0dd;--bd:#9ec87a;--pc:#c2a0d4;--an:#d9a878;
-  --ta:#e08878;--kn:#8fa9e8;--te:#6cc4ae;--bn:#b98fdb;
+  --sa:#d4a574;--en:#7fb0dd;--bd:#9ec87a;
+  --s1:#e08878;--s2:#6fa8cc;--s3:#9dbf72;
   --person:#e0a08e;--person-bg:#33201c;--place:#6cc4ae;--place-bg:#12302a;
   --people:#d3b562;--people-bg:#302816;--divine:#a6a2e8;--divine-bg:#232140;
   --unknown:#9a9088;--unknown-bg:#2a2724;
@@ -191,10 +194,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
 .layer{margin:0 0 11px;padding-left:13px;border-left:2px solid var(--line)}
 .layer.sa{border-left-color:var(--sa)}.layer.en{border-left-color:var(--en)}
 .layer.bd{border-left-color:var(--bd)}
-/* Quoted from OUTSIDE this parva. Dashed, because unlike the layers above it
-   is not this verse -- it is what the reciter reached for while expounding it.
-   Lifted from kartika-atlas.html, which has carried this layer since the
-   Kārtika build; the two pages share their layout CSS. */
+/* Quoted from OUTSIDE this grantha. Dashed, because unlike the three layers
+   above it is not this verse -- it is what the speaker reached for while
+   expounding it. */
 .layer.q{border-left:2px dashed var(--muted)}
 .q .qr{display:flex;flex-wrap:wrap;align-items:baseline;gap:.35rem .6rem;
   margin:0 0 5px;font-size:13px}
@@ -208,15 +210,18 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
   background:var(--sunk);border:1px solid var(--line);border-radius:4px;
   padding:1px 5px;cursor:pointer}
 .q .qat:hover{border-color:var(--accent);color:var(--accent)}
-/* The maṅgala sequence, before the first verse of the parva. Rendered on
-   adhyāya 1 only, where it belongs in the recording's own order. */
+/* The material chanted before the first verse the lane expounds. Shown on the
+   first adhyāya only, where it falls in the recording's own order, and only
+   when it recurs -- the builder withholds a lane whose "opening" is a tail of
+   one-offs. */
 .opening{border:1px dashed var(--line);border-radius:8px;padding:12px 14px;
   margin:0 0 18px;background:var(--sunk)}
 .opening h3{font-size:10px;letter-spacing:.11em;text-transform:uppercase;
   color:var(--faint);margin:0 0 4px;font-weight:600}
+.opening h3+h3{margin-top:16px}
 .opening .note{font-size:12.5px;color:var(--muted);margin:0 0 10px}
-.opening .qr .qeps{font-family:var(--mono);font-size:11px;color:var(--faint)}
 .opening .qr{margin-bottom:14px}
+.opening .qr .qeps{font-family:var(--mono);font-size:11px;color:var(--faint)}
 .opening .qbar{flex:1 1 100%;display:flex;flex-wrap:wrap;gap:.3rem}
 .opening .qmore{font-family:var(--mono);font-size:11px;color:var(--accent);
   background:none;border:0;cursor:pointer;padding:1px 4px}
@@ -249,15 +254,6 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
 .parthead{margin:0 0 14px}
 .parthead h2{font-family:var(--serif);font-size:1.5rem;margin:0 0 4px}
 .parthead .sub{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:.4rem 1.2rem}
-.layer.pc{border-left-color:var(--pc)}.layer.an{border-left-color:var(--an)}
-.layer.pc .txt,.layer.an .txt{font-family:var(--serif);font-size:16px;line-height:2}
-.pada{cursor:help;border-bottom:1px dotted transparent}
-.pada:hover{border-bottom-color:var(--muted)}
-.hemisep{color:var(--faint);margin:0 6px}
-.derived{font-size:9px;letter-spacing:.06em;color:var(--faint);
-  border:1px solid var(--line);border-radius:3px;padding:0 4px;margin-left:6px;
-  text-transform:none;letter-spacing:0}
-.layer.pc .lowsim{color:var(--muted)}
 .layer .lbl{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);
   margin-bottom:4px;font-weight:600}
 .layer.sa .txt{font-family:var(--serif);font-size:17px;line-height:1.9}
@@ -292,7 +288,11 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
 .bandhead{display:flex;justify-content:space-between;padding:6px 12px;background:var(--sunk);
   font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:600}
 .bandhead span{letter-spacing:.02em;text-transform:none;font-size:11px;font-weight:400;color:var(--muted)}
-.lane{display:grid;grid-template-columns:88px minmax(0,1fr) 52px auto;gap:10px;align-items:center;
+/* The label column was a fixed 88px, sized for 'தமிழ்'. A speaker name plus
+   a 'no url' badge overflows it and clipped to 'Speaker 2 no u'. max-content
+   sizes to whatever the data names the lanes, with the old width as floor. */
+.lane{display:grid;grid-template-columns:minmax(88px,max-content) minmax(0,1fr) 52px auto;
+  gap:10px;align-items:center;
   padding:5px 12px;border-top:1px solid var(--line2)}
 .marks{display:flex;gap:4px;flex-wrap:wrap}
 .mk{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:11px;
@@ -440,6 +440,25 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
   opacity:0;pointer-events:none;transition:opacity .18s;z-index:50;max-width:min(520px,88vw)}
 .toast.show{opacity:1}
 .loading{padding:60px 30px;text-align:center;color:var(--muted)}
+/* A control over a layer that does not exist must not look operable. */
+.tog.nolayer{position:relative}
+/* was `opacity:.42` on the group, which dimmed `Exposition` too -- the one
+   button here that is live. The dead ones carry the dimming now. */
+.tog.nolayer button:disabled{opacity:.42;cursor:not-allowed}
+.gapsec{padding:13px 14px;border-bottom:1px solid var(--line2);
+  background:var(--miss-bg);border-left:3px solid var(--miss)}
+.gapsec h4{margin:0 0 7px;font-size:10px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--miss)}
+.gapsec p{margin:0 0 7px;font-size:12px;line-height:1.6;color:var(--ink2)}
+.gapsec .need{font-size:12px;line-height:1.55;color:var(--ink);background:var(--panel);
+  border:1px solid var(--line);border-radius:6px;padding:8px 10px;margin-top:8px}
+.gapsec code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px}
+.topic{font-family:var(--serif);font-size:13px;line-height:1.5;color:var(--ink);
+  padding:6px 0;border-bottom:1px dotted var(--line2)}
+.topic:last-child{border-bottom:0}
+.chaphead .sub .miss{color:var(--miss)}
+.vnourl{font-family:var(--mono);font-size:10px;color:var(--muted);margin-left:8px;
+  white-space:nowrap}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){.card,.scrim{transition:none}}
 </style>
@@ -447,46 +466,31 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
 <body>
 
 <div class="top">
-  <div class="brand">विराटपर्व <small>atlas</small></div>
+  <div class="brand">गरुडपुराणे ब्रह्मकाण्डः <small>atlas · अध्यायाः 5·7·9·10·17</small></div>
   <button class="iconbtn sheetbtn" id="railbtn" aria-expanded="false" aria-controls="rail">☰ Adhyāyas</button>
   <button class="iconbtn sheetbtn" id="ctxbtn" aria-expanded="false" aria-controls="ctx">◧ In this adhyāya</button>
   <button class="iconbtn sheetbtn" id="filterbtn" aria-expanded="false" aria-controls="togs">⚙ Filters</button>
   <div class="togs" id="togs">
-    <div class="tog" id="showtog">
-      <span class="toglbl">Show</span>
-      <button data-k="person" class="on">Characters</button>
-      <button data-k="people" class="on">Peoples</button>
-      <button data-k="place" class="on">Places</button>
-      <button data-k="divine" class="on">Divine</button>
-      <button data-k="unknown" class="on" title="The substrate derived no type for these -- shown so the gap is visible, not filled">Unclassified</button>
+    <div class="tog nolayer" id="showtog" title="No entity layer exists for this corpus — see the notice under In this adhyāya">
+      <span class="toglbl">Show <i>· no name layer</i></span>
+      <button data-k="person" class="on" disabled>Characters</button>
+      <button data-k="people" class="on" disabled>Peoples</button>
+      <button data-k="place" class="on" disabled>Places</button>
+      <button data-k="divine" class="on" disabled>Divine</button>
+      <button data-k="unknown" class="on" disabled>Unclassified</button>
       <button data-k="band" class="on">Exposition</button>
     </div>
     <!-- Evidence grade. An annotation is only as good as what put it there, and
          the substrate emits all of it: `scan` is a string match with no index
          behind it, so it is off by default. Turning it on is a deliberate act. -->
-    <div class="tog" id="gradetog" title="Evidence behind each annotation">
-      <span class="toglbl">Evidence</span>
-      <button data-g="index-verse" class="on">Indexed</button>
-      <button data-g="translation" class="on">Translated</button>
-      <button data-g="scan">Scanned</button>
+    <div class="tog nolayer" id="gradetog" title="Evidence behind each annotation">
+      <span class="toglbl">Evidence <i>· none</i></span>
+      <button data-g="index-verse" class="on" disabled>Indexed</button>
+      <button data-g="translation" class="on" disabled>Translated</button>
+      <button data-g="scan" disabled>Scanned</button>
     </div>
-    <!-- The DCS layer. Padaccheda is hand-annotated in the Digital Corpus of
-         Sanskrit and is on by default. The anvaya is NOT: it is linearised from a
-         machine parse by this pipeline, it is right often enough to be useful and
-         wrong often enough that nobody should meet it without having asked. -->
-    <!-- The अन्वय toggle is deliberately absent. The lane is built and its data
-         still ships (dcs.v[...].a), but nothing verifies that an ordering is
-         *right*: the permutation gate proves only that the words are the verse's
-         own, and it accepts a random shuffle. There is no human-made Mahābhārata
-         anvaya to score against, and agreement between two models is not
-         evidence -- their errors correlate. It goes back the moment somebody who
-         reads Sanskrit has judged a sample and given us an error rate. Restoring
-         it is this one button plus show.an. -->
-    <div class="tog" id="dcstog" title="Digital Corpus of Sanskrit: hand-annotated word separation">
-      <button data-k="pc" class="on">पदच्छेद</button>
-    </div>
-    <div class="tog" id="ambtog" title="Mark names that could denote more than one entity">
-      <button data-k="amb" class="on">Ambiguity</button>
+    <div class="tog nolayer" id="ambtog" title="Mark names that could denote more than one entity">
+      <button data-k="amb" class="on" disabled>Ambiguity</button>
     </div>
   </div>
   <div class="spacer"></div>
@@ -504,7 +508,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
   <div id="ytwrap" class="hide"><div id="yt"></div></div>
   <div class="tinfo">
     <div class="now"><span id="tnow">nothing playing</span><span class="state" id="tstate"></span></div>
-    <div class="line" id="tline">Click any verse — or a timestamp in the Tamil lane — to hear it.</div>
+    <div class="line" id="tline">Click any verse — or a timestamp in a speaker's lane — to hear it.</div>
     <div class="meta" id="tmeta"></div>
   </div>
   <div class="tswitch" id="tswitch"></div>
@@ -553,7 +557,7 @@ const cmpHit=(a,b)=>(b.res|0)-(a.res|0)
 
 let V=null,A=null,curChap=1,
     show={person:true,people:true,place:true,divine:true,band:true,
-          unknown:true,pc:true,an:false},
+          unknown:true},
   // `scan` has no index behind it -- 8,593 of the annotations here, and
   // the source of most of the ambiguity markers. Off until asked for.
   showAmb=true,
@@ -564,8 +568,8 @@ $('#theme').onclick=()=>{const c=document.documentElement.getAttribute('data-the
   const d=c?c==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
   document.documentElement.setAttribute('data-theme',d?'light':'dark');};
 
-Promise.all([fetch('data/virata_4lang.json').then(r=>r.json()),
-             fetch('data/virata_atlas_substrate.json').then(r=>r.json())])
+Promise.all([fetch('data/garuda_4lang.json').then(r=>r.json()),
+             fetch('data/garuda_atlas_substrate.json').then(r=>r.json())])
  .then(([v,a])=>{V=v;A=a;
    // **4lang is an AUDIO-ONLY file.** It is unmaintained, and the substrate is
    // the sole authority for which verses and chapters exist and what they say.
@@ -583,18 +587,12 @@ Promise.all([fetch('data/virata_4lang.json').then(r=>r.json()),
    V.verses={};
    for(const r in (A.text||{})){
      const t=A.text[r],p=r.split('.');
-     // `bd` too. Without it `v.bd` is undefined for every verse and the
-     // भावदीप branch in verse() is unreachable -- measured at 0 of 2,262
-     // verses. The lane died when the substrate became the authority for
-     // the text and 4lang was demoted to lanes and timings; the commentary
-     // now comes through the substrate, where the text belongs.
-     // `q` comes across with the lanes and for the same reason: a quotation
-     // attached to this verse is audio evidence keyed by ref -- what the
-     // reciter reached for while expounding it -- not text the substrate is
-     // the authority for. Dropping it here is what made the layer invisible
-     // on the first build: the data was in 4lang and never reached V.verses.
-     V.verses[r]={ch:+p[0],v:+p[1],sa:t.sa,en:t.en,bd:t.bd,
-                  lang:(audio[r]||{}).lang||{},q:(audio[r]||{}).q};
+     // Take `lang` AND `q` off the audio record. A fixed key list here is the
+     // same trap the builder's five-key projection was: anything 4lang starts
+     // carrying is dropped on arrival, and nothing errors when it is.
+     const a=audio[r]||{};
+     V.verses[r]={ch:+p[0],v:+p[1],sa:t.sa,en:t.en,lang:a.lang||{},
+                  ...(a.q?{q:a.q}:{})};
    }
    if(A.chapters)V.chapters=A.chapters;
    // An audio lane for a verse the text does not contain is a mismatch to
@@ -603,6 +601,8 @@ Promise.all([fetch('data/virata_4lang.json').then(r=>r.json()),
    if(orphan.length)
      console.warn('4lang has audio for %d verse(s) absent from the text:',
                   orphan.length,orphan);
+   CITE=V.cite_prefix||'';
+   loadMissing(A);
    buildTimelines();
    buildRail();
    const h=location.hash.replace('#','');
@@ -614,10 +614,6 @@ document.querySelectorAll('#showtog button').forEach(b=>b.onclick=()=>{
   show[b.dataset.k]=!show[b.dataset.k];b.classList.toggle('on',show[b.dataset.k]);
   showChapter(curChap);});
 
-document.querySelectorAll('#dcstog button').forEach(b=>b.onclick=()=>{
-  show[b.dataset.k]=!show[b.dataset.k];b.classList.toggle('on',show[b.dataset.k]);
-  showChapter(curChap);});
-
 document.querySelectorAll('#ambtog button').forEach(b=>b.onclick=()=>{
   showAmb=!showAmb;b.classList.toggle('on',showAmb);showChapter(curChap);});
 
@@ -625,9 +621,76 @@ document.querySelectorAll('#gradetog button').forEach(b=>b.onclick=()=>{
   grade[b.dataset.g]=!grade[b.dataset.g];b.classList.toggle('on',grade[b.dataset.g]);
   showChapter(curChap);});
 
+// Read off the substrate rather than restated here, so the page cannot drift
+// from the file that knows why the layer is absent.
+let MISSING={short:'no entity layer',detail:'',needs:'',schema:'',substitute:''};
+// A parva number belongs to a Mahābhārata citation, not to every corpus. The
+// prefix comes from the data so a single-text atlas cites 7.1, not 4.7.1.
+let CITE='';
+// `sim` meant two things at once: the data is invented, and there is nothing
+// to play. Speaker 2 is the second without the first -- every onset is forced
+// alignment off the waveform, the episodes simply have no upload yet. So the
+// page must never call it simulated, and must not offer a play control that
+// will fail. Playable = real data AND a URL to reach it.
+const playable = l => !l.sim && !l.nourl;
+// Finer than the lane: once some of Speaker 2's parts are uploaded and some
+// are not, "can this be played" is a question about the episode behind THIS
+// occurrence, not about the lane as a whole.
+const hasUrl = epId => { const e=episode(epId); return !!(e&&e.yt); };
+// WHY a mark cannot be played, or null if it can. Three reasons that used to
+// collapse into one "not uploaded yet" message, which was wrong for the third.
+//
+// `zw` is a ZERO-WIDTH detection: detected_span was [t, t] -- an onset with no
+// extent measured at all. It is a boundary, not a recitation. Seeking to it
+// drops the listener wherever the episode happened to be at that instant: for
+// 1.12 that was 356.31s of kmm-11, in the middle of adhyaya 13's exposition,
+// so playing it landed you in 13.22's `श्रीकृष्ण उवाच` and ran on into 13.23.
+// The onset is real and stays on screen; it is not somewhere to send a player.
+//
+// This hides no measured recitation. All 28 verses it makes unplayable were
+// reached ONLY by such markers -- not one was ever seated by either speaker,
+// and two of them (4.1 `ब्रह्मोवाच`, 4.56 `गङ्गोवाच`) are the sandhi'd speaker
+// forms matcher.py's own SPEAKER filter documents itself as missing.
+const whyUnplayable = (l,o) =>
+  (l.sim||o.sim) ? 'sim' : !hasUrl(o.ep) ? 'nourl' : o.zw ? 'zw' : null;
+const occPlayable = (l,o) => !whyUnplayable(l,o);
+const unplayableNote = (l,o) => {
+  const w=whyUnplayable(l,o);
+  if(w==='sim') return laneNote(l);
+  if(w==='zw') return l.name+' — the onset here was detected, but no duration '
+    +'was measured. This marks a boundary, not a recitation, so there is '
+    +'nothing to play from it.';
+  return l.name+' chanted this — part '+o.ep.replace(/^[a-z]+-0*/,'')
+    +' is not uploaded yet.';
+};
+// A lane can carry more than one taught series. Speaker 2 expounded this text
+// twice -- Kartika 2024 and Tulakaveri 2025 -- so `part 24` and `part 138` are
+// the same voice on two different occasions, and the part number alone does not
+// say which. The builder stamps `series` on every occurrence; this names it.
+const SERIES={yt4:'Garuḍa Purāṇa'};
+const seriesOf=o=>o.series?(SERIES[o.series]||o.series):null;
+const seriesNote=o=>{const t=seriesOf(o);return t?'\n'+t:'';};
+const laneOcc = (v,l) => ((v.lang[l.id]||{}).occ)||[];
+const anyPlayable = v => V.langs.some(l=>laneOcc(v,l).some(o=>occPlayable(l,o)));
+const laneNote = l => l.nourl
+  ? l.name+' — '+(l.speaker||'')+'. Chanted and force-aligned, but these '
+    +'recordings are not uploaded, so there is nothing to play yet.'
+  : l.sim ? l.name+' is simulated: there is no audio to play.' : '';
+function loadMissing(A){
+  const m=(A.missing||{}).cards; if(!m) return;
+  MISSING={short:m.reason||'no entity layer',detail:m.detail||'',
+           needs:m.needs||'',schema:m.schema_anticipates||'',
+           substitute:m.partial_substitute||''};
+}
+// "heard" for the rail count: any admitted occurrence in a real (non-sim) lane.
+function heardRef(r){
+  const v=V.verses[r]; if(!v||!v.lang) return false;
+  return V.langs.some(l=>!l.sim&&(((v.lang[l.id]||{}).occ)||[]).length);
+}
+
 // Two spines, one rail. The text's -- 72 adhyāyas -- and the recordings' -- 22
 // parts in the order they were chanted. The second exists because 27 measured
-// quotations (159 on Kārtika) belong to no verse of this text and so cannot
+// quotations (125 here) belong to no verse of this text and so cannot
 // appear on the first: before the reciter seats his first verse, or where the
 // seating around them runs backwards, there is no verse to hang them on. On a
 // recording's spine every one of them has an exact second.
@@ -644,13 +707,16 @@ function buildRail(){
   });
   rail.appendChild(tabs);
   if(railMode==='part'){buildRailParts(rail);return;}
-  rail.appendChild(el('div','railhead','72 adhyāyas'));
+    if(railMode==='part'){buildRailParts(rail);return;}
+  rail.appendChild(el('div','railhead',
+    Object.keys(V.chapters).length+' adhyāyas · '+MISSING.short));
   let last=null;
   Object.keys(V.chapters).map(Number).sort((a,b)=>a-b).forEach(ch=>{
     const c=V.chapters[ch];
-    if(c.upaparva!==last){rail.appendChild(el('div','upa',esc(c.upaparva)));last=c.upaparva;}
+    // no upaparva division in a māsa-māhātmya; the count is verses heard,
+    // not verses annotated, because the annotation layer does not exist
     const n=Object.keys(V.verses).filter(r=>V.verses[r].ch===ch)
-      .reduce((a,r)=>a+((A.ann[r]||[]).length?1:0),0);
+      .reduce((a,r)=>a+(heardRef(r)?1:0),0);
     const row=el('div','chap');row.dataset.ch=ch;
     row.innerHTML='<div class="n">'+ch+'</div><div class="nm" title="'+esc(c.name)+'">'+esc(c.name)
       +'</div><div class="cnt">'+n+'</div>';
@@ -742,16 +808,11 @@ function showPart(id){
   const ctx=$('#ctx');if(ctx)ctx.innerHTML='';
 }
 
-// The lowest adhyāya this atlas actually carries. Every atlas built before
-// 2026-09-13 began at 1, so `showChapter(1)` and `ch===1` were right by
-// accident; the purāṇa pages are scoped to the chapters their parāyaṇa
-// walked and need not start there -- Garuḍa's begin at 5, Viṣṇu's at 9.
-// There the literal read an undefined chapter, `c.name` threw inside the
-// loader's .catch, and the page drew its rail and died with 'Could not
-// load data' -- with no console error, and with every data check in
-// refresh.py passing. The opening-invocation block failed the same way and
-// more quietly: ten passages chanted in all seven parts, rendered never.
-// A no-op on this page, and it is here so the next scoped atlas is too.
+// The lowest adhyāya this atlas actually carries. A purāṇa page is
+// scoped to the chapters its parāyaṇa walked, and those need not
+// start at 1 -- Garuḍa's begin at 5. `showChapter(1)` then reads an
+// undefined chapter and throws inside the loader's .catch, so the
+// rail draws and the page dies with 'Could not load data'.
 const firstChap=()=>Math.min.apply(null,
   Object.keys(V.chapters||{}).map(Number).filter(n=>!isNaN(n)));
 function showChapter(ch){
@@ -764,12 +825,15 @@ function showChapter(ch){
   const ev=(A.events||[]).filter(e=>e.chapter_start<=ch);
   const cur=ev.length?ev[ev.length-1]:null;
   const head=el('div','chaphead');
+  const nheard=refs.filter(heardRef).length;
   head.innerHTML='<h2>'+esc(c.name)+'</h2><div class="sub"><span>अध्याय <b>'+ch+'</b></span>'
-    +'<span>'+esc(c.upaparva)+'</span><span><b>'+refs.length+'</b> verses</span></div>'
-    +(cur?'<div class="storytag">📖 <b>'+esc(cur.name_dev)+'</b> — '+esc(cur.summary)+'</div>':'');
+    +'<span><b>'+refs.length+'</b> verses</span>'
+    +'<span><b>'+nheard+'</b> heard</span>'
+    +'<span class="miss">'+esc(MISSING.short)+'</span></div>'
+    +((c.topics||[]).length?'<div class="storytag">📖 '+(c.topics||[]).map(esc).join(' · ')+'</div>':'');
   stage.appendChild(head);
-  // The maṅgala sequence is chanted before 1.1, so it is shown before 1.1 --
-  // on this adhyāya only, never repeated down the parva.
+  // The opening is chanted before the first verse, so it is shown before the
+  // first verse -- on this adhyāya only, never repeated down the text.
   if(ch===firstChap()&&V.opening&&V.opening.length) stage.appendChild(openingBlock(V.opening));
   const box=el('div','verses');
   refs.forEach(r=>box.appendChild(verse(r)));
@@ -876,61 +940,33 @@ function mark(text,hits,surface){
   return out+esc(text.slice(at));
 }
 
-// ---------------- DCS layer: padaccheda and anvaya ----------------
-// A pada carries its own grammar in the tooltip, which is the whole reason the
-// morphology is shipped: `विराट-नगरे  nagara · NOUN · Loc sg neut` is what
-// makes the separation checkable rather than decorative.
-const FEATSHORT={Nom:'nom',Acc:'acc',Ins:'ins',Dat:'dat',Abl:'abl',Gen:'gen',
-  Loc:'loc',Voc:'voc',Cpd:'in compound',Sing:'sg',Dual:'du',Plur:'pl',
-  Masc:'masc',Fem:'fem',Neut:'neut'};
-function gloss(p){
-  const [w,lemma,pos,feats]=p;
-  const bits=(feats||'').split('|').filter(Boolean).map(f=>{
-    const v=f.split('=')[1];return FEATSHORT[v]||v;});
-  return lemma+' · '+pos.toLowerCase()+(bits.length?' · '+bits.join(' '):'');
-}
-function padaSpan(p){
-  return '<span class="pada" title="'+esc(gloss(p))+'">'+esc(p[0])+'</span>';
-}
-// One lane for the whole verse, hemistichs separated -- not one lane each.
-// The verse is the unit a reader is looking at even though the annotation unit
-// underneath is the half-verse.
-function dcsLane(rows,kind){
-  const parts=[];
-  for(const h of rows){
-    if(kind==='an'&&!h.a)continue;
-    const order=kind==='an'?h.a.map(i=>h.p[i]):h.p;
-    // Below a perfect match the words shown are the critical edition's, which
-    // can differ from the mūla above by a word (16.10: केशपाशे / केशपक्षे).
-    // Saying so costs one class; not saying it makes the page look wrong.
-    const cls=h.sim<1?' class="lowsim"':'';
-    parts.push('<span'+cls+(h.sim<1?' title="'+h.ref+', matched at '+h.sim
-      +' -- the words shown are the critical edition\'s"':' title="'+h.ref+'"')
-      +'>'+order.map(padaSpan).join(' ')+'</span>');
-  }
-  if(!parts.length)return null;
-  return parts.join('<span class="hemisep">।</span>');
-}
-
 function verse(ref){
   const v=V.verses[ref],hits=A.ann[ref]||[],node=el('div','v');
   node.id='v-'+ref;node.dataset.ref=ref;
-  const num=el('div','vnum','<span>4.'+v.ch+'.'+v.v+'</span>');
+  const num=el('div','vnum','<span>'+CITE+v.ch+'.'+v.v+'</span>');
   // Only offer to play a verse somebody actually chanted. A `sim` lane is an
   // invented second and must not look like a recording from the verse either.
-  const heard=V.langs.some(l=>!l.sim&&((v.lang[l.id]||{}).occ||[]).some(o=>!o.sim));
-  if(heard){
+  // Heard is heard, by either speaker -- that is what the atlas records.
+  // Whether it can be PLAYED is a separate question, and only one lane can.
+  const heard=V.langs.some(l=>!l.sim&&laneOcc(v,l).length);
+  const canPlay=anyPlayable(v);
+  if(canPlay){
     const pb=el('button','vplay','▶ hear');
     pb.title='Play the recitation from this verse';
     pb.onclick=e=>{e.stopPropagation();playRef(ref);};
     num.appendChild(pb);
+  }else if(heard){
+    // Chanted, and we know by whom and when -- just not playable.
+    const only=V.langs.filter(l=>laneOcc(v,l).length);
+    num.appendChild(el('span','vnourl','◦ '+only.map(l=>l.name).join(', ')
+      +' — no recording uploaded'));
   }
   node.appendChild(num);
   const sa=el('div','layer sa');
   sa.innerHTML='<div class="lbl">मूल</div><div class="txt" id="sa-'+ref+'">'+mark(v.sa,hits,'sa')+'</div>';
   // The other half of the two-way link: the line itself is a play control. A
   // name inside it still opens its card -- `.ent` stops the click before here.
-  if(heard){
+  if(canPlay){
     const txt=sa.querySelector('.txt');
     txt.title='Click to hear this verse chanted';
     txt.onclick=()=>{if(!String(getSelection()))playRef(ref);};
@@ -939,69 +975,33 @@ function verse(ref){
   if(v.en){const e=el('div','layer en');
     e.innerHTML='<div class="lbl">M. N. Dutt · 1897</div><div class="txt">'+mark(v.en,hits,'en')+'</div>';
     node.appendChild(e);}
-  else node.appendChild(el('div','absent','no English translation for this verse'));
-  // Between the mūla and the translations: the separation is of the Sanskrit,
-  // so it belongs next to the Sanskrit.
-  const dcs=(A.dcs&&A.dcs.v[ref])||null;
-  if(dcs){
-    if(show.pc){const t=dcsLane(dcs,'pc');
-      if(t)node.appendChild(el('div','layer pc',
-        '<div class="lbl">पदच्छेद · DCS</div><div class="txt">'+t+'</div>'));}
-    if(show.an){const t=dcsLane(dcs,'an');
-      if(t)node.appendChild(el('div','layer an',
-        '<div class="lbl">अन्वय<span class="derived" title="Linearised from the '
-        +'corpus\'s machine parse by this pipeline -- not a commentator\'s '
-        +'anvaya, and not always right">derived</span></div>'
-        +'<div class="txt">'+t+'</div>'));}
-  }
+  // Silent by design: Dutt has no purāṇa counterpart, so saying it on
+  // each of 1817 verses would report the corpus as a per-verse gap.
+  // The banner says it once instead.
   if(v.bd) node.appendChild(el('div','layer bd',
     '<div class="lbl">भावदीप · नीलकण्ठ</div><div class="txt">'+esc(v.bd)+'</div>'));
-  if(v.q) node.appendChild(quoteLayer(v.q));
+  if(v.q&&v.q.length) node.appendChild(quoteLayer(v.q));
   if(show.band) node.appendChild(band(v,ref));
   bindEnts(node);
   return node;
 }
 
-// What the reciter reached for while expounding this verse, and where to hear
-// it. The builder attached each quotation to the verse last seated before its
-// onset and folded the rows on the CITATION, so one entry is one verse quoted
-// and its chips are every (part, second) it was reached for -- the shape the
-// exposition lane below already uses. Folding per episode instead printed the
-// same verse five times over on Kārtika 2.47.
-function quoteLayer(qs){
-  const n=el('div','layer q');
-  n.appendChild(el('div','lbl','quoted here · '+qs.length
-    +(qs.length===1?' passage':' passages')));
-  qs.forEach(q=>{
-    const r=el('div','qr');
-    const name=q.as||q.cit;
-    r.appendChild(el('span','qcit', q.url
-      ? '<a href="'+esc(q.url)+'" target="_blank" rel="noopener">'+esc(name)+'</a>'
-      : esc(name)));
-    if(q.as&&q.as!==q.cit) r.appendChild(el('span','qalso',q.cit));
-    let last=null;
-    (q.at||[]).forEach(x=>{
-      const part=x.ep.replace(/^[a-z]+-0*/,'');
-      const again=(x.ep===last);
-      const at=el('button','qat',again?mmss(x.s):part+' · '+mmss(x.s));
-      at.title=again?'Chanted again at '+mmss(x.s)+' in part '+part+' — punaḥ'
-                    :'Play from '+mmss(x.s)+' in part '+part;
-      at.onclick=e=>{e.stopPropagation();playQuote(x);};
-      r.appendChild(at);
-      last=x.ep;
-    });
-    if(q.txt) r.appendChild(el('p','qtxt',esc(q.txt)));
-    n.appendChild(r);
-  });
-  return n;
-}
-
+// What the speaker quoted from OUTSIDE this grantha while expounding a verse.
+//
+// Deliberately NOT a lane mark. A mark asserts `this text was chanted at this
+// second`; a Gītā verse in the middle of a walked adhyāya is the opposite claim.
+// So it gets its own dashed layer, below the text and above the lanes.
+//
+// The citation carries two names where the index's address is not the one a
+// reader knows: the Gītā is inside the Mahābhārata, so it is indexed as
+// Bhīṣmaparva and shown as both. The link goes to the source the identifier
+// matched against.
 // The passages chanted before the first verse a lane expounds, folded across
 // its parts: one entry per citation, with every (part, second) it was reached
 // for. The builder shows a lane here only when this is a HABIT -- recurring in
 // at least half its parts -- so a lane whose first seated verse arrives twenty
 // minutes in does not get its unplaced exposition dressed up as an invocation.
-// Nothing in this block is Virāṭa Parva.
+// Nothing in this block is the Garuḍa Purāṇa.
 function openingBlock(blocks){
   const n=el('div','opening');
   blocks.forEach(b=>{
@@ -1013,7 +1013,7 @@ function openingBlock(blocks){
       +(b.all?', '+b.all+' of them in every one':'')+'. '
       +(b.tail?b.tail+' further passages were chanted before it in one or two '
         +'parts only and are not listed. ':'')
-      +'None of it is Virāṭa Parva.'));
+      +'None of it is the Garuḍa Purāṇa.'));
     b.qs.forEach(q=>{
       const r=el('div','qr');
       const name=q.as||q.cit;
@@ -1048,8 +1048,46 @@ function openingBlock(blocks){
   });
   return n;
 }
-// A quotation plays from its own second in its own part. Ported verbatim from
-// kartika-atlas.html: same player, same cue machinery.
+
+function quoteLayer(qs){
+  const n=el('div','layer q');
+  n.appendChild(el('div','lbl','quoted here · '+qs.length
+    +(qs.length===1?' passage':' passages')));
+  qs.forEach((q,i)=>{
+    const r=el('div','qr');
+    const name=q.as||q.cit;
+    r.appendChild(el('span','qcit', q.url
+      ? '<a href="'+esc(q.url)+'" target="_blank" rel="noopener">'+esc(name)+'</a>'
+      : esc(name)));
+    // Show the epic address too when the display name replaced it, so the
+    // citation a reader knows and the one that resolves are both on screen.
+    if(q.as&&q.as!==q.cit) r.appendChild(el('span','qalso',q.cit));
+    // One chip per onset, across every part that reached for this verse. The
+    // builder folds on the CITATION now, not on (part, citation): 2.47 used to
+    // print गरुडपुराणम् 47.48 five times over, once per part, each block
+    // identical but for its chips. A repeated part is `punaḥ` and drops its
+    // number, exactly as the exposition lane below does.
+    let last=null;
+    (q.at||[]).forEach(x=>{
+      const part=x.ep.replace(/^[a-z]+-0*/,''),again=(x.ep===last);
+      const at=el('button','qat',again?mmss(x.s):part+' · '+mmss(x.s));
+      at.title=again?'Chanted again at '+mmss(x.s)+' in part '+part+' — punaḥ'
+                    :'Play from '+mmss(x.s)+' in part '+part;
+      at.onclick=e=>{e.stopPropagation();playQuote(x);};
+      r.appendChild(at);
+      last=x.ep;
+    });
+    if(q.txt) r.appendChild(el('p','qtxt',esc(q.txt)));
+    n.appendChild(r);
+  });
+  return n;
+}
+
+// A quotation is played on whichever lane owns that episode -- an episode
+// belongs to exactly one speaker, and TL is keyed that way. Unlike play() there
+// is no cue INDEX to jump to: the quotation is not one of this text's verses.
+// cueAt() gives the verse whose exposition it fell in, which is what the
+// transport should be showing while it plays.
 function playQuote(q){
   const ep=episode(q.ep);
   if(!ep||!ep.yt){toast('Part '+(ep?ep.n:q.ep.replace(/^[a-z]+-0*/,''))
@@ -1112,7 +1150,7 @@ function band(v,ref){
     const rec=v.lang[l.id],lane=el('div','lane');
     const nodw=rec&&rec.dwell==null;
     lane.innerHTML='<div class="who" style="color:var(--'+l.id+')"><span class="sw" style="background:var(--'
-      +l.id+')"></span>'+l.native+(l.sim?' <em>sim</em>':'')+'</div>'
+      +l.id+')"></span>'+l.native+(l.sim?' <em>sim</em>':l.nourl?' <em>no url</em>':'')+'</div>'
       +(!rec?'<div class="dwell none"></div><div class="t">—</div>'
         :nodw?'<div class="dwell onset" title="He was heard here. How long he stayed was not measured."></div>'
               +'<div class="t">–</div>'
@@ -1124,9 +1162,19 @@ function band(v,ref){
         const m=el('button','mk'+(o.sim?' sim':'')+(o.part?' part':'')+(o.cf?' cf':''));
         m.dataset.ref=ref;m.dataset.l=l.id;m.dataset.i=i;
         m.textContent=o.ep.replace(/^[a-z]+-/,'')+' · '+mmss(o.s);
-        if(o.sim){m.title=l.name+' is simulated — no recording exists, this timing is invented.';
-          m.onclick=()=>toast(l.name+' is simulated: there is no audio to play.');}
+        if(!occPlayable(l,o)){const w=whyUnplayable(l,o);
+          m.title=(w==='sim'?laneNote(l)
+              :w==='zw'?l.name+' — '+(l.speaker||'')+'. Part '
+               +o.ep.replace(/^[a-z]+-0*/,'')+partTitle(o)
+              :l.name+' — '+(l.speaker||'')+'. Part '
+               +o.ep.replace(/^[a-z]+-0*/,'')+' is not uploaded yet.')
+            +(o.conf!=null?'\nconf '+o.conf:'')
+            +(w==='nourl'&&l.nourl
+                ?'\nThe onset is measured; only the upload is missing.':'');
+          m.title+=seriesNote(o);
+          m.onclick=()=>toast(unplayableNote(l,o));}
         else{m.title='Part '+o.ep.replace('vp-','')+' at '+mmss(o.s)
+          +seriesNote(o)
           +(o.conf!=null?'\nconf '+o.conf:'')
           +(o.part?partTitle(o):'')
           +(o.cf?'\n° another verse is aligned to these seconds — at most one is right':'');
@@ -1143,6 +1191,28 @@ function band(v,ref){
 function buildCtx(ch,refs){
   const ctx=$('#ctx');ctx.innerHTML='';
   ctx.appendChild(el('div','ctxhead','In this adhyāya'));
+
+  // The entity column of the Virāṭa atlas cannot be filled here, and an empty
+  // column reads as "nothing found in this adhyāya". Say which it is, once,
+  // in the place the pills would have stood.
+  const gap=el('div','gapsec');
+  gap.appendChild(el('h4',null,'Cards · missing'));
+  gap.appendChild(el('p',null,esc(MISSING.detail)));
+  if(MISSING.schema)
+    gap.appendChild(el('p',null,'Anticipated but undefined: <code>'+esc(MISSING.schema)+'</code>'));
+  if(MISSING.needs)
+    gap.appendChild(el('div','need','<b>Needs:</b> '+esc(MISSING.needs)));
+  ctx.appendChild(gap);
+
+  // The 133 topic headings are the only structural spine this text carries.
+  const tp=(V.chapters[ch]||{}).topics||[];
+  if(tp.length){
+    const sec=el('div','ctxsec');
+    sec.appendChild(el('h4',null,'Topics <span style="float:right;opacity:.7">'+tp.length+'</span>'));
+    tp.forEach(t=>sec.appendChild(el('div','topic',esc(t))));
+    ctx.appendChild(sec);
+  }
+  if(!Object.keys(A.cards||{}).length) return;
   // Both filters, the same way the verses apply them. This column honoured the
   // grade toggles but not the kind toggles, so Characters-off left all 85 pills
   // standing and the control looked dead.
@@ -1281,7 +1351,7 @@ function openCard(cid,alt){
     +(taken.length?taken.length+' verses':'not the reading taken anywhere here')
     +'</span>'));
   taken.slice(0,6).forEach(r=>{
-    const b=el('button',null,'4.'+r);
+    const b=el('button',null,CITE+r);
     b.onclick=()=>{closeCard();showChapter(+r.split('.')[0]);focus(r);};
     seen.appendChild(b);
   });
@@ -1293,7 +1363,7 @@ function openCard(cid,alt){
       +shared.length+' verse'+(shared.length>1?'s':'')+' carry a name this entry '
       +'shares, where the evidence favours a different one</span>'));
     shared.slice(0,6).forEach(r=>{
-      const b=el('button',null,'4.'+r);
+      const b=el('button',null,CITE+r);
       b.onclick=()=>{closeCard();showChapter(+r.split('.')[0]);focus(r);};
       sh.appendChild(b);
     });
@@ -1461,9 +1531,13 @@ window.onYouTubeIframeAPIReady=()=>{
 function play(ref,lid,i){
   const v=V.verses[ref],rec=v&&v.lang[lid];if(!rec||!rec.occ)return;
   const o=rec.occ[i];if(!o)return;
-  if(o.sim){toast(V.langs.find(l=>l.id===lid).name+' is simulated — no audio.');return;}
+  const L0=V.langs.find(l=>l.id===lid)||{};
+  if(!occPlayable(L0,o)){toast(unplayableNote(L0,o));return;}
   const ep=episode(o.ep),cs=(TL[lid]||{})[o.ep];
-  if(!ep||!ep.yt||!cs||!player||!player.loadVideoById){toast('Player not ready yet.');return;}
+  // 'Player not ready yet' was the message for a missing URL too, which is a
+  // different fact and not one waiting will fix.
+  if(ep&&!ep.yt){toast('Part '+ep.n+' has no upload yet — nothing to play.');return;}
+  if(!ep||!cs||!player||!player.loadVideoById){toast('Player not ready yet.');return;}
   const idx=cs.findIndex(c=>c.ref===ref&&c.i===i);
   const same=playing&&playing.ep.id===ep.id;
   restoreMula();
@@ -1482,19 +1556,31 @@ function play(ref,lid,i){
 // forced alignment measured end to end, else the first real onset.
 function playRef(ref){
   const v=V.verses[ref];if(!v)return;
-  const has=lid=>((v.lang[lid]||{}).occ||[]).some(o=>!o.sim);
+  const lane=id=>V.langs.find(l=>l.id===id)||{};
+  const has=lid=>laneOcc(v,lane(lid)).some(o=>occPlayable(lane(lid),o));
   const lid=(playing&&has(playing.lid))?playing.lid
-           :(V.langs.find(l=>!l.sim&&has(l.id))||{}).id;
+           :(V.langs.find(l=>has(l.id))||{}).id;
   if(!lid){
-    const simOnly=V.langs.some(l=>(v.lang[l.id]||{}).occ);
-    toast(simOnly?'Only simulated lanes reach 4.'+ref+' — those seconds are invented, not recorded.'
-                 :'No recording reaches 4.'+ref+' yet.');
+    // Distinguish "nobody chanted it" from "somebody did and it is not
+    // uploaded" -- the second is a fact about our publishing, not the text.
+    const unpub=V.langs.filter(l=>!l.sim&&laneOcc(v,l).length);
+    const simOnly=V.langs.some(l=>l.sim&&(v.lang[l.id]||{}).occ);
+    // Name the part, not just the speaker: with some of a lane uploaded and
+    // some not, "not uploaded yet" without a part number is unactionable.
+    const parts=[...new Set(unpub.flatMap(l=>laneOcc(v,l)
+        .filter(o=>!hasUrl(o.ep)).map(o=>o.ep.replace(/^[a-z]+-0*/,''))))];
+    toast(unpub.length
+        ?unpub.map(l=>l.name).join(' and ')+' chanted '+CITE+ref
+          +' — part '+parts.join(', ')+' is not uploaded yet.'
+        :simOnly?'Only simulated lanes reach '+CITE+ref+' — those seconds are invented.'
+                :'No recording reaches '+CITE+ref+' yet.');
     return;
   }
-  const occ=v.lang[lid].occ;
-  let i=playing?occ.findIndex(o=>!o.sim&&o.ep===playing.ep.id):-1;
-  if(i<0)i=occ.findIndex(o=>!o.sim&&o.hs);
-  if(i<0)i=occ.findIndex(o=>!o.sim);
+  const L=lane(lid),occ=v.lang[lid].occ;
+  const ok=o=>occPlayable(L,o);
+  let i=playing?occ.findIndex(o=>ok(o)&&o.ep===playing.ep.id):-1;
+  if(i<0)i=occ.findIndex(o=>ok(o)&&o.hs);
+  if(i<0)i=occ.findIndex(ok);
   play(ref,lid,i);
 }
 function buildSwitch(ref,cur){
@@ -1504,8 +1590,10 @@ function buildSwitch(ref,cur){
     const rec=v.lang[l.id],b=el('button',l.id===cur?'cur':'');
     b.textContent=l.native;b.style.color='var(--'+l.id+')';
     if(!rec){b.disabled=true;b.title=l.native+' does not reach this verse';}
-    else if(l.sim){b.disabled=true;b.title=l.name+' is simulated — no audio to switch to';}
-    else b.onclick=()=>play(ref,l.id,0);
+    else if(!rec.occ.some(o=>occPlayable(l,o))){
+      b.disabled=true;
+      b.title=laneNote(l)||unplayableNote(l,rec.occ[0]);}
+    else b.onclick=()=>play(ref,l.id,rec.occ.findIndex(o=>occPlayable(l,o)));
     box.appendChild(b);
   });
 }
@@ -1529,7 +1617,7 @@ function showCue(idx,opt){
   }
   const c=P.cues[idx],v=V.verses[c.ref];
   P.ref=c.ref;P.o=c.o;
-  $('#tnow').textContent='4.'+c.ref+'  ·  '+L.native+'  ·  part '+P.ep.n+'  ·  '+mmss(c.s);
+  $('#tnow').textContent=CITE+c.ref+'  ·  '+L.native+'  ·  part '+P.ep.n+'  ·  '+mmss(c.s);
   // The caption is the chanted line, hemistich by hemistich, so `tick` has
   // something to light. Where no extent was measured there are no hemistichs
   // and the verse's own text stands in.
@@ -1546,10 +1634,8 @@ function showCue(idx,opt){
   // 2.4 seconds while expounding adhyāya 1: following it would throw the reader
   // into another adhyāya and back before they could read a line. The caption
   // and the chip still report it -- the page just does not chase it.
-  // And while the reader is in a part's own order, the page must not jump into
-  // the text at all: they asked for this recording, and pressing play on a row
-  // that has no verse would otherwise throw them into whatever adhyāya the
-  // cue happens to name. The caption bar still reports it.
+  // While the reader is in a part's own order the page must not jump into
+  // the text: they asked for this recording.
   if(railMode==='part'){markCue();return;}
   if(opt.hard)focus(c.ref,{});
   else if(followAudio)focus(c.ref,passing(c)

@@ -87,6 +87,18 @@ ATLASES = [
     ("kartika-atlas.html", "kartika_4lang.json", "kartika_atlas_substrate.json"),
     ("adhyatma-atlas.html", "adhyatma_4lang.json",
      "adhyatma_atlas_substrate.json"),
+    # Varāha is scoped to the span its parāyaṇa walks -- adhyāyas 1-7 of 218 --
+    # so `verses` below is 314 and the reached figure is 74.5%, not the 2.3%
+    # the whole purāṇa would give. The substrate carries only that span for
+    # exactly this reason; build_varaha_audio.py says why at length.
+    ("varaha-atlas.html", "varaha_4lang.json", "varaha_atlas_substrate.json"),
+    # Garuḍa and Viṣṇu SELECT chapters rather than walking a run, so their
+    # substrate is the walked set and not the span between its ends -- see
+    # build_purana_audio.walked_span. Importing the chapters between would drop
+    # Viṣṇu from 45.6% to 18.1% for adhyāyas he never undertook, which is the
+    # whole-book error at a smaller scale.
+    ("garuda-atlas.html", "garuda_4lang.json", "garuda_atlas_substrate.json"),
+    ("vishnu-atlas.html", "vishnu_4lang.json", "vishnu_atlas_substrate.json"),
 ]
 
 # The Tulā Kāverī page is not an atlas and deliberately does not have a
@@ -286,6 +298,49 @@ def check_4lang(path):
     if orphan:
         bad += fail("real occurrences reference episodes with no row: %s -- "
                     "those verses can never find a URL" % sorted(orphan)[:4])
+
+    # ---- the quotation layer accounts for itself, or the build fails.
+    #
+    # A verse-spined atlas has no row for a verse of another work, so before
+    # 2026-09-12 `quotes.py`'s output reached the .srt and stopped -- Virāṭa
+    # was dropping 483 of 557 and the page looked fine. The fix attaches each
+    # quotation to the verse last seated before its onset; `quote_stats` is
+    # how that fix PROVES itself, and until now it was a number in a file
+    # nothing read. A silent regression here looks exactly like an atlas whose
+    # speaker happened to quote less.
+    #
+    # Two assertions, and the second is the one with teeth:
+    #   every named quotation is in exactly one bucket  (the sum identity)
+    #   none of them is in no bucket                    (unplaced == 0)
+    q = d.get("quote_stats")
+    name = os.path.basename(path)
+    if q is None:
+        # Absence is only acceptable for a page with no quotation layer at
+        # all. An `opening` block or a `q` on any verse means the layer ran
+        # and its accounting was dropped in transit -- which is what
+        # build_virata_4lang.py did to Virāṭa's, carrying `opening` and
+        # `quote_text` forward and leaving `stats` behind.
+        ran = bool(d.get("opening")) or any(
+            v.get("q") for v in d.get("verses", {}).values())
+        if ran:
+            bad += fail("%s renders quotations but publishes no quote_stats -- "
+                        "the layer cannot show it dropped nothing" % name)
+    else:
+        parts = ("self", "verse", "opening", "inverted")
+        missing = [k for k in parts + ("named", "unplaced") if k not in q]
+        if missing:
+            bad += fail("%s quote_stats is missing %s" % (name, missing))
+        else:
+            if q["unplaced"]:
+                bad += fail("%s: %d named quotation(s) reached no bucket "
+                            "(unplaced) -- they are on no verse, in no opening "
+                            "block, and not in this grantha, so the page shows "
+                            "them nowhere" % (name, q["unplaced"]))
+            got = sum(q[k] for k in parts)
+            if got != q["named"]:
+                bad += fail("%s quote_stats does not reconcile: %d named but "
+                            "self+verse+opening+inverted = %d"
+                            % (name, q["named"], got))
     return bad, d
 
 
@@ -816,6 +871,23 @@ def main():
                                 if l.get("speaker")}),
             "lane_axis": four.get("lane_axis") or "",
         }
+        # A SCOPED ATLAS MUST SAY SO ON THE INDEX. The purāṇa pages carry only
+        # the adhyāyas their parāyaṇa walked, so `verses` above is 313 for
+        # Varāha -- and a card reading "313 verses · 74.8% heard" states, to
+        # anyone who does not already know, that the Varāha Purāṇa is 313
+        # verses. It is 10,258. The builder already measured both; this carries
+        # them so index.html can print "adhyāyas 1-7 of 218" beside the figure
+        # instead of a number that is right about the page and wrong about the
+        # book. Same rule as the Śrāddha pair: never one coverage figure.
+        fs = four.get("stats") or {}
+        if fs.get("book_verses"):
+            stats[key].update({
+                "scope": four.get("scope") or "",
+                "walk": (four.get("walk") or {}).get("chapters") or [],
+                "span": (four.get("walk") or {}).get("span") or [],
+                "book_chapters": fs["book_chapters"],
+                "book_verses": fs["book_verses"],
+            })
         print("  %d verses · %d reached by a real recording (%.1f%%) · "
               "%d lanes (%d real) · %d parts, %d recordings"
               % (verses, reached, stats[key]["reached_pct"],

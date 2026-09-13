@@ -210,6 +210,50 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
   background:var(--sunk);border:1px solid var(--line);border-radius:4px;
   padding:1px 5px;cursor:pointer}
 .q .qat:hover{border-color:var(--accent);color:var(--accent)}
+/* The material chanted before the first verse the lane expounds. Shown on the
+   first adhyāya only, where it falls in the recording's own order, and only
+   when it recurs -- the builder withholds a lane whose "opening" is a tail of
+   one-offs. */
+.opening{border:1px dashed var(--line);border-radius:8px;padding:12px 14px;
+  margin:0 0 18px;background:var(--sunk)}
+.opening h3{font-size:10px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--faint);margin:0 0 4px;font-weight:600}
+.opening h3+h3{margin-top:16px}
+.opening .note{font-size:12.5px;color:var(--muted);margin:0 0 10px}
+.opening .qr{margin-bottom:14px}
+.opening .qr .qeps{font-family:var(--mono);font-size:11px;color:var(--faint)}
+.opening .qbar{flex:1 1 100%;display:flex;flex-wrap:wrap;gap:.3rem}
+.opening .qmore{font-family:var(--mono);font-size:11px;color:var(--accent);
+  background:none;border:0;cursor:pointer;padding:1px 4px}
+.opening .qmore:hover{text-decoration:underline}
+/* THE PART'S OWN ORDER. The rail switches between the text's spine and the
+   recordings': a quotation that no verse can carry still has an exact place
+   here, which is the whole reason this view exists. */
+.railtabs{display:flex;gap:4px;padding:8px 10px 6px}
+.railtabs button{flex:1;font:inherit;font-family:var(--mono);font-size:11px;
+  padding:5px 8px;border-radius:6px;border:1px solid var(--line);cursor:pointer;
+  background:var(--bg);color:var(--muted)}
+.railtabs button.on{background:var(--sunk);color:var(--ink);border-color:var(--muted)}
+.prow{display:grid;grid-template-columns:76px 1fr;gap:12px;padding:7px 0;
+  border-top:1px solid var(--line);align-items:baseline}
+.prow:first-of-type{border-top:0}
+.prow.q{border-left:2px dashed var(--muted);padding-left:10px;margin-left:-12px}
+.prow .tat{font-family:var(--mono);font-size:11px;color:var(--muted);
+  background:var(--sunk);border:1px solid var(--line);border-radius:4px;
+  padding:1px 5px;cursor:pointer}
+.prow .tat:hover{border-color:var(--accent);color:var(--accent)}
+.prow .tref{font-family:var(--mono);font-size:11.5px;color:var(--accent);
+  cursor:pointer;border-bottom:1px solid transparent}
+.prow .tref:hover{border-bottom-color:var(--accent)}
+.prow .tcit{font-weight:600;font-size:13px;color:var(--ink)}
+.prow .tcit a{color:inherit;text-decoration:none;border-bottom:1px solid var(--line)}
+.prow .tline{font-family:var(--serif);font-size:14.5px;color:var(--ink2);
+  line-height:1.7;display:block}
+.prow .twhy{font-family:var(--mono);font-size:10.5px;color:var(--faint);
+  margin-left:.5rem}
+.parthead{margin:0 0 14px}
+.parthead h2{font-family:var(--serif);font-size:1.5rem;margin:0 0 4px}
+.parthead .sub{font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:.4rem 1.2rem}
 .layer .lbl{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);
   margin-bottom:4px;font-weight:600}
 .layer.sa .txt{font-family:var(--serif);font-size:17px;line-height:1.9}
@@ -562,7 +606,7 @@ Promise.all([fetch('data/adhyatma_4lang.json').then(r=>r.json()),
    buildTimelines();
    buildRail();
    const h=location.hash.replace('#','');
-   if(h&&V.verses[h]){showChapter(+h.split('.')[0]);focus(h);}else showChapter(1);})
+   if(h&&V.verses[h]){showChapter(+h.split('.')[0]);focus(h);}else showChapter(firstChap());})
  .catch(e=>{$('#stage').innerHTML='<div class="loading">Could not load data.<br>'
    +'Serve with <code>python3 -m http.server 8137</code><br><small>'+esc(e.message)+'</small></div>';});
 
@@ -637,8 +681,26 @@ function heardRef(r){
   return V.langs.some(l=>!l.sim&&(((v.lang[l.id]||{}).occ)||[]).length);
 }
 
+// Two spines, one rail. The text's -- 72 adhyāyas -- and the recordings' -- 22
+// parts in the order they were chanted. The second exists because 27 measured
+// quotations (159 on Kārtika) belong to no verse of this text and so cannot
+// appear on the first: before the reciter seats his first verse, or where the
+// seating around them runs backwards, there is no verse to hang them on. On a
+// recording's spine every one of them has an exact second.
+let railMode='text';
 function buildRail(){
-  const rail=$('#rail');
+  const rail=$('#rail');rail.innerHTML='';
+  const tabs=el('div','railtabs');
+  [['text','Adhyāyas'],['part','Parts']].forEach(([m,label])=>{
+    const b=el('button',m===railMode?'on':'',label);
+    b.onclick=()=>{railMode=m;buildRail();
+      if(m==='part'){const e=(V.ta_episodes||[])[0];if(e)showPart(e.id);}
+      else showChapter(curChap||firstChap());};
+    tabs.appendChild(b);
+  });
+  rail.appendChild(tabs);
+  if(railMode==='part'){buildRailParts(rail);return;}
+    if(railMode==='part'){buildRailParts(rail);return;}
   rail.appendChild(el('div','railhead',
     Object.keys(V.chapters).length+' sargas · '+MISSING.short));
   let last=null;
@@ -656,6 +718,101 @@ function buildRail(){
   });
 }
 
+function buildRailParts(rail){
+  const eps=(V.ta_episodes||[]).filter(e=>e.timeline);
+  rail.appendChild(el('div','railhead',eps.length+' parts, in order'));
+  eps.forEach(e=>{
+    const q=e.timeline.filter(r=>r.cit).length;
+    const row=el('div','chap');row.dataset.part=e.id;
+    row.innerHTML='<div class="n">'+(e.n||e.id.replace(/^[a-z]+-0*/,''))+'</div>'
+      +'<div class="nm">'+esc(fmtdur(e.duration))+(e.yt?'':' · no video')+'</div>'
+      +'<div class="cnt">'+q+'</div>';
+    row.title=q+' quotation'+(q===1?'':'s')+' · '
+      +e.timeline.filter(r=>!r.cit).length+' verses of this text';
+    row.onclick=()=>showPart(e.id);
+    rail.appendChild(row);
+  });
+}
+const fmtdur=s=>s?Math.round(s/60)+' min':'—';
+
+// One part, in the order it was chanted. Verses of this text link back into
+// the text's spine; quotations say what happened to them there -- attached to
+// a verse, chanted before the text began, or not placed at all. Nothing is
+// hidden here, which is the point: this is the only view where the rows no
+// verse can carry are visible.
+function showPart(id){
+  const ep=episode(id);if(!ep||!ep.timeline)return;
+  closePanels();
+  document.querySelectorAll('.chap').forEach(r=>
+    r.classList.toggle('on',r.dataset.part===id));
+  const stage=$('#stage');stage.innerHTML='';
+  const nq=ep.timeline.filter(r=>r.cit).length,nv=ep.timeline.length-nq;
+  const head=el('div','parthead');
+  head.innerHTML='<h2>Part '+(ep.n||id.replace(/^[a-z]+-0*/,''))+'</h2>'
+    +'<div class="sub"><span>'+esc(fmtdur(ep.duration))+'</span>'
+    +'<span><b>'+nv+'</b> verses of this text</span>'
+    +'<span><b>'+nq+'</b> quotations</span>'
+    +(ep.yt?'':'<span>not uploaded — nothing here will play</span>')+'</div>';
+  stage.appendChild(head);
+  const box=el('div','verses');
+  // `open` is not always literally before the first seated verse: it also
+  // catches the case where the ONLY thing seated so far was a verse the
+  // reciter chanted and then left, which the builder reads as still invoking.
+  // "in the opening" is true of both; "before the text" would contradict a
+  // verse row the reader can see further up the page.
+  const WHY={verse:'attached to ',open:'in the opening',
+             inv:'not placed — the seating runs backwards here'};
+  ep.timeline.forEach(r=>{
+    const row=el('div','prow'+(r.cit?' q':''));
+    const left=el('div');
+    [r.s].concat(r.also||[]).forEach((t,j)=>{
+      const at=el('button','tat',mmss(t));
+      at.title=j?'Chanted again at '+mmss(t)+' — punaḥ'
+                :'Play from '+mmss(t)+' in this part';
+      at.onclick=()=>playQuote({ep:id,s:t});
+      left.appendChild(at);
+    });
+    row.appendChild(left);
+    const right=el('div');
+    if(r.cit){
+      const qt=(V.quote_text||{})[r.cit]||{};
+      right.appendChild(el('span','tcit', qt.url
+        ? '<a href="'+esc(qt.url)+'" target="_blank" rel="noopener">'+esc(r.cit)+'</a>'
+        : esc(r.cit)));
+      right.appendChild(el('span','twhy',
+        r.why==='verse'?(WHY.verse+(r.at||'')):(WHY[r.why]||'')));
+      if(qt.txt) right.appendChild(el('span','tline',esc(qt.txt)));
+    }else{
+      const v=V.verses[r.ref]||{};
+      const ref=el('span','tref','4.'+(r.ref||''));
+      ref.title='Go to this verse in the text';
+      ref.onclick=()=>{railMode='text';buildRail();
+                       showChapter(+r.ref.split('.')[0]);focus(r.ref);};
+      right.appendChild(ref);
+      right.appendChild(el('span','tline',esc((v.sa||'').slice(0,150)
+        +((v.sa||'').length>150?'…':''))));
+    }
+    row.appendChild(right);
+    box.appendChild(row);
+  });
+  stage.appendChild(box);
+  // The context rail answers "what is in this adhyāya" and there is no adhyāya
+  // here. Emptied rather than left standing with the last chapter's names.
+  const ctx=$('#ctx');if(ctx)ctx.innerHTML='';
+}
+
+// The lowest adhyāya this atlas actually carries. Every atlas built before
+// 2026-09-13 began at 1, so `showChapter(1)` and `ch===1` were right by
+// accident; the purāṇa pages are scoped to the chapters their parāyaṇa
+// walked and need not start there -- Garuḍa's begin at 5, Viṣṇu's at 9.
+// There the literal read an undefined chapter, `c.name` threw inside the
+// loader's .catch, and the page drew its rail and died with 'Could not
+// load data' -- with no console error, and with every data check in
+// refresh.py passing. The opening-invocation block failed the same way and
+// more quietly: ten passages chanted in all seven parts, rendered never.
+// A no-op on this page, and it is here so the next scoped atlas is too.
+const firstChap=()=>Math.min.apply(null,
+  Object.keys(V.chapters||{}).map(Number).filter(n=>!isNaN(n)));
 function showChapter(ch){
   curChap=ch;closePanels();   // the rail is a sheet on a phone; a pick dismisses it
 
@@ -673,6 +830,9 @@ function showChapter(ch){
     +'<span class="miss">'+esc(MISSING.short)+'</span></div>'
     +((c.topics||[]).length?'<div class="storytag">📖 '+(c.topics||[]).map(esc).join(' · ')+'</div>':'');
   stage.appendChild(head);
+  // The opening is chanted before the first verse, so it is shown before the
+  // first verse -- on this adhyāya only, never repeated down the text.
+  if(ch===firstChap()&&V.opening&&V.opening.length) stage.appendChild(openingBlock(V.opening));
   const box=el('div','verses');
   refs.forEach(r=>box.appendChild(verse(r)));
   stage.appendChild(box);
@@ -834,6 +994,59 @@ function verse(ref){
 // reader knows: the Gītā is inside the Mahābhārata, so it is indexed as
 // Bhīṣmaparva and shown as both. The link goes to the source the identifier
 // matched against.
+// The passages chanted before the first verse a lane expounds, folded across
+// its parts: one entry per citation, with every (part, second) it was reached
+// for. The builder shows a lane here only when this is a HABIT -- recurring in
+// at least half its parts -- so a lane whose first seated verse arrives twenty
+// minutes in does not get its unplaced exposition dressed up as an invocation.
+// Nothing in this block is the Adhyātma Rāmāyaṇa.
+function openingBlock(blocks){
+  const n=el('div','opening');
+  blocks.forEach(b=>{
+    n.appendChild(el('h3', b.label?('before the first verse · '+b.label)
+                                  :'before the first verse'));
+    n.appendChild(el('p','note',
+      b.qs.length+' passages, chanted before the first verse of the text in '
+      +b.eps+' of '+b.parts+' parts'
+      +(b.all?', '+b.all+' of them in every one':'')+'. '
+      +(b.tail?b.tail+' further passages were chanted before it in one or two '
+        +'parts only and are not listed. ':'')
+      +'None of it is the Adhyātma Rāmāyaṇa.'));
+    b.qs.forEach(q=>{
+      const r=el('div','qr');
+      const name=q.as||q.cit;
+      r.appendChild(el('span','qcit', q.url
+        ? '<a href="'+esc(q.url)+'" target="_blank" rel="noopener">'+esc(name)+'</a>'
+        : esc(name)));
+      r.appendChild(el('span','qeps','in '+q.eps+' of '+b.parts+' parts'));
+      // Text before chips, and chips folded: 22 parts times two onsets is
+      // forty buttons a row, which walled each stotra off from its own
+      // citation and made the block four screens tall.
+      if(q.txt) r.appendChild(el('p','qtxt',esc(q.txt)));
+      const bar=el('div','qbar'),SHOW=5;
+      let last=null;
+      const chips=(q.at||[]).map(x=>{
+        const part=x.ep.replace(/^[a-z]+-0*/,''),again=(x.ep===last);
+        const at=el('button','qat',again?mmss(x.s):part+' · '+mmss(x.s));
+        at.title='Play from '+mmss(x.s)+' in part '+part;
+        at.onclick=e=>{e.stopPropagation();playQuote(x);};
+        last=x.ep;
+        return at;
+      });
+      chips.slice(0,SHOW).forEach(c=>bar.appendChild(c));
+      if(chips.length>SHOW){
+        const more=el('button','qmore','+'+(chips.length-SHOW)+' more');
+        more.onclick=e=>{e.stopPropagation();more.remove();
+                         chips.slice(SHOW).forEach(c=>bar.appendChild(c));};
+        bar.appendChild(more);
+      }
+      r.appendChild(bar);
+      n.appendChild(r);
+    });
+  });
+  return n;
+}
+
 function quoteLayer(qs){
   const n=el('div','layer q');
   n.appendChild(el('div','lbl','quoted here · '+qs.length
@@ -847,17 +1060,20 @@ function quoteLayer(qs){
     // Show the epic address too when the display name replaced it, so the
     // citation a reader knows and the one that resolves are both on screen.
     if(q.as&&q.as!==q.cit) r.appendChild(el('span','qalso',q.cit));
-    // One chip per onset. A quotation record is a hemistich, so a two-line
-    // verse arrives twice and the reciter may re-chant it besides; the builder
-    // folds those into one entry and keeps every onset, because each is a real
-    // second to listen from. The first is the verse; the rest are `punaḥ`.
-    const part=q.ep.replace(/^[a-z]+-0*/,'');
-    (q.at||[q.s]).forEach((t,j)=>{
-      const at=el('button','qat',j?mmss(t):part+' · '+mmss(t));
-      at.title=j?'Chanted again at '+mmss(t)+' — punaḥ'
-               :'Play from '+mmss(t)+' in part '+part;
-      at.onclick=e=>{e.stopPropagation();playQuote({ep:q.ep,s:t});};
+    // One chip per onset, across every part that reached for this verse. The
+    // builder folds on the CITATION now, not on (part, citation): 2.47 used to
+    // print गरुडपुराणम् 47.48 five times over, once per part, each block
+    // identical but for its chips. A repeated part is `punaḥ` and drops its
+    // number, exactly as the exposition lane below does.
+    let last=null;
+    (q.at||[]).forEach(x=>{
+      const part=x.ep.replace(/^[a-z]+-0*/,''),again=(x.ep===last);
+      const at=el('button','qat',again?mmss(x.s):part+' · '+mmss(x.s));
+      at.title=again?'Chanted again at '+mmss(x.s)+' in part '+part+' — punaḥ'
+                    :'Play from '+mmss(x.s)+' in part '+part;
+      at.onclick=e=>{e.stopPropagation();playQuote(x);};
       r.appendChild(at);
+      last=x.ep;
     });
     if(q.txt) r.appendChild(el('p','qtxt',esc(q.txt)));
     n.appendChild(r);
@@ -1414,6 +1630,9 @@ function showCue(idx,opt){
   // 2.4 seconds while expounding adhyāya 1: following it would throw the reader
   // into another adhyāya and back before they could read a line. The caption
   // and the chip still report it -- the page just does not chase it.
+  // While the reader is in a part's own order the page must not jump into
+  // the text: they asked for this recording.
+  if(railMode==='part'){markCue();return;}
   if(opt.hard)focus(c.ref,{});
   else if(followAudio)focus(c.ref,passing(c)
       ? {hash:false,chapter:false,scroll:false}
