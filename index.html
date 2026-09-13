@@ -64,6 +64,17 @@ h1{font-family:var(--serif);font-size:2.1rem;line-height:1.2;margin:0 0 .5rem;
 .grouphead h2{margin:0 0 6px;font-size:20px}
 .grouphead p{margin:0;font-size:13.5px;line-height:1.6;color:var(--muted);max-width:62ch}
 .grouphead .rest{font-size:12.5px;color:var(--faint)}
+/* The attested verse under a group head: the Devanagari as the
+   transcription decoded it, and a link to the second it is chanted. */
+.attest{display:block;margin:10px 0 2px;padding:9px 12px;
+  border-left:2px solid var(--accent);background:var(--sunk);
+  border-radius:0 6px 6px 0}
+.attest .dev{display:block;font-size:14.5px;line-height:1.75;color:var(--ink)}
+.attest .hear{display:inline-block;margin-top:5px;font-size:12px;
+  font-weight:600;color:var(--accent);text-decoration:none}
+.attest .hear:hover{text-decoration:underline}
+@media (max-width:560px){.attest{padding:7px 9px}
+  .attest .dev{font-size:13.5px;line-height:1.65}}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(19rem,1fr));
        gap:1.25rem;margin:2rem 0 2.5rem}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;
@@ -445,6 +456,13 @@ const CARDS = {
   }
 };
 const n = x => x.toLocaleString('en-IN');
+// The atlas pages define this; index.html did not, and calling it threw a
+// ReferenceError that the .catch below swallowed -- the page then rendered its
+// five plain cards and silently dropped both group heads, with nothing in the
+// console. Any text from data/ goes through here before it reaches innerHTML.
+const esc = t => String(t == null ? '' : t)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 fetch('data/stats.json').then(r => r.json()).then(S => {
   const box = document.getElementById('cards');
@@ -510,6 +528,8 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
   // Every number here is counted in refresh.py from the ingest manifest, so a
   // month that gains an atlas joins the row of cards by itself.
   const MONTHS = S.akamavai || [];
+    const V = S.akamavai_verse && S.akamavai_verse.text
+              ? S.akamavai_verse : null;
   if (MONTHS.length) {
     const withAtlas = MONTHS.filter(m => m.atlas && S.atlases[m.atlas]);
     const rest = MONTHS.filter(m => !(m.atlas && S.atlases[m.atlas]));
@@ -528,10 +548,29 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
       + 'The grouping is the reciter\'s own, not ours: he names the '
       + '<i>āk&#257;m&#257;vai puṇyak&#257;la</i> in the titles of his Kārtika '
       + 'and Māgha full-moon discourses, and chants the verse that states it — '
-      + '<i>viṣuve śatasāhasram <b>ākāmāvaiṣv</b>anantakam</i>, “a hundred '
+      + '“a hundred at the new moon, a thousand at the day\'s end, a hundred '
       + 'thousand at the equinox, and endless in the Ā-kā-mā-vai months.”<br>'
       + 'They are grouped by the observance, not by a text: these are four '
       + 'different works, unlike the digest below.<br>'
+      // THE VERSE, AND THE SECOND IT IS CHANTED -- the one claim this site
+      // exists to make, applied to its own grouping. Text and time both come
+      // out of refresh.py rather than being typed, so a re-alignment moves the
+      // link instead of leaving it pointing at the wrong moment.
+      //
+      // It is a FINDING AID, not a reading text, and visibly so: this chanting
+      // decodes `शतमित्युक्षये` where dsb-041 gives `शतं बिन्दुक्षये` --
+      // bindu-kṣaye, at the new moon, which is the real reading. The page does
+      // not quietly correct it, because what plays at 0:33 is what is printed.
+      + (V ? '<span class="attest">'
+          + '<span class="dev">' + esc(V.text) + '</span>'
+          + (V.yt
+              ? '<a class="hear" target="_blank" rel="noopener" href="'
+                + 'https://youtu.be/' + esc(V.yt) + '?t=' + Math.floor(V.t)
+                + '">&#9656; hear it — ' + V.ep + ' at '
+                + Math.floor(V.t / 60) + ':'
+                + String(Math.floor(V.t % 60)).padStart(2, '0') + '</a>'
+              : '')
+          + '</span>' : '')
       + '<span class="rest">'
       + rest.map(m => '<b>' + m.dev + '</b> ' + state(m)).join(' · ')
       + '</span></p>';

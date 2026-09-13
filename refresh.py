@@ -1062,6 +1062,79 @@ def main():
         for u in cites:
             print("      %-32s cites %s" % ("", u))
 
+    # The verse that licenses the Ākāmāvai grouping, WITH THE SECOND IT IS
+    # CHANTED. Derived, never typed: the Devanagari comes out of the reftext,
+    # the onset out of the forced alignment beside it, and the video id out of
+    # the links file -- so a re-alignment moves the link instead of silently
+    # making it point at the wrong moment.
+    #
+    # This verse is NOT in index.db, so quotes.py cannot name it and it has no
+    # citation. What it has is a measured time, which is the whole claim this
+    # site makes. `score` is the mean per-word CTC confidence and is carried so
+    # the page can be honest: the first two words of this chanting align at
+    # 0.23 and 0.18, and it is the distinctive आकामावैष्वनन्तकम् at 0.75 that
+    # carries it.
+    attest, cands = {}, []
+    try:
+        import glob as _glob
+        NEEDLE = "आकामावै"
+        for rp in sorted(_glob.glob(os.path.join(a.ingest, "build", "reftext",
+                                                 "dsb-*.json"))):
+            ep = os.path.basename(rp)[:-5]
+            rd = json.load(open(rp, encoding="utf-8"))
+            units = rd.get("units") if isinstance(rd, dict) else rd
+            hit = next((u for u in (units or []) if NEEDLE in (u.get("text") or "")),
+                       None)
+            if not hit:
+                continue
+            ap = os.path.join(a.ingest, "build", "aligned", ep + ".json")
+            if not os.path.exists(ap):
+                continue
+            ad = json.load(open(ap, encoding="utf-8"))
+            words = ad.get("words") if isinstance(ad, dict) else ad
+            un = hit.get("i", hit.get("n"))
+            ws = [w for w in (words or []) if w.get("unit") == un]
+            if not ws:
+                continue
+            yt = None
+            for lf in ("dsb-kartika-links.txt", "dsb-magha-links.txt",
+                       "dsb-shravana-links.txt"):
+                lp = os.path.join(a.ingest, lf)
+                if not os.path.exists(lp):
+                    continue
+                for line in open(lp, encoding="utf-8"):
+                    line = line.split("#")[0]
+                    if line.split() and line.split()[0] == ep:
+                        m = re.search(r"([A-Za-z0-9_-]{11})", line)
+                        if m:
+                            yt = m.group(1)
+                if yt:
+                    break
+            cands.append({
+                "text": hit["text"], "ep": ep, "yt": yt,
+                "t": round(min(w["t"] for w in ws), 2),
+                "end": round(max(w["e"] for w in ws), 2),
+                "score": round(sum(w.get("score") or 0 for w in ws) / len(ws), 3),
+            })
+        # TWO WITNESSES, AND THE BETTER TEXT IS NOT THE PLAYABLE ONE. dsb-041
+        # chants it inside the Triveṇī stotra and decodes `शतं बिन्दुक्षये` --
+        # bindu-kṣaye, at the new moon, which is the real reading; dsb-144
+        # chants the verse on its own and decodes `शतमित्युक्षये`, the same two
+        # words run together. dsb-041 has no video.
+        #
+        # The playable one wins, because a link to the second it is chanted is
+        # the entire claim being made and an unplayable quotation makes none.
+        # The other is carried in `alt` rather than dropped: two independent
+        # decodes of one verse is exactly the evidence the Tulākāverī witness
+        # page is built on, and the variant is the more interesting half.
+        cands.sort(key=lambda c: (c["yt"] is None, len(c["text"])))
+        if cands:
+            attest = cands[0]
+            attest["alt"] = [{k: c[k] for k in ("ep", "text", "t", "score")}
+                             for c in cands[1:]]
+    except Exception as e:                       # never fail a publish for this
+        print("  (no Ākāmāvai attestation: %s)" % e)
+
     # ---------------------------------------------------------- ĀKĀMĀVAI
     # The four months the tradition names by their first syllables -- ĀṢĀḌHA,
     # KĀRTIKA, MĀGHA, VAIŚĀKHA -- as the months in which snāna before sunrise
@@ -1122,7 +1195,7 @@ def main():
                                     if k.get("volume") == "smp6"), {}),
                    "kandas": kandas,
                    # the four months of snāna and dāna; see above
-                   "akamavai": months},
+                   "akamavai": months, "akamavai_verse": attest},
                   open(os.path.join(data_dir, "stats.json"), "w",
                        encoding="utf-8"),
                   ensure_ascii=False, indent=1)
