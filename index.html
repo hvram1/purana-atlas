@@ -446,10 +446,15 @@ const n = x => x.toLocaleString('en-IN');
 
 fetch('data/stats.json').then(r => r.json()).then(S => {
   const box = document.getElementById('cards');
-  for (const key of ['virata', 'kartika', 'adhyatma',
-                     'varaha', 'garuda', 'vishnu']) {
+  // Kārtika is NOT in this list. It belongs to the Ākāmāvai group below, and a
+  // card can only be appended once -- the grid is ordered by append order, so
+  // membership of a group is expressed by where the card is built, not by a
+  // flag on it. Everything here stands on its own: an epic, a Rāmāyaṇa, and
+  // three whole-Purāṇa parāyaṇas.
+  const makeCard = key => {
     const c = CARDS[key], s = S.atlases[key];
-    if (!s) continue;
+    // `return`, not `continue` -- this is a function now, not a loop body.
+    if (!s) return;
     const a = document.createElement('a');
     a.className = 'card'; a.href = c.href;
     a.innerHTML =
@@ -483,7 +488,55 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
           : '')
       + '<div class="go">Open the atlas →</div>';
     box.appendChild(a);
+  };
+  ['virata', 'adhyatma', 'varaha', 'garuda', 'vishnu'].forEach(makeCard);
+
+  // ------------------------------------------------------------ ĀKĀMĀVAI
+  // Four months under one heading, and the heading is the tradition's, not
+  // ours: आ-का-मा-वै, the first syllables of Āṣāḍha, Kārtika, Māgha and
+  // Vaiśākha, the months in which bathing before sunrise and giving carry the
+  // greatest merit. The reciter names the आकामावै puṇyakāla in two of his own
+  // titles and chants the verse that establishes it.
+  //
+  // GROUPED BY OBSERVANCE, NOT BY EDITION, and the note says so. The digest's
+  // three kāṇḍas below are three volumes of one printed work; these four are
+  // four different texts -- Kārtika and Vaiśākha are Skanda sections of their
+  // own, Māgha is a chapter run inside the Padma Uttarakhaṇḍa -- held together
+  // by a rite rather than by a binding. Saying otherwise would claim a
+  // bibliographic relation that does not exist.
+  //
+  // Every number here is counted in refresh.py from the ingest manifest, so a
+  // month that gains an atlas joins the row of cards by itself.
+  const MONTHS = S.akamavai || [];
+  if (MONTHS.length) {
+    const withAtlas = MONTHS.filter(m => m.atlas && S.atlases[m.atlas]);
+    const rest = MONTHS.filter(m => !(m.atlas && S.atlases[m.atlas]));
+    const state = m =>
+      m.episodes === 0 ? 'no recording yet'
+      : m.aligned === 0 ? n(m.episodes) + ' recordings, ' + m.hours + ' h — not yet aligned'
+      : m.seated === 0 ? n(m.aligned) + ' aligned, none seated'
+      : n(m.aligned) + ' of ' + n(m.episodes) + ' aligned, ' + n(m.seated) + ' seated';
+    const h = document.createElement('div');
+    h.className = 'grouphead';
+    h.innerHTML =
+      '<h2>आकामावै · Ākāmāvai</h2>'
+      + '<p>Four lunar months named by their first syllables — <b>आ</b>षाढ, '
+      + '<b>का</b>र्तिक, <b>मा</b>घ, <b>वै</b>शाख — as the months in which '
+      + '<i>snāna</i> before sunrise and <i>dāna</i> carry the greatest merit. '
+      + 'The grouping is the reciter\'s own, not ours: he names the '
+      + '<i>āk&#257;m&#257;vai puṇyak&#257;la</i> in the titles of his Kārtika '
+      + 'and Māgha full-moon discourses, and chants the verse that states it — '
+      + '<i>viṣuve śatasāhasram <b>ākāmāvaiṣv</b>anantakam</i>, “a hundred '
+      + 'thousand at the equinox, and endless in the Ā-kā-mā-vai months.”<br>'
+      + 'They are grouped by the observance, not by a text: these are four '
+      + 'different works, unlike the digest below.<br>'
+      + '<span class="rest">'
+      + rest.map(m => '<b>' + m.dev + '</b> ' + state(m)).join(' · ')
+      + '</span></p>';
+    box.appendChild(h);
+    withAtlas.forEach(m => makeCard(m.atlas));
   }
+
   // The Śrāddha atlas is an atlas -- it has an edition -- so it belongs in the
   // grid above. It is built here rather than in that loop because its coverage
   // is a PAIR and the loop's shape is a single reached_pct. Sections walked

@@ -323,5 +323,51 @@
    "rom": "Varṇāśramadharmakāṇḍa",
    "page": "varnasrama-atlas.html"
   }
+ ],
+ "akamavai": [
+  {
+   "syllable": "आ",
+   "dev": "आषाढः",
+   "rom": "Āṣāḍha",
+   "group": "ashadha",
+   "episodes": 0,
+   "hours": 0.0,
+   "aligned": 0,
+   "seated": 0,
+   "atlas": null
+  },
+  {
+   "syllable": "का",
+   "dev": "कार्तिकः",
+   "rom": "Kārtika",
+   "group": "kartika",
+   "episodes": 17,
+   "hours": 8.5,
+   "aligned": 17,
+   "seated": 14,
+   "atlas": "kartika"
+  },
+  {
+   "syllable": "मा",
+   "dev": "माघः",
+   "rom": "Māgha",
+   "group": "magha",
+   "episodes": 26,
+   "hours": 15.5,
+   "aligned": 26,
+   "seated": 15,
+   "atlas": null
+  },
+  {
+   "syllable": "वै",
+   "dev": "वैशाखः",
+   "rom": "Vaiśākha",
+   "group": "vaishakha",
+   "episodes": 24,
+   "hours": 12.6,
+   "aligned": 0,
+   "seated": 0,
+   "atlas": null
+  }
  ]
 }

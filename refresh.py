@@ -1062,6 +1062,52 @@ def main():
         for u in cites:
             print("      %-32s cites %s" % ("", u))
 
+    # ---------------------------------------------------------- ĀKĀMĀVAI
+    # The four months the tradition names by their first syllables -- ĀṢĀḌHA,
+    # KĀRTIKA, MĀGHA, VAIŚĀKHA -- as the months in which snāna before sunrise
+    # and dāna carry the greatest merit.
+    #
+    # THIS GROUPING IS NOT OURS AND THAT IS WHY IT IS ALLOWED. The quotes note
+    # refuses topic grouping as unsigned editorial judgement; this one is
+    # signed twice over by the material itself. The reciter names the आकामावै
+    # puṇyakāla in the titles of dsb-018 (Kārtika pūrṇimā) and dsb-041 (Māgha
+    # pūrṇimā), and dsb-144 chants the verse that establishes it:
+    #
+    #   शतमित्युक्षये पुण्यं सहस्रन्तु दिनक्षये । विषुवे शतसाहस्रम् आकामावैष्वनन्तकम्॥
+    #
+    # -- a hundred at one occasion, a thousand at another, a hundred thousand
+    # at the equinox, and endless in the Ā-kā-mā-vai months.
+    #
+    # Counted here rather than typed into index.html, for the same reason every
+    # other figure on that page is: when Māgha seats, the group says so without
+    # anyone editing markup. Read from the ingest manifest's own `group` field,
+    # which is what attribute.py assigned -- not a second list that can drift.
+    months = []
+    man_p = os.path.join(a.ingest, "build", "attribute", "manifest.json")
+    if os.path.exists(man_p):
+        items = json.load(open(man_p, encoding="utf-8")).get("items", [])
+        aligned_d = os.path.join(a.ingest, "build", "aligned")
+        seated_d = os.path.join(a.ingest, "build", "seated")
+        # (group in the manifest, syllable, devanagari, roman, atlas key)
+        FOUR = [("ashadha", "आ", "आषाढः", "Āṣāḍha", None),
+                ("kartika", "का", "कार्तिकः", "Kārtika", "kartika"),
+                ("magha", "मा", "माघः", "Māgha", None),
+                ("vaishakha", "वै", "वैशाखः", "Vaiśākha", None)]
+        for grp, syl, dev, rom, atlas_key in FOUR:
+            eps = [i for i in items if i.get("group") == grp]
+            # The Musiri Kārtika lane is its own series, not a dsb `group`, and
+            # it is already in the shipped atlas -- so it is counted through
+            # the atlas row rather than here, or it would be counted twice.
+            have = lambda d, k: os.path.exists(os.path.join(d, k + ".json"))
+            months.append({
+                "syllable": syl, "dev": dev, "rom": rom, "group": grp,
+                "episodes": len(eps),
+                "hours": round(sum(i.get("duration") or 0 for i in eps) / 3600, 1),
+                "aligned": sum(1 for i in eps if have(aligned_d, i["key"])),
+                "seated": sum(1 for i in eps if have(seated_d, i["key"])),
+                "atlas": atlas_key,
+            })
+
     # index.html renders its figures from this file rather than carrying them
     # in the markup, so coverage printed on the landing page cannot drift away
     # from the coverage in the data. [[derive-do-not-ask-the-human]]
@@ -1074,7 +1120,9 @@ def main():
                    # Smṛtimuktāphalam grouping.
                    "sraddha": next((k for k in kandas
                                     if k.get("volume") == "smp6"), {}),
-                   "kandas": kandas},
+                   "kandas": kandas,
+                   # the four months of snāna and dāna; see above
+                   "akamavai": months},
                   open(os.path.join(data_dir, "stats.json"), "w",
                        encoding="utf-8"),
                   ensure_ascii=False, indent=1)
