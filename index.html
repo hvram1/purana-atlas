@@ -118,6 +118,59 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
 .card .scope{margin:.5rem 0 0;color:var(--muted);font-size:.78rem;
   line-height:1.45}
 .card h2.pitch{font-family:var(--ui);font-size:1.08rem;letter-spacing:-.01em}
+
+/* ---------------------------------------------------------------- PHONE
+   MEASURED, NOT GUESSED. At 390x844 before this block: the header ran 551px
+   before the first card, cards were 430-546px each, and **not one card was
+   fully on the first screen** -- a reader arriving on a phone saw a masthead
+   and the top edge of Virāṭa. The page is a gallery of nine; it has to look
+   like one.
+
+   Three costs, in the order they mattered. The header was the largest single
+   item and the cards were not far behind. Inside a card, `.stat b{display:
+   block}` makes every figure two lines tall, so four stats cost eight lines;
+   inline they cost two. The blurb is prose and clamps to two lines without
+   losing what it is for -- naming the text -- and the scope line stays at full
+   length, because a card that says "313 verses" while hiding "of 10,258" is
+   the one thing on this page that must not be abbreviated. */
+@media (max-width:560px){
+  /* 56px of top padding is a desktop margin. On a phone it is the difference
+     between one card on the first screen and two: before this, card 2 ended at
+     854px in an 844px viewport -- ten pixels short. */
+  .wrap{padding-top:1.35rem}
+  h1{font-size:1.55rem;margin-bottom:.35rem}
+  header{padding-bottom:1rem;margin-bottom:1.1rem}
+  /* The masthead was 551px of an 844px screen. Not clamped -- this paragraph
+     is what the site is, and it carries the two links into #soon and
+     #fourth -- but set tighter, which is worth ~45px without losing a word. */
+  .sub{font-size:.86rem;line-height:1.38}
+  .sub.why{margin-top:.45rem;font-size:.8rem;line-height:1.38}
+  .cards{gap:.7rem}
+  .card{padding:.85rem .95rem .8rem;border-radius:8px}
+  .card h2{font-size:1.1rem}
+  .card .rom{font-size:.76rem;margin:0 0 .45rem}
+  /* Two lines of the blurb. -webkit-line-clamp is the only widely supported
+     way to do this; the standard `line-clamp` is listed beside it so the
+     declaration is not purely prefixed. */
+  .card p{font-size:.84rem;margin:0 0 .6rem;
+    display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden;
+    -webkit-line-clamp:2;line-clamp:2}
+  /* The scope line is NOT clamped and NOT hidden. See above. */
+  .card .scope{-webkit-line-clamp:unset;line-clamp:unset;display:block;
+    overflow:visible;font-size:.74rem;margin:.35rem 0 0}
+  .card .who{font-size:.74rem;margin-top:.35rem;
+    -webkit-line-clamp:unset;line-clamp:unset;display:block;overflow:visible}
+  /* One line, not two. Four stats at .8rem with a 1.4rem gap wrap onto a
+     second row at 390px and cost 55px; tightened they cost 26. */
+  .stats{gap:.1rem .55rem;padding-top:.5rem;margin-top:.45rem}
+  .stat{font-size:.72rem}
+  .stat b{display:inline;font-size:.82rem;margin-right:.2rem}
+  /* "Open the atlas →" is a pointer affordance. The card is an <a>, and on a
+     touch screen the tap target is the whole card, so the row costs 29px to
+     restate what tapping already does. It stays on desktop, where the hover
+     lift is what it belongs to. */
+  .go{display:none}
+}
 /* The fourth text. NOT a .card, and the difference is the argument: a card
    on this page opens an atlas, and an atlas has a printed edition behind it.
    This one has none, so it gets a shape of its own -- full width, its own
