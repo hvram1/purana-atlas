@@ -145,6 +145,7 @@ code{font-family:var(--mono);font-size:.86em;background:var(--sunk);
       flex-wrap:wrap;margin-bottom:.8rem}
 .head .t{font-family:var(--serif);font-size:1.3rem;font-weight:600}
 .head .m{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.head .m a.ed{font-family:var(--sans,inherit);white-space:nowrap}
 .playall{font:inherit;font-size:.8rem;cursor:pointer;background:var(--digest);
          color:var(--bg);border:0;border-radius:4px;padding:.35rem .9rem}
 .playall[disabled]{opacity:.4;cursor:default}
@@ -319,6 +320,10 @@ var PAD_IN = 0.5, PAD_OUT = 0.4;   // alignment onsets are tight; a beat of
                                    // lead-in keeps the first syllable whole
 var D = null, player = null, ready = false, queue = [], qi = -1, tick = null;
 var spine = 'text', sel = null;
+// The section's own page in the edition (ADR-0003): the digest's Sanskrit
+// beside its Tamil rendering. Set per draw, only on the text spine, and only
+// when the builder checked the edition's title for that id -- never guessed.
+var edLink = null;
 
 function fmt(s){
   s = Math.max(0, Math.round(s));
@@ -474,7 +479,17 @@ function chips(r){
 }
 function renderRows(ids, title, meta){
   document.getElementById('h-t').textContent = title;
-  document.getElementById('h-m').textContent = meta;
+  var hm = document.getElementById('h-m');
+  hm.textContent = meta;
+  if (edLink) {
+    var a = document.createElement('a');
+    a.className = 'ed'; a.href = edLink; a.target = '_blank'; a.rel = 'noopener';
+    // "Rendering", not "translation": the Tamil is the edition's own facing
+    // text, printed on the same page, not a translator's work joined to ours.
+    a.textContent = 'read in the edition — Sanskrit beside its Tamil ↗';
+    hm.appendChild(document.createTextNode(' · '));
+    hm.appendChild(a);
+  }
   var host = document.getElementById('rows');
   host.textContent = '';
   var spans = [];
@@ -630,6 +645,7 @@ function seriesOf(ep){
 function draw(){
   document.getElementById('asks').textContent = ASKS[spine];
   var items = [], ids = [], title = '', meta = '';
+  edLink = null;
   if (spine === 'text'){
     D.sections.forEach(function(s){
       items.push({key:'s'+s.n, n:s.rows.length, nm:'§' + s.n + ' ' + (s.sa||''),
@@ -644,6 +660,7 @@ function draw(){
     }
     var s = D.sections.filter(function(x){ return 's'+x.n === sel; })[0] || D.sections[0];
     ids = s.rows; title = '§' + s.n + '  ' + (s.sa || '');
+    edLink = s.ed || null;
     meta = 'printed p.' + s.page + ' · ' + s.nq + ' quotations in the digest · ' +
            s.rows.length + ' chanted here';
   } else if (spine === 'rec'){
