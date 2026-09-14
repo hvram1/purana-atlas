@@ -1,0 +1,425 @@
+{
+ "_meta": {
+  "harness_version": 3,
+  "repo": "purana-atlas"
+ },
+ "adhyatma-atlas.html": {
+  "buttons_at_start": 148,
+  "chapters": 66,
+  "controls": {
+   "capped": false,
+   "dead": [],
+   "hidden_by_sweep": 0,
+   "total": 61,
+   "unreached": {
+    "e": [],
+    "n": 0
+   }
+  },
+  "errors": [],
+  "lanes": [
+   {
+    "id": "up",
+    "name": "Upany\u0101sa",
+    "sim": false,
+    "speaker": "Ayngarai Rangaswamy Deekshithar"
+   },
+   {
+    "id": "pa",
+    "name": "P\u0101r\u0101ya\u1e47a",
+    "sim": false,
+    "speaker": "Ayngarai Rangaswamy Deekshithar"
+   }
+  ],
+  "marks": {
+   "acted": 0,
+   "bad_time": [],
+   "dead": [],
+   "errors": [],
+   "played": 427,
+   "refusals": [],
+   "refused": 0,
+   "total": 427
+  },
+  "overflow": 0,
+  "overflow_390": 0,
+  "phone_viewport": 390,
+  "rendered": 71,
+  "viewport": 1280,
+  "yt_order": true
+ },
+ "aparakarya-atlas.html": {
+  "buttons_at_start": 72,
+  "chapters": 0,
+  "controls": {
+   "capped": false,
+   "dead": [],
+   "hidden_by_sweep": 64,
+   "total": 32,
+   "unreached": {
+    "e": [],
+    "n": 0
+   }
+  },
+  "errors": [],
+  "lanes": null,
+  "marks": {
+   "acted": 0,
+   "bad_time": [],
+   "dead": [],
+   "errors": [],
+   "played": 5,
+   "refusals": [],
+   "refused": 0,
+   "total": 5
+  },
+  "overflow": 0,
+  "overflow_390": 0,
+  "phone_viewport": 390,
+  "rendered": 4,
+  "viewport": 1280,
+  "yt_order": true
+ },
+ "garuda-atlas.html": {
+  "buttons_at_start": 213,
+  "chapters": 5,
+  "controls": {
+   "capped": false,
+   "dead": [],
+   "hidden_by_sweep": 0,
+   "total": 110,
+   "unreached": {
+    "e": [],
+    "n": 0
+   }
+  },
+  "errors": [],
+  "lanes": [
+   {
+    "id": "s1",
+    "name": "Musiri \u00b7 Garu\u1e0da",
+    "sim": false,
+    "speaker": "Musiri Yagnarama Somayaji D\u012bk\u1e63itar"
+   }
+  ],
+  "marks": {
+   "acted": 0,
+   "bad_time": [],
+   "dead": [],
+   "errors": [],
+   "played": 491,
+   "refusals": [],
+   "refused": 0,
+   "total": 491
+  },
+  "overflow": 0,
+  "overflow_390": 0,
+  "phone_viewport": 390,
+  "rendered": 84,
+  "viewport": 1280,
+  "yt_order": true
+ },
+ "kartika-atlas.html": {
+  "buttons_at_start": 351,
+  "chapters": 36,
+  "controls": {
+   "capped": false,
+   "dead": [],
+   "hidden_by_sweep": 0,
+   "total": 65,
+   "unreached": {
+    "e": [],
+    "n": 0
+   }
+  },
+  "errors": [],
+  "lanes": [
+   {
+    "id": "s1",
+    "name": "Musiri \u00b7 K\u0101rtika",
+    "sim": false,
+    "speaker": "Musiri Yagnarama Somayaji D\u012bk\u1e63itar"
+   },
+   {
+    "id": "s2",
+    "name": "Vaisampayanar \u00b7 K\u0101rtika 2024",
+    "sim": false,
+    "speaker": "Pondicherry Vaisampayanar"
+   },
+   {
+    "id": "s3",
+    "name": "Vaisampayanar \u00b7 Tul\u0101k\u0101ver\u012b 2025",
+    "sim": false,
+    "speaker": "Pondicherry Vaisampayanar"
+   }
+  ],
+  "marks": {
+   "acted": 0,
+   "bad_time": [],
+   "dead": [],
+   "errors": [],
+   "played": 772,
+   "refusals": [
+    "Vaisampayanar \u00b7 K\u0101rtika 2024 chanted this \u2014 part 17 is not uploaded ye",
+    "Vaisampayanar \u00b7 K\u0101rtika 2024 chanted this \u2014 part 12 is not uploaded ye",
+    "Vaisampayanar \u00b7 K\u0101rtika 2024 chanted this \u2014 part 12 is not uploaded ye",
+    "Vaisampayanar \u00b7 K\u0101rtika 2024 chanted this \u2014 part 12 is not uploaded ye",
+    "Vaisampayanar \u00b7 K\u0101rtika 2024 chanted this \u2014 part 12 is not uploaded ye",
+    "Vaisampayanar \u00b7 K\u0101rtika 2024 chanted this \u2014 part 12 is not uploaded ye"
+   ],
+   "refused": 7,
+   "total": 779
+  },
+  "overflow": 0,
+  "overflow_390": 0,
+  "phone_viewport": 390,
+  "rendered": 224,
+  "viewport": 1280,
+  "yt_order": true
+ },
+ "shraddha-atlas.html": {
+  "buttons_at_start": 82,
+  "chapters": 0,
+  "controls": {
+   "capped": false,
+   "dead": [],
+   "hidden_by_sweep": 75,
+   "total": 214,
+   "unreached": {
+    "e": [],
+    "n": 0
+   }
+  },
+  "errors": [],
+  "lanes": null,
+  "marks": {
+   "acted": 0,
+   "bad_time": [],
+   "dead": [],
+   "errors": [],
+   "played": 4,
+   "refusals": [],
+   "refused": 0,
+   "total": 4
+  },
+  "overflow": 0,
+  "overflow_390": 0,
+  "phone_viewport": 390,
+  "rendered": 2,
+  "viewport": 1280,
+  "yt_order": true
+ },
+ "shravana-anukramanika.html": {
+  "buttons_at_start": 996,
+  "chapters": 0,
+  "controls": {
+   "capped": false,
+   "dead": [],
+   "hidden_by_sweep": 20,
+   "total": 10,
+   "unreached": {
+    "e": [],
+    "n": 0
+   }
+  },
+  "errors": [],
+  "lanes": null,
+  "marks": {
+   "acted": 0,
+   "bad_time": [],
+   "dead": [],
+   "errors": [],
+   "played": 974,
+   "refusals": [],
+   "refused": 0,
+   "total": 974
+  },
+  "overflow": 0,
+  "overflow_390": 0,
+  "phone_viewport": 390,
+  "rendered": 967,
+  "viewport": 1280,
+  "yt_order": true
+ },
+ "tulakaveri-witness.html": {
+  "buttons_at_start": 426,
+  "chapters": 0,
+  "controls": {
+   "capped": false,
+   "dead": [],
+   "hidden_by_sweep": 0,
+   "total": 4,
+   "unreached": {
+    "e": [],
+    "n": 0
+   }
+  },
+  "errors": [],
+  "lanes": null,
+  "marks": {
+   "acted": 0,
+   "bad_time": [],
+   "dead": [],
+   "errors": [],
+   "played": 424,
+   "refusals": [],
+   "refused": 0,
+   "total": 424
+  },
+  "overflow": 0,
+  "overflow_390": 0,
+  "phone_viewport": 390,
+  "rendered": 141,
+  "viewport": 1280,
+  "yt_order": true
+ },
+ "varaha-atlas.html": {
+  "buttons_at_start": 152,
+  "chapters": 7,
+  "controls": {
+   "capped": false,
+   "dead": [],
+   "hidden_by_sweep": 0,
+   "total": 58,
+   "unreached": {
+    "e": [],
+    "n": 0
+   }
+  },
+  "errors": [],
+  "lanes": [
+   {
+    "id": "s1",
+    "name": "Musiri \u00b7 Var\u0101ha",
+    "sim": false,
+    "speaker": "Musiri Yagnarama Somayaji D\u012bk\u1e63itar"
+   }
+  ],
+  "marks": {
+   "acted": 0,
+   "bad_time": [],
+   "dead": [],
+   "errors": [],
+   "played": 302,
+   "refusals": [],
+   "refused": 0,
+   "total": 302
+  },
+  "overflow": 0,
+  "overflow_390": 0,
+  "phone_viewport": 390,
+  "rendered": 48,
+  "viewport": 1280,
+  "yt_order": true
+ },
+ "varnasrama-atlas.html": {
+  "buttons_at_start": 202,
+  "chapters": 0,
+  "controls": {
+   "capped": false,
+   "dead": [],
+   "hidden_by_sweep": 193,
+   "total": 28,
+   "unreached": {
+    "e": [],
+    "n": 0
+   }
+  },
+  "errors": [],
+  "lanes": null,
+  "marks": {
+   "acted": 0,
+   "bad_time": [],
+   "dead": [],
+   "errors": [],
+   "played": 5,
+   "refusals": [],
+   "refused": 0,
+   "total": 5
+  },
+  "overflow": 0,
+  "overflow_390": 0,
+  "phone_viewport": 390,
+  "rendered": 6,
+  "viewport": 1280,
+  "yt_order": true
+ },
+ "virata-atlas.html": {
+  "buttons_at_start": 144,
+  "chapters": 72,
+  "controls": {
+   "capped": false,
+   "dead": [],
+   "hidden_by_sweep": 0,
+   "total": 72,
+   "unreached": {
+    "e": [],
+    "n": 0
+   }
+  },
+  "errors": [],
+  "lanes": [
+   {
+    "id": "ta",
+    "name": "Tamil",
+    "sim": false,
+    "speaker": "Musiri Yagnarama Somayaji D\u012bk\u1e63itar"
+   }
+  ],
+  "marks": {
+   "acted": 0,
+   "bad_time": [],
+   "dead": [],
+   "errors": [],
+   "played": 201,
+   "refusals": [],
+   "refused": 0,
+   "total": 201
+  },
+  "overflow": 0,
+  "overflow_390": 0,
+  "phone_viewport": 390,
+  "rendered": 39,
+  "viewport": 1280,
+  "yt_order": true
+ },
+ "vishnu-atlas.html": {
+  "buttons_at_start": 281,
+  "chapters": 4,
+  "controls": {
+   "capped": false,
+   "dead": [],
+   "hidden_by_sweep": 0,
+   "total": 71,
+   "unreached": {
+    "e": [],
+    "n": 0
+   }
+  },
+  "errors": [],
+  "lanes": [
+   {
+    "id": "s1",
+    "name": "Musiri \u00b7 Vi\u1e63\u1e47u",
+    "sim": false,
+    "speaker": "Musiri Yagnarama Somayaji D\u012bk\u1e63itar"
+   }
+  ],
+  "marks": {
+   "acted": 0,
+   "bad_time": [],
+   "dead": [],
+   "errors": [],
+   "played": 365,
+   "refusals": [],
+   "refused": 0,
+   "total": 365
+  },
+  "overflow": 0,
+  "overflow_390": 0,
+  "phone_viewport": 390,
+  "rendered": 127,
+  "viewport": 1280,
+  "yt_order": true
+ }
+}
