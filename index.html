@@ -418,6 +418,14 @@ const CARDS = {
          + 'renditions — one reading the book straight through, one following '
          + 'the calendar.'
   },
+  vaishakha: {
+    href: 'vaishakha-atlas.html',
+    title: 'वैशाखमासमाहात्म्यम्',
+    rom: 'Vaiśākha Māsa Māhātmya · Skanda Purāṇa',
+    blurb: 'The glory of the month of Vaiśākha, in two Tamil renditions five '
+         + 'years apart — thirty short parts in 2020, and a month of daily '
+         + 'discourses in 2025 that walks the book in order.'
+  },
   adhyatma: {
     href: 'adhyatma-atlas.html',
     title: 'अध्यात्मरामायणम्',
@@ -483,7 +491,9 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
       + '<p>' + c.blurb + '</p>'
       + '<div class="stats">'
       +   '<span class="stat"><b>' + n(s.verses) + '</b>verses</span>'
-      +   '<span class="stat"><b>' + s.reached_pct + '%</b>heard aloud</span>'
+      // toFixed: JSON's 46.0 arrives as the number 46 and printed "46%" beside
+      // cards reading 60.2% and 74.6%.
+      +   '<span class="stat"><b>' + Number(s.reached_pct).toFixed(1) + '%</b>heard aloud</span>'
       +   '<span class="stat"><b>' + s.chapters + '</b>'
       +     (key === 'adhyatma' ? 'sargas' : 'adhyāyas') + '</span>'
       +   '<span class="stat"><b>' + s.recordings + '</b>recordings</span>'
@@ -533,11 +543,20 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
   if (MONTHS.length) {
     const withAtlas = MONTHS.filter(m => m.atlas && S.atlases[m.atlas]);
     const rest = MONTHS.filter(m => !(m.atlas && S.atlases[m.atlas]));
-    const state = m =>
-      m.episodes === 0 ? 'no recording yet'
-      : m.aligned === 0 ? n(m.episodes) + ' recordings, ' + m.hours + ' h — not yet aligned'
-      : m.seated === 0 ? n(m.aligned) + ' aligned, none seated'
-      : n(m.aligned) + ' of ' + n(m.episodes) + ' aligned, ' + n(m.seated) + ' seated';
+    // A month can have more than one reciter (Māgha and Vaiśākha have two),
+    // so the recordings and hours lead and the pipeline counts follow. "with a
+    // video" counts ids in the links files; it says nothing about playback.
+    const state = m => {
+      if (m.episodes === 0) return 'no recording yet';
+      const who = m.runs && m.runs.length > 1
+        ? ' by ' + m.runs.length + ' reciters' : '';
+      const done = m.aligned === 0 ? 'not yet aligned'
+        : m.seated === 0 ? n(m.aligned) + ' aligned, none seated'
+        : n(m.aligned) + ' aligned, ' + n(m.seated) + ' seated';
+      return n(m.episodes) + ' recordings' + who + ', ' + m.hours + ' h — '
+        + done
+        + (m.online != null ? ', ' + n(m.online) + ' with a video' : '');
+    };
     const h = document.createElement('div');
     h.className = 'grouphead';
     h.innerHTML =
@@ -572,7 +591,7 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
               : '')
           + '</span>' : '')
       + '<span class="rest">'
-      + rest.map(m => '<b>' + m.dev + '</b> ' + state(m)).join(' · ')
+      + rest.map(m => '<b>' + m.dev + '</b> ' + state(m)).join('<br>')
       + '</span></p>';
     box.appendChild(h);
     withAtlas.forEach(m => makeCard(m.atlas));

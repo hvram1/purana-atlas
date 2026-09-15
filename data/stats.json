@@ -1,5 +1,5 @@
 {
- "built": "2026-09-14",
+ "built": "2026-09-15",
  "simulated_lanes": false,
  "atlases": {
   "virata": {
@@ -27,6 +27,22 @@
    "recordings": 53,
    "parts": 59,
    "both_lanes": 325,
+   "speakers": [
+    "Musiri Yagnarama Somayaji Dīkṣitar",
+    "Pondicherry Vaisampayanar"
+   ],
+   "lane_axis": "speaker and series"
+  },
+  "vaishakha": {
+   "verses": 1759,
+   "chapters": 25,
+   "reached": 810,
+   "reached_pct": 46.0,
+   "lanes": 2,
+   "real_lanes": 2,
+   "recordings": 49,
+   "parts": 50,
+   "both_lanes": 78,
    "speakers": [
     "Musiri Yagnarama Somayaji Dīkṣitar",
     "Pondicherry Vaisampayanar"
@@ -334,6 +350,8 @@
    "hours": 0.0,
    "aligned": 0,
    "seated": 0,
+   "online": 0,
+   "runs": [],
    "atlas": null
   },
   {
@@ -345,6 +363,18 @@
    "hours": 8.5,
    "aligned": 17,
    "seated": 14,
+   "online": 14,
+   "runs": [
+    {
+     "group": "kartika",
+     "speaker": "Pondicherry Vaisampayanar",
+     "episodes": 17,
+     "hours": 8.5,
+     "aligned": 17,
+     "seated": 14,
+     "online": 14
+    }
+   ],
    "atlas": "kartika"
   },
   {
@@ -352,10 +382,31 @@
    "dev": "माघः",
    "rom": "Māgha",
    "group": "magha",
-   "episodes": 26,
-   "hours": 15.5,
-   "aligned": 26,
+   "episodes": 31,
+   "hours": 16.3,
+   "aligned": 31,
    "seated": 15,
+   "online": 31,
+   "runs": [
+    {
+     "group": "magha",
+     "speaker": "Pondicherry Vaisampayanar",
+     "episodes": 26,
+     "hours": 15.5,
+     "aligned": 26,
+     "seated": 15,
+     "online": 26
+    },
+    {
+     "group": "mgs",
+     "speaker": "Musiri Yagnarama Somayaji Dīkṣitar",
+     "episodes": 5,
+     "hours": 0.8,
+     "aligned": 5,
+     "seated": 0,
+     "online": 5
+    }
+   ],
    "atlas": null
   },
   {
@@ -363,11 +414,32 @@
    "dev": "वैशाखः",
    "rom": "Vaiśākha",
    "group": "vaishakha",
-   "episodes": 24,
-   "hours": 12.6,
-   "aligned": 0,
-   "seated": 0,
-   "atlas": null
+   "episodes": 54,
+   "hours": 17.3,
+   "aligned": 54,
+   "seated": 53,
+   "online": 53,
+   "runs": [
+    {
+     "group": "vaishakha",
+     "speaker": "Pondicherry Vaisampayanar",
+     "episodes": 24,
+     "hours": 12.6,
+     "aligned": 24,
+     "seated": 23,
+     "online": 24
+    },
+    {
+     "group": "vsm",
+     "speaker": "Musiri Yagnarama Somayaji Dīkṣitar",
+     "episodes": 30,
+     "hours": 4.7,
+     "aligned": 30,
+     "seated": 30,
+     "online": 29
+    }
+   ],
+   "atlas": "vaishakha"
   }
  ],
  "akamavai_verse": {

@@ -7,6 +7,7 @@ the workbench and copied in by this script:
 
     dharmasastra-gcp/workbench/virata-atlas.html   + data/virata_*.json
     dharmasastra-gcp/workbench/kartika-atlas.html  + data/kartika_*.json
+    dharmasastra-gcp/workbench/vaishakha-atlas.html + data/vaishakha_*.json
     audio-ingest/tulakaveri-witness.html           + data/tulakaveri_*.json
     audio-ingest/shravana-anukramanika.html        + data/shravana_*.json
     audio-ingest/shraddha-atlas.html               + data/shraddha_*.json
@@ -85,6 +86,10 @@ INGEST = os.environ.get("ATLAS_INGEST", "/home/wipro/projects/audio-ingest")
 ATLASES = [
     ("virata-atlas.html", "virata_4lang.json", "virata_atlas_substrate.json"),
     ("kartika-atlas.html", "kartika_4lang.json", "kartika_atlas_substrate.json"),
+    # Vaiśākha is Kārtika's shape -- a whole māhātmya, two reciters, ids from
+    # links files -- built by build_vaishakha_audio.py.
+    ("vaishakha-atlas.html", "vaishakha_4lang.json",
+     "vaishakha_atlas_substrate.json"),
     ("adhyatma-atlas.html", "adhyatma_4lang.json",
      "adhyatma_atlas_substrate.json"),
     # Varāha is scoped to the span its parāyaṇa walks -- adhyāyas 1-7 of 218 --
@@ -1115,6 +1120,26 @@ def main():
     # the page can be honest: the first two words of this chanting align at
     # 0.23 and 0.18, and it is the distinctive आकामावैष्वनन्तकम् at 0.75 that
     # carries it.
+    # The ids of recordings that arrived with no id in their path live only in
+    # these files in audio-ingest, one per series, filled in off the Studio
+    # listing after upload. A blank id means not uploaded (or still a Draft).
+    DSB_LINKS = ("dsb-kartika-links.txt", "dsb-magha-links.txt",
+                 "dsb-vaishakha-links.txt", "dsb-shravana-links.txt")
+
+    def read_links(root, names):
+        ids = {}
+        for lf in names:
+            lp = os.path.join(root, lf)
+            if not os.path.exists(lp):
+                continue
+            for line in open(lp, encoding="utf-8"):
+                f = line.split("#")[0].split()
+                if len(f) >= 2:
+                    m = re.search(r"([A-Za-z0-9_-]{11})\s*$", f[1])
+                    if m:
+                        ids.setdefault(f[0], m.group(1))
+        return ids
+
     attest, cands = {}, []
     try:
         import glob as _glob
@@ -1137,20 +1162,7 @@ def main():
             ws = [w for w in (words or []) if w.get("unit") == un]
             if not ws:
                 continue
-            yt = None
-            for lf in ("dsb-kartika-links.txt", "dsb-magha-links.txt",
-                       "dsb-shravana-links.txt"):
-                lp = os.path.join(a.ingest, lf)
-                if not os.path.exists(lp):
-                    continue
-                for line in open(lp, encoding="utf-8"):
-                    line = line.split("#")[0]
-                    if line.split() and line.split()[0] == ep:
-                        m = re.search(r"([A-Za-z0-9_-]{11})", line)
-                        if m:
-                            yt = m.group(1)
-                if yt:
-                    break
+            yt = read_links(a.ingest, DSB_LINKS).get(ep)
             cands.append({
                 "text": hit["text"], "ep": ep, "yt": yt,
                 "t": round(min(w["t"] for w in ws), 2),
@@ -1206,21 +1218,58 @@ def main():
         FOUR = [("ashadha", "आ", "आषाढः", "Āṣāḍha", None),
                 ("kartika", "का", "कार्तिकः", "Kārtika", "kartika"),
                 ("magha", "मा", "माघः", "Māgha", None),
-                ("vaishakha", "वै", "वैशाखः", "Vaiśākha", None)]
+                ("vaishakha", "वै", "वैशाखः", "Vaiśākha", "vaishakha")]
+        # EACH MONTH IS EVERY RECITER WHO RECORDED IT. The dsb days are an
+        # attribute.py `group`; the Musiri Māgha Snānam and Vaiśākha Māhātmyam
+        # came off the drive as series of their own, and belong to the month
+        # all the same -- the grouping is by observance. Names are stated per
+        # directory, never inferred. The Musiri Kārtika lane is NOT listed: it
+        # is already in the shipped atlas, and counted through the atlas row.
+        # (manifest group, speaker, links file)
+        RECITERS = {
+            "kartika":   [("kartika", "Pondicherry Vaisampayanar",
+                           "dsb-kartika-links.txt")],
+            "magha":     [("magha", "Pondicherry Vaisampayanar",
+                           "dsb-magha-links.txt"),
+                          ("mgs", "Musiri Yagnarama Somayaji Dīkṣitar",
+                           "mgs-links.txt")],
+            "vaishakha": [("vaishakha", "Pondicherry Vaisampayanar",
+                           "dsb-vaishakha-links.txt"),
+                          ("vsm", "Musiri Yagnarama Somayaji Dīkṣitar",
+                           "vsm-links.txt")],
+        }
+        have = lambda d, k: os.path.exists(os.path.join(d, k + ".json"))
         for grp, syl, dev, rom, atlas_key in FOUR:
-            eps = [i for i in items if i.get("group") == grp]
-            # The Musiri Kārtika lane is its own series, not a dsb `group`, and
-            # it is already in the shipped atlas -- so it is counted through
-            # the atlas row rather than here, or it would be counted twice.
-            have = lambda d, k: os.path.exists(os.path.join(d, k + ".json"))
+            runs, secs = [], 0
+            for g, speaker, lf in RECITERS.get(grp, []):
+                eps = [i for i in items if i.get("group") == g]
+                if not eps:
+                    continue
+                ids = read_links(a.ingest, (lf,))
+                secs += sum(i.get("duration") or 0 for i in eps)
+                runs.append({
+                    "group": g, "speaker": speaker, "episodes": len(eps),
+                    "hours": round(sum(i.get("duration") or 0
+                                       for i in eps) / 3600, 1),
+                    "aligned": sum(1 for i in eps if have(aligned_d, i["key"])),
+                    "seated": sum(1 for i in eps if have(seated_d, i["key"])),
+                    # an id is necessary, not sufficient: this counts ids, and
+                    # says nothing about whether YouTube will play them
+                    "online": sum(1 for i in eps if ids.get(i["key"])),
+                })
+            tot = lambda f: sum(r[f] for r in runs)
             months.append({
                 "syllable": syl, "dev": dev, "rom": rom, "group": grp,
-                "episodes": len(eps),
-                "hours": round(sum(i.get("duration") or 0 for i in eps) / 3600, 1),
-                "aligned": sum(1 for i in eps if have(aligned_d, i["key"])),
-                "seated": sum(1 for i in eps if have(seated_d, i["key"])),
-                "atlas": atlas_key,
+                "episodes": tot("episodes"),
+                "hours": round(secs / 3600, 1),
+                "aligned": tot("aligned"), "seated": tot("seated"),
+                "online": tot("online"),
+                "runs": runs, "atlas": atlas_key,
             })
+            print("  Ākāmāvai %-9s %s" % (rom, " · ".join(
+                "%s %d eps, %d aligned, %d seated, %d with an id"
+                % (r["group"], r["episodes"], r["aligned"], r["seated"],
+                   r["online"]) for r in runs) or "no recording"))
 
     # index.html renders its figures from this file rather than carrying them
     # in the markup, so coverage printed on the landing page cannot drift away
