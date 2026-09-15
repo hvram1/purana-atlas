@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>Purāṇa Atlas</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Two Sanskrit texts, each verse aligned to the second in a recorded upanyāsam.">
+<meta name="description" content="Sanskrit texts, each verse aligned to the second in a recorded upanyāsam.">
 <style>
 /* Noto Serif Devanagari, SELF-HOSTED. The Sanskrit must not depend on a
    font the visitor happens to have installed, and it must not depend on a
@@ -110,17 +110,9 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
 /* the proposal pair: same card, but titled in the UI face rather than the
    serif, so a proposal never reads as one of the texts themselves */
 .cards.two{margin:1.25rem 0 0}
-/* Forthcoming works. Deliberately NOT .card: a card on this page opens an
-   atlas, and none of these opens anything yet. */
-.soon{list-style:none;padding:0;margin:1rem 0 0;display:grid;gap:.85rem}
-.soon li{background:var(--panel);border:1px solid var(--line);
-  border-left:3px solid var(--line);border-radius:8px;padding:.85rem 1rem;
-  font-size:.92rem;color:var(--ink2)}
-.soon b{color:var(--ink);font-weight:600}
-/* The reciter's name, in the "what is coming" list and on the atlas cards.
-   Same treatment in both places: it is an attribution, not a statistic, so it
-   sits under the prose rather than in the .stats row. */
-.soon .who,.card .who{display:block;color:var(--muted);font-size:.8rem;
+/* The reciter's name on the atlas cards: an attribution, not a statistic, so
+   it sits under the prose rather than in the .stats row. */
+.card .who{display:block;color:var(--muted);font-size:.8rem;
   letter-spacing:.02em;margin-top:.3rem}
 .card .who{margin-top:.55rem}
 /* The scope of a scoped atlas, under its numbers. Muted and small
@@ -152,8 +144,8 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
   h1{font-size:1.55rem;margin-bottom:.35rem}
   header{padding-bottom:1rem;margin-bottom:1.1rem}
   /* The masthead was 551px of an 844px screen. Not clamped -- this paragraph
-     is what the site is, and it carries the two links into #soon and
-     #fourth -- but set tighter, which is worth ~45px without losing a word. */
+     is what the site is, and it carries the link into #fourth -- but set
+     tighter, which is worth ~45px without losing a word. */
   .sub{font-size:.86rem;line-height:1.38}
   .sub.why{margin-top:.45rem;font-size:.8rem;line-height:1.38}
   .cards{gap:.7rem}
@@ -223,12 +215,14 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
 <div class="wrap">
 <header>
   <h1>Purāṇa Atlas</h1>
-  <p class="sub">Nine Sanskrit texts, each verse tied to the second it is chanted
-  in a recorded <i>upanyāsam</i>. Click a verse, hear it. Six stand on editions
-  of their own; the other three are <i>kāṇḍa</i>s of one <i>nibandha</i> — a
-  digest made of quotations, indexed by the authority it credits as well as by
-  the text. <a href="#soon">Two more are in hand</a>, and <a href="#fourth">two
-  further texts have no edition to hang them on</a>.</p>
+  <p class="sub"><span id="n-texts">Eleven</span> Sanskrit texts, each verse
+  tied to the second it is chanted in a recorded <i>upanyāsam</i>. Click a
+  verse, hear it. <span id="n-ed">Eight</span> stand on editions of their own;
+  the other <span id="n-kd">three</span> are <i>kāṇḍa</i>s of one
+  <i>nibandha</i> — a digest made of quotations, indexed by the authority it
+  credits as well as by the text. <a href="#fourth">Two further texts have no
+  edition to hang them on</a>, and one month of Māgha talks is indexed by the
+  <span id="n-mb">thirteen</span> books it draws on.</p>
   <p class="sub why">They are built to argue for two things the Purāṇas still
   lack: recitation that is <i>addressable</i> at the verse, and an <i>index of
   names</i> across the corpus. <a href="#why">Read the two proposals →</a></p>
@@ -315,38 +309,6 @@ footer{margin-top:3.5rem;padding-top:1.25rem;border-top:1px solid var(--line);
     <p>The Sanskrit is set in Noto Serif Devanagari, which the site serves
     itself — you do not need a Devanagari font installed, and the page asks
     no third party for one.</p>
-  </div>
-</section>
-
-<section id="soon">
-  <h3>What is coming</h3>
-  <p>Two more recordings are in hand, and they are at different stages. Neither
-  is an atlas yet: one has not been aligned at all, the other has been aligned
-  and has no page. They are listed because that is what they are waiting for,
-  not because a date has been set. The Varāha, Viṣṇu and Garuḍa Purāṇas were on
-  this list until September 2026 and are now atlases above.</p>
-  <ul class="soon">
-    <li><b>Vaiśākha Māsa Māhātmya</b> — Skanda Purāṇa, and the near twin of the
-    Kārtika atlas already here: a month's māhātmya of comparable length, in the
-    same corpus. Expounded by <i>both</i> reciters, so it should carry two lanes
-    as Kārtika does.
-    <span class="who">Musiri Yagnarama Somayaji Dīkṣitar · Pondicherry
-    Vaisampayanar</span></li>
-    <li><b>Māgha Māsa Māhātmya</b> — Padma Purāṇa, not Skanda, and a run of
-    chapters inside a far larger <i>khaṇḍa</i> rather than a section of its own.
-    That is a shape this site does not yet have. Also expounded by both.
-    <span class="who">Musiri Yagnarama Somayaji Dīkṣitar · Pondicherry
-    Vaisampayanar</span></li>
-  </ul>
-  <div class="note">
-    <p>A <i>Tulā Kāverī</i> māhātmya is not on that list either, and it is not
-    waiting for the alignment pass. This page used to say it might prove to be
-    a reading of what is already published here rather than a text of its own.
-    That is now settled, and the other way: it names itself in its own
-    colophons, its chapters run 1 to 15 in order, and 141 of the verses its two
-    reciters share appear in no text we hold. It has a
-    <a href="tulakaveri-witness.html">page of its own</a>, which is not an
-    atlas, because the thing it is missing is the printed edition.</p>
   </div>
 </section>
 
@@ -694,6 +656,22 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
       + '<div class="go">Open the atlas →</div>';
     box.appendChild(a);
   });
+
+  // THE MASTHEAD COUNTS ARE DERIVED. They were typed -- "Nine texts, six on
+  // editions, two more in hand" -- and were still saying so after the two in
+  // hand had become atlases. Editions are the atlases in stats.json, kāṇḍas
+  // are the digest's volumes with recordings; the words are only spelling.
+  const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
+    'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen',
+    'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
+  const word = x => WORDS[x] || String(x);
+  const cap = t => t.charAt(0).toUpperCase() + t.slice(1);
+  const nEd = Object.keys(S.atlases).length;
+  document.getElementById('n-texts').textContent = cap(word(nEd + KANDAS.length));
+  document.getElementById('n-ed').textContent = cap(word(nEd));
+  document.getElementById('n-kd').textContent = word(KANDAS.length);
+  if (S.magha_anukramanika && S.magha_anukramanika.books)
+    document.getElementById('n-mb').textContent = word(S.magha_anukramanika.books);
 
   const k = S.atlases.kartika;
   if (k && k.both_lanes) {
