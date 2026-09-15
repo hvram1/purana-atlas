@@ -185,6 +185,81 @@
   "viewport": 1280,
   "yt_order": true
  },
+ "magha-anukramanika.html": {
+  "buttons_at_start": 1058,
+  "chapters": 0,
+  "controls": {
+   "capped": false,
+   "dead": [],
+   "hidden_by_sweep": 1,
+   "total": 29,
+   "unreached": {
+    "e": [],
+    "n": 0
+   }
+  },
+  "errors": [],
+  "lanes": null,
+  "marks": {
+   "acted": 0,
+   "bad_time": [],
+   "dead": [],
+   "errors": [],
+   "played": 1055,
+   "refusals": [],
+   "refused": 0,
+   "total": 1055
+  },
+  "overflow": 0,
+  "overflow_390": 0,
+  "overflow_390_after": "(page as left)",
+  "overflow_after": "(page as left)",
+  "phone_viewport": 390,
+  "rendered": 1029,
+  "viewport": 1280,
+  "yt_order": true
+ },
+ "magha-atlas.html": {
+  "buttons_at_start": 76,
+  "chapters": 5,
+  "controls": {
+   "capped": false,
+   "dead": [],
+   "hidden_by_sweep": 0,
+   "total": 21,
+   "unreached": {
+    "e": [],
+    "n": 0
+   }
+  },
+  "errors": [],
+  "lanes": [
+   {
+    "id": "s1",
+    "name": "Musiri \u00b7 M\u0101gha Sn\u0101nam",
+    "sim": false,
+    "speaker": "Musiri Yagnarama Somayaji D\u012bk\u1e63itar"
+   }
+  ],
+  "marks": {
+   "acted": 0,
+   "bad_time": [],
+   "dead": [],
+   "errors": [],
+   "played": 83,
+   "refusals": [],
+   "refused": 0,
+   "total": 83
+  },
+  "overflow": 0,
+  "overflow_390": 0,
+  "overflow_390_after": "(page as left)",
+  "overflow_after": "(page as left)",
+  "phone_viewport": 390,
+  "rendered": 32,
+  "viewport": 1280,
+  "yt_order": true
+ },
  "shraddha-atlas.html": {
   "buttons_at_start": 82,
   "chapters": 0,

@@ -97,7 +97,8 @@
     7
    ],
    "book_chapters": 218,
-   "book_verses": 10258
+   "book_verses": 10258,
+   "book_name": null
   },
   "garuda": {
    "verses": 452,
@@ -129,7 +130,8 @@
     17
    ],
    "book_chapters": 49,
-   "book_verses": 2895
+   "book_verses": 2895,
+   "book_name": null
   },
   "vishnu": {
    "verses": 338,
@@ -159,7 +161,35 @@
     19
    ],
    "book_chapters": 22,
-   "book_verses": 1400
+   "book_verses": 1400,
+   "book_name": null
+  },
+  "magha": {
+   "verses": 1022,
+   "chapters": 5,
+   "reached": 34,
+   "reached_pct": 3.3,
+   "lanes": 1,
+   "real_lanes": 1,
+   "recordings": 5,
+   "parts": 5,
+   "both_lanes": 0,
+   "speakers": [
+    "Musiri Yagnarama Somayaji Dīkṣitar"
+   ],
+   "lane_axis": "",
+   "scope": "run",
+   "walk": [],
+   "span": [
+    125,
+    126,
+    127,
+    128,
+    129
+   ],
+   "book_chapters": 255,
+   "book_verses": 14794,
+   "book_name": "Padma Uttarakhaṇḍa"
   }
  },
  "witness": {
@@ -188,6 +218,18 @@
   "quoted_days": 15,
   "divisions": 17,
   "puranas": 8,
+  "speakers": [
+   "Pondicherry Vaisampayanar"
+  ]
+ },
+ "magha_anukramanika": {
+  "episodes": 26,
+  "hours": 15.5,
+  "days_seated": 15,
+  "books": 13,
+  "seated": 787,
+  "quoted": 229,
+  "on_magha_mahatmya": 3,
   "speakers": [
    "Pondicherry Vaisampayanar"
   ]
@@ -385,7 +427,7 @@
    "episodes": 31,
    "hours": 16.3,
    "aligned": 31,
-   "seated": 15,
+   "seated": 20,
    "online": 31,
    "runs": [
     {
@@ -403,11 +445,11 @@
      "episodes": 5,
      "hours": 0.8,
      "aligned": 5,
-     "seated": 0,
+     "seated": 5,
      "online": 5
     }
    ],
-   "atlas": null
+   "atlas": "magha"
   },
   {
    "syllable": "वै",

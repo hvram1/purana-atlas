@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Māgha Māsa — an anukramaṇikā</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="A month of Māgha observances, each day expounded
+ from the book that tells it, every verse placed to the second in its recording.">
+<style>
+@font-face{
+  font-family:"Noto Serif Devanagari";
+  src:url("fonts/NotoSerifDevanagari.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;
+  unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+20F0,
+                U+25CC,U+A830-A839,U+A8E0-A8FF,U+11B00-11B09;
+}
+:root{
+  --bg:#f7f4ee;--panel:#fffdf9;--sunk:#f1ece2;--line:#e2dace;
+  --ink:#282320;--ink2:#4a423b;--muted:#857a6e;--faint:#a99e90;
+  --accent:#8b3a2e;--s1:#a8362b;--s2:#2e6b8b;--ok:#4f7a45;
+  --shadow:0 1px 2px rgba(40,35,32,.06),0 8px 26px rgba(40,35,32,.10);
+  --serif:"Noto Serif Devanagari","Sanskrit 2003",Georgia,serif;
+  --ui:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#16140f;--panel:#1e1b16;--sunk:#242019;--line:#332d24;
+  --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
+  --accent:#d98a72;--s1:#e08878;--s2:#6fa8cc;--ok:#8fbd83;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 26px rgba(0,0,0,.4);
+}}
+:root[data-theme="dark"]{
+  --bg:#16140f;--panel:#1e1b16;--sunk:#242019;--line:#332d24;
+  --ink:#ece5d8;--ink2:#c8bfb0;--muted:#948a7c;--faint:#6c6458;
+  --accent:#d98a72;--s1:#e08878;--s2:#6fa8cc;--ok:#8fbd83;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 26px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);
+     line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:58rem;margin:0 auto;padding:3rem 1.25rem 5rem}
+a{color:var(--accent)}
+header{border-bottom:1px solid var(--line);padding-bottom:1.5rem;margin-bottom:1.5rem}
+.back{font-size:.85rem;color:var(--muted);text-decoration:none;display:inline-block;
+      margin-bottom:1rem}
+.back:hover{color:var(--accent)}
+h1{font-family:var(--serif);font-size:2.1rem;line-height:1.25;margin:0 0 .3rem;
+   font-weight:600}
+.rom{color:var(--muted);font-size:.9rem;letter-spacing:.02em;margin:0 0 1rem}
+.claim{color:var(--ink2);font-size:1.02rem;max-width:46rem;margin:0}
+.claim b{color:var(--ink)}
+h3{font-size:.78rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);
+   margin:0 0 .7rem;font-weight:600}
+p{font-size:.95rem;color:var(--ink2)}
+section{margin:2.25rem 0}
+code{font-family:var(--mono);font-size:.86em;background:var(--sunk);
+     padding:.1em .35em;border-radius:3px}
+
+/* ---- the number band -------------------------------------------------- */
+.band{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.5rem,1fr));
+      gap:.9rem;margin:1.5rem 0}
+.num{background:var(--panel);border:1px solid var(--line);border-radius:9px;
+     padding:.8rem .9rem;box-shadow:var(--shadow)}
+.num b{display:block;font-family:var(--mono);font-size:1.35rem;color:var(--ink);
+       font-weight:600;letter-spacing:-.02em;line-height:1.2}
+.num span{font-size:.78rem;color:var(--muted);display:block;margin-top:.15rem}
+
+/* ---- the reciter ------------------------------------------------------ */
+.wit{background:var(--panel);border:1px solid var(--line);border-radius:9px;
+     padding:1rem 1.1rem;box-shadow:var(--shadow);border-top:3px solid var(--s2)}
+.wit h4{margin:0 0 .1rem;font-size:1rem;font-weight:600}
+.wit .sr{color:var(--muted);font-size:.8rem;margin:0 0 .5rem}
+.wit p{margin:0;font-size:.88rem}
+
+/* ---- player ------------------------------------------------------------ */
+.player{position:sticky;top:0;z-index:30;background:var(--bg);
+        padding:.6rem 0 .7rem;border-bottom:1px solid var(--line);margin-bottom:1rem}
+.player.idle .frame{display:none}
+.frame{position:relative;width:100%;max-width:32rem;aspect-ratio:16/9;
+       border-radius:9px;overflow:hidden;background:#000;margin:0 auto .5rem}
+.frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.nowbar{font-size:.83rem;color:var(--muted);text-align:center;min-height:1.3em}
+.nowbar b{color:var(--ink);font-weight:600}
+.nowbar .stop{margin-left:.6rem;background:none;border:0;color:var(--accent);
+      font:inherit;cursor:pointer;text-decoration:underline}
+
+/* ---- filter ------------------------------------------------------------ */
+.filter{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center;margin:0 0 1rem}
+.filter button{font:inherit;font-size:.83rem;padding:.32rem .75rem;cursor:pointer;
+    background:var(--panel);color:var(--ink2);border:1px solid var(--line);
+    border-radius:99px}
+.filter button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);
+    color:#fff}
+.filter .count{font-size:.8rem;color:var(--muted);margin-left:auto}
+.find{display:flex;gap:.5rem;align-items:center;margin:0 0 1.25rem}
+.find input{font:inherit;font-family:var(--serif);font-size:1rem;flex:1;
+    padding:.45rem .7rem;border-radius:8px;border:1px solid var(--line);
+    background:var(--panel);color:var(--ink);min-width:0}
+.find input::placeholder{font-family:var(--ui);font-size:.85rem;color:var(--faint)}
+
+/* ---- days and rows ------------------------------------------------------ */
+.chap{margin:2rem 0 .8rem;padding-bottom:.35rem;border-bottom:1px solid var(--line);
+      display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap}
+.chap h2{margin:0;font-size:1.02rem;font-weight:600;font-family:var(--serif);
+      line-height:1.5}
+.chap .ep{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.chap .cite{font-size:.78rem;color:var(--faint)}
+.chap .whole{font:inherit;font-size:.78rem;padding:.2rem .6rem;cursor:pointer;
+      border-radius:99px;border:1px solid var(--line);background:var(--panel);
+      color:var(--ink2);margin-left:auto}
+.chap .whole:hover{border-color:var(--accent);color:var(--accent)}
+.row{background:var(--panel);border:1px solid var(--line);border-radius:9px;
+     padding:.7rem .9rem;margin-bottom:.55rem;box-shadow:var(--shadow)}
+.row.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow)}
+.row .head{display:flex;align-items:baseline;gap:.55rem;margin-bottom:.4rem;
+     flex-wrap:wrap}
+.row .n{font-family:var(--mono);font-size:.76rem;color:var(--faint)}
+.tag{font-size:.7rem;letter-spacing:.05em;padding:.1rem .45rem;border-radius:99px;
+     border:1px solid var(--line);color:var(--muted);text-decoration:none;
+     white-space:nowrap}
+.tag.q{color:var(--s2);border-color:color-mix(in srgb,var(--s2) 40%,transparent)}
+.tag.run{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,transparent)}
+.tag.scr{color:var(--s1);border-color:color-mix(in srgb,var(--s1) 40%,transparent)}
+.read{font-family:var(--serif);font-size:1.1rem;line-height:1.75;margin:0}
+.plays{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.55rem;align-items:center}
+.plays button{font:inherit;font-size:.82rem;padding:.28rem .7rem;cursor:pointer;
+     border-radius:7px;border:1px solid var(--line);border-left:3px solid var(--s2);
+     background:var(--sunk);color:var(--ink2);display:inline-flex;gap:.35rem;
+     align-items:center}
+.plays button:hover{border-color:var(--accent);color:var(--accent)}
+.plays button .t{font-family:var(--mono);font-size:.76rem;color:var(--faint)}
+.dur{font-family:var(--mono);font-size:.75rem;color:var(--faint);margin-left:auto}
+.empty{color:var(--faint);font-size:.88rem;margin:.2rem 0 1rem}
+footer{margin-top:3rem;padding-top:1.25rem;border-top:1px solid var(--line);
+       color:var(--faint);font-size:.82rem;display:flex;flex-wrap:wrap;
+       gap:.4rem 1.2rem;justify-content:space-between}
+.err{background:var(--sunk);border:1px solid var(--line);border-left:3px solid var(--accent);
+     padding:1rem;border-radius:0 8px 8px 0}
+.books{display:grid;gap:.55rem}
+.book .days{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.45rem}
+.book .days a{font-family:var(--mono);font-size:.74rem;color:var(--muted);
+     text-decoration:none;border:1px solid var(--line);border-radius:99px;padding:.05rem .45rem}
+.book .days a:hover{color:var(--accent);border-color:var(--accent)}
+.book h4{margin:0;font-family:var(--serif);font-size:1.02rem;font-weight:600}
+.year{font-family:var(--serif);font-size:1.25rem;margin:2.4rem 0 .2rem;font-weight:600}
+.tag.seat{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 45%,transparent)}
+.sib{background:var(--sunk);border:1px solid var(--line);border-left:3px solid var(--s1);
+     border-radius:0 8px 8px 0;padding:.8rem 1rem;font-size:.9rem;color:var(--ink2)}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header>
+  <a class="back" href="index.html">&larr; Pur&#0257;&#07751;a Atlas</a>
+  <h1 id="title">माघमासः</h1>
+  <p class="rom" id="rom">The month of Māgha</p>
+  <p class="claim">A month of daily talks, each on one observance of Māgha —
+  a tithi, a festival, the bath at Prayāga — and each expounded from
+  <b>the book that tells it</b>. There is no single text under this series:
+  its <b id="ndays">26</b> days draw on <b id="nbooks">13</b> divisions of the
+  purāṇas and the Mahābhārata. So this is not an atlas of one edition but an
+  index to the recordings: every verse, named, placed to the second.</p>
+</header>
+
+<div class="player idle" id="player">
+  <div class="frame"><div id="yt"></div></div>
+  <div class="nowbar" id="nowbar"></div>
+</div>
+
+<section>
+  <h3>Two Māgha series, two shapes</h3>
+  <p class="sib">The Padma Purāṇa has a Māgha-māhātmya of its own —
+  Uttarakhaṇḍa 125–129 — and Musiri Yagnarama Somayaji Dīkṣitar’s Māgha
+  Snānam recites it in order. That series has a verse atlas:
+  <a href="magha-atlas.html">माघमाहात्म्यम्</a>. The series on this page
+  does not walk that text; <span id="onspine">3</span> of its rows fall on
+  it. It walks the month instead.</p>
+</section>
+
+<section>
+  <h3>The reciter</h3>
+  <div class="wit" id="who"></div>
+</section>
+
+<div class="band" id="band"></div>
+
+<section>
+  <h3>The books the month draws on</h3>
+  <p>Each is a book a day was seated on — the text its verses were aligned
+  against, decided per day from the whole transcript, not from the title.
+  Commonest first. Press a day to go to it.</p>
+  <div class="books" id="books"></div>
+</section>
+
+<section>
+  <h3>The month, day by day</h3>
+  <p>Each heading is one recording, titled by the reciter. Under it, in the
+  order they are chanted, the verses that could be named: <span class="tag seat">seated</span>
+  on the day’s own book, or <span class="tag q">quoted</span> from any
+  indexed text. Press one to hear it.</p>
+  <div class="filter" id="filter">
+    <button data-f="all" aria-pressed="true">All</button>
+    <button data-f="seated" aria-pressed="false">Seated</button>
+    <button data-f="quoted" aria-pressed="false">Quoted</button>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="find">
+    <input id="find" type="search"
+           placeholder="Find a verse - type Devanagari, e.g. प्रयाग">
+  </div>
+  <div id="rows"></div>
+</section>
+
+<footer>
+  <span>Timings are CTC forced alignment against the waveform. A row is not
+  shown if its confidence is under <span id="floor">0.40</span>, if its
+  alignment has no duration, or if the alignment heard other words where it
+  claims this verse (<span id="nref">0</span> refused).</span>
+  <span id="built"></span>
+</footer>
+</div>
+
+<script>
+var PAD_IN = 0.5, PAD_OUT = 0.4;   // forced-alignment onsets are tight; a beat
+                                   // of lead-in keeps the first syllable whole
+var DATA = null, player = null, ready = false, queue = [], qi = -1, tick = null;
+
+function fmt(s){
+  s = Math.max(0, Math.round(s));
+  var m = Math.floor(s / 60), h = Math.floor(m / 60);
+  return h ? h + ':' + String(m % 60).padStart(2, '0') + ':' +
+             String(s % 60).padStart(2, '0')
+           : m + ':' + String(s % 60).padStart(2, '0');
+}
+
+function onYouTubeIframeAPIReady(){
+  player = new YT.Player('yt', {
+    height: '100%', width: '100%',
+    playerVars: {playsinline: 1, rel: 0, modestbranding: 1},
+    events: {onReady: function(){ ready = true; if (queue.length) step(0); }}
+  });
+}
+window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+
+// The API script is fetched HERE, after the callback above exists -- never from
+// a <script src> tag earlier in the page. YouTube's iframe_api fires
+// onYouTubeIframeAPIReady once, whenever its widget script finishes; if the
+// HTML arrives in two pieces (a phone, and the widget script already warm in
+// cache from another atlas on this site) that can happen BEFORE this script has
+// run, the callback is then undefined, and nothing ever builds the player: the
+// page renders in full and every row is silent. Measured in Firefox with the
+// page served in two chunks.
+(function(){ var t = document.createElement('script');
+  t.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(t); })();
+
+function play(spans, label){
+  queue = spans; qi = -1;
+  document.getElementById('player').classList.remove('idle');
+  // A tap before the player exists must still answer: onReady picks the queue
+  // up a moment later, but a row that goes quiet reads as a broken page.
+  setNow(ready ? label : label + ' — starting the player…');
+  if (ready) step(0);          // otherwise onReady picks the queue up
+}
+
+function step(i){
+  if (i >= queue.length) { stop(); return; }
+  qi = i;
+  var s = queue[i];
+  markRow(s.row);
+  setNow(s.label + (queue.length > 1 ? ' (' + (i + 1) + ' of ' +
+                                        queue.length + ')' : ''));
+  player.loadVideoById({videoId: s.yt,
+                        startSeconds: Math.max(0, s.t - PAD_IN)});
+  watch(s);
+}
+
+function watch(s){
+  if (tick) clearInterval(tick);
+  tick = setInterval(function(){
+    if (!player || !player.getCurrentTime) return;
+    var st = player.getPlayerState ? player.getPlayerState() : 1;
+    if (st !== 1) return;                       // only judge while PLAYING
+    if (player.getCurrentTime() >= s.e + PAD_OUT) step(qi + 1);
+  }, 200);
+}
+
+function stop(){
+  if (tick) { clearInterval(tick); tick = null; }
+  if (player && player.pauseVideo) player.pauseVideo();
+  queue = []; qi = -1; markRow(null); setNow(null);
+}
+
+function setNow(label){
+  var bar = document.getElementById('nowbar');
+  bar.textContent = '';
+  if (!label) return;
+  var b = document.createElement('b'); b.textContent = label;
+  bar.appendChild(b);
+  var x = document.createElement('button');
+  x.className = 'stop'; x.textContent = 'stop';
+  x.addEventListener('click', stop);
+  bar.appendChild(x);
+}
+
+function markRow(n){
+  var on = document.querySelectorAll('.row.on');
+  for (var i = 0; i < on.length; i++) on[i].classList.remove('on');
+  if (n == null) return;
+  var el = document.getElementById('row-' + n);
+  if (el) el.classList.add('on');
+}
+
+// ---------------------------------------------------------------------------
+// Render
+// ---------------------------------------------------------------------------
+function el(tag, cls, text){
+  var e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text != null) e.textContent = text;
+  return e;
+}
+var BOOK = {};
+function dayLabel(ep){ return DATA.episodes[ep].title || ep; }
+function span(r){
+  return {yt: DATA.episodes[r.ep].yt, t: r.t, e: r.e,
+          label: r.ep + ' · ' + fmt(r.t), row: r.n};
+}
+function link(cls, text, url){
+  var a = el(url ? 'a' : 'span', cls, text);
+  if (url) { a.href = url; a.target = '_blank'; a.rel = 'noopener'; }
+  return a;
+}
+function rowNode(r){
+  var box = el('div', 'row'); box.id = 'row-' + r.n;
+  var head = el('div', 'head');
+  head.appendChild(el('span', 'n', '#' + r.n));
+  if (r.kind === 'seated')
+    head.appendChild(link('tag seat', BOOK[r.book].label + ' ' + r.ref, r.url));
+  else
+    head.appendChild(link('tag q', r.cite, r.url));
+  if (r.script === 'tamil')
+    head.appendChild(el('span', 'tag scr', 'decoded in Tamil script'));
+  head.appendChild(el('span', 'dur', (r.e - r.t).toFixed(1) + 's'));
+  box.appendChild(head);
+  box.appendChild(el('p', 'read', r.text));
+  var plays = el('div', 'plays');
+  var b = el('button');
+  b.appendChild(el('span', null, '▶ chant'));
+  b.appendChild(el('span', 't', fmt(r.t)));
+  b.addEventListener('click', function(){ play([span(r)], dayLabel(r.ep)); });
+  plays.appendChild(b);
+  box.appendChild(plays);
+  return box;
+}
+var FILTER = 'all', FIND = '';
+function keep(r){
+  if (FILTER !== 'all' && r.kind !== FILTER) return false;
+  if (FIND && r.text.indexOf(FIND) < 0 &&
+      (r.cite || '').indexOf(FIND) < 0) return false;
+  return true;
+}
+function byDate(a, b){
+  var A = DATA.episodes[a], B = DATA.episodes[b];
+  return (A.year - B.year) || (a < b ? -1 : 1);
+}
+function draw(){
+  var host = document.getElementById('rows');
+  host.textContent = '';
+  var shown = 0, year = null;
+  Object.keys(DATA.episodes).sort(byDate).forEach(function(ep){
+    var e = DATA.episodes[ep];
+    var mine = DATA.rows.filter(function(r){ return r.ep === ep && keep(r); });
+    if (!mine.length && (FILTER !== 'all' || FIND)) return;
+    if (e.year !== year) { year = e.year; host.appendChild(el('h2', 'year', 'Māgha ' + year)); }
+    var h = el('div', 'chap'); h.id = 'day-' + ep;
+    h.appendChild(el('h2', null, dayLabel(ep)));
+    h.appendChild(el('span', 'ep', ep));
+    h.appendChild(el('span', 'cite', (e.date ? e.date + ' · ' : '') + fmt(e.dur)
+      + ' · ' + (e.books.length
+          ? e.books.map(function(k){ return BOOK[k].label; }).join(' + ')
+          : 'no book seated')));
+    if (mine.length) {
+      var w = el('button', 'whole', '▶ the day’s verses, in order');
+      w.addEventListener('click', function(){ play(mine.map(span), dayLabel(ep)); });
+      h.appendChild(w);
+    }
+    host.appendChild(h);
+    if (!mine.length) {
+      host.appendChild(el('p', 'empty', 'Nothing chanted on this day could be '
+        + 'named: no book seats on it, and the index names no quotation in it '
+        + 'above the floor.'));
+      return;
+    }
+    mine.forEach(function(r){ host.appendChild(rowNode(r)); shown++; });
+  });
+  document.getElementById('count').textContent =
+      shown + ' of ' + DATA.rows.length + ' shown';
+}
+function drawBooks(D){
+  var host = document.getElementById('books');
+  D.books.forEach(function(b){
+    var mine = D.rows.filter(function(r){ return r.book === b.key; })
+                     .sort(function(x, y){ return byDate(x.ep, y.ep) || x.t - y.t; });
+    var box = el('div', 'row book');
+    var head = el('div', 'head');
+    head.appendChild(el('h4', null, b.label));
+    head.appendChild(el('span', 'dur', b.verses + ' verses · ' + b.days.length
+                                       + (b.days.length === 1 ? ' day' : ' days')));
+    box.appendChild(head);
+    var days = el('div', 'days');
+    b.days.forEach(function(ep){
+      var a = el('a', null, ep); a.href = '#day-' + ep;
+      a.title = dayLabel(ep);
+      days.appendChild(a);
+    });
+    box.appendChild(days);
+    var plays = el('div', 'plays');
+    var p = el('button');
+    p.appendChild(el('span', null, '▶ every verse of it, in order'));
+    p.appendChild(el('span', 't', mine.length + ''));
+    p.addEventListener('click', function(){ play(mine.map(span), b.label); });
+    plays.appendChild(p);
+    box.appendChild(plays);
+    host.appendChild(box);
+  });
+}
+function render(D){
+  DATA = D;
+  var s = D.stats;
+  D.books.forEach(function(b){ BOOK[b.key] = b; });
+  document.getElementById('title').textContent = D.title;
+  document.getElementById('rom').textContent = D.rom + ' · ' + D.kind;
+  document.getElementById('ndays').textContent = s.episodes;
+  document.getElementById('nbooks').textContent = s.books;
+  document.getElementById('onspine').textContent = s.on_magha_mahatmya;
+  document.getElementById('floor').textContent = s.conf_floor.toFixed(2);
+  document.getElementById('nref').textContent =
+      Object.keys(s.refused).reduce(function(a, k){ return a + s.refused[k]; }, 0);
+  document.getElementById('built').textContent = 'Built ' + D.built;
+  var w = document.getElementById('who');
+  w.appendChild(el('h4', null, D.speaker.name));
+  w.appendChild(el('p', 'sr', D.speaker.series + ' · ' + s.episodes
+                              + ' recordings · ' + s.hours + ' h'));
+  w.appendChild(el('p', null, D.speaker.shape));
+  [[s.episodes, 'days, all playable'], [s.hours + ' h', 'of discourse'],
+   [s.days_seated, 'days seated on a book'], [s.books, 'books drawn on'],
+   [s.seated, 'verses seated'], [s.quoted, 'quotations named']
+  ].forEach(function(p){
+    var d = el('div', 'num');
+    d.appendChild(el('b', null, String(p[0])));
+    d.appendChild(el('span', null, p[1]));
+    document.getElementById('band').appendChild(d);
+  });
+  drawBooks(D);
+  var f = document.getElementById('filter');
+  f.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click', function(){
+      FILTER = b.dataset.f;
+      f.querySelectorAll('button').forEach(function(o){
+        o.setAttribute('aria-pressed', String(o === b)); });
+      draw();
+    });
+  });
+  document.getElementById('find').addEventListener('input', function(ev){
+    FIND = ev.target.value.trim(); draw();
+  });
+  draw();
+}
+fetch('data/magha_anukramanika.json')
+  .then(function(r){ return r.json(); })
+  .then(render)
+  .catch(function(){
+    document.getElementById('rows').innerHTML =
+      '<div class="err">The page data did not load, so nothing below can be ' +
+      'played. Run <code>./refresh.py --check</code>.</div>';
+  });
+</script>
+</body>
+</html>

@@ -418,6 +418,14 @@ const CARDS = {
          + 'renditions — one reading the book straight through, one following '
          + 'the calendar.'
   },
+  magha: {
+    href: 'magha-atlas.html',
+    title: 'माघमाहात्म्यम्',
+    rom: 'Māgha Māhātmya · Padma Purāṇa, Uttarakhaṇḍa 125–129',
+    blurb: 'Bathing before sunrise in the month of Māgha, as the Padma Purāṇa '
+         + 'tells it — five short Tamil parts from 2020 that recite its opening '
+         + 'chapter in order and stop early in the next.'
+  },
   vaishakha: {
     href: 'vaishakha-atlas.html',
     title: 'वैशाखमासमाहात्म्यम्',
@@ -509,7 +517,8 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
               ? 'Adhyāyas ' + s.span[0] + '–' + s.span[s.span.length - 1]
               : 'Adhyāyas ' + s.walk.join(', '))
             + ' of ' + n(s.book_chapters) + ' — '
-            + n(s.book_verses) + ' verses in the whole Purāṇa</p>'
+            + n(s.book_verses) + ' verses in the '
+            + (s.book_name || 'whole Purāṇa') + '</p>'
           : '')
       // Named from stats.json, which reads them off the lanes -- so a page
       // that gains a reciter says so without anyone editing this file.
@@ -594,7 +603,36 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
       + rest.map(m => '<b>' + m.dev + '</b> ' + state(m)).join('<br>')
       + '</span></p>';
     box.appendChild(h);
-    withAtlas.forEach(m => makeCard(m.atlas));
+    // THE SECOND MĀGHA IS NOT AN ATLAS. Vaiśampāyanar's month draws each day
+    // from a different book, so it has no single spine to hang on; it is an
+    // index to the recordings, by day and by book. Built beside the Musiri
+    // atlas card because it is the same month, and says what it is.
+    const MA = S.magha_anukramanika;
+    const maghaIndex = () => {
+      if (!(MA && MA.episodes)) return;
+      const a = document.createElement('a');
+      a.className = 'card'; a.href = 'magha-anukramanika.html';
+      a.innerHTML =
+        '<h2>माघमासः</h2>'
+        + '<p class="rom">The month of Māgha · an anukramaṇikā, not an atlas</p>'
+        + '<p>A talk a day on one observance of Māgha, each expounded from the '
+        + 'book that tells it — so no single text runs under the series. '
+        + 'Indexed by day and by book instead; only ' + n(MA.on_magha_mahatmya)
+        + ' of its verses fall on the Padma Māgha-māhātmya beside it.</p>'
+        + '<div class="stats">'
+        +   '<span class="stat"><b>' + n(MA.books) + '</b>books drawn on</span>'
+        +   '<span class="stat"><b>' + n(MA.days_seated) + ' of ' + n(MA.episodes)
+        +     '</b>days seated</span>'
+        +   '<span class="stat"><b>' + n(MA.seated + MA.quoted) + '</b>verses named</span>'
+        +   '<span class="stat"><b>' + n(MA.episodes) + '</b>recordings</span>'
+        + '</div>'
+        + '<p class="who">Expounded by ' + MA.speakers.join(' · ') + '</p>'
+        + '<div class="go">Open the index →</div>';
+      box.appendChild(a);
+    };
+    // Month by month, and the Māgha index straight after the Māgha atlas, so
+    // the two shapes of one month sit side by side.
+    withAtlas.forEach(m => { makeCard(m.atlas); if (m.group === 'magha') maghaIndex(); });
   }
 
   // The Śrāddha atlas is an atlas -- it has an edition -- so it belongs in the

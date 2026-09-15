@@ -104,6 +104,10 @@ ATLASES = [
     # whole-book error at a smaller scale.
     ("garuda-atlas.html", "garuda_4lang.json", "garuda_atlas_substrate.json"),
     ("vishnu-atlas.html", "vishnu_4lang.json", "vishnu_atlas_substrate.json"),
+    # Musiri's Māgha Snānam on the Māgha-māhātmya, Padma Uttarakhaṇḍa 125-129,
+    # published whole (build_purana_audio.py --purana magha). The other Māgha
+    # series is not a verse atlas: it draws each day from a different book.
+    ("magha-atlas.html", "magha_4lang.json", "magha_atlas_substrate.json"),
 ]
 
 # The Tulā Kāverī page is not an atlas and deliberately does not have a
@@ -123,6 +127,13 @@ WITNESS_SRC = ("", os.path.join("build", "witness"))   # page dir, data dir
 # shape check -- but the same repo, the same build/witness directory, and the
 # same copy-then-verify loop.
 ANUK = ("shravana-anukramanika.html", "shravana_anukramanika.json")
+
+# Vaiśampāyanar's Māgha month. An anukramaṇikā too, but the opposite finding
+# from Śrāvaṇa: every book is HELD, there are simply thirteen of them, one or
+# more per day. So it is not a verse atlas (no single spine) and does not argue
+# absence (no probe comparison) -- it indexes each day's verses by book, and
+# check_magha_anuk holds that.
+MAGHA_ANUK = ("magha-anukramanika.html", "magha_anukramanika.json")
 
 # The Śrāddha atlas. Unlike the two above it HAS an edition -- the
 # Smṛtimuktāphalam's śrāddha kāṇḍa -- so it is an atlas and not a witness. It
@@ -577,6 +588,53 @@ def check_anukramanika(path):
     return bad, d
 
 
+def check_magha_anuk(path):
+    """Every row playable, every seated row on a book the file carries, and
+    every figure the page prints recomputed from the rows.
+
+    The page prints `on_magha_mahatmya` as the reason this series is not a lane
+    of the Māgha atlas, so that number above all must be the rows' own.
+    """
+    name = os.path.basename(path)
+    d = json.load(open(path, encoding="utf-8"))
+    bad = 0
+    rows, eps = d.get("rows") or [], d.get("episodes") or {}
+    books = {b["key"] for b in d.get("books") or []}
+    if not rows or not eps:
+        return fail("%s has no rows or no episodes" % name), {}
+    st = d.get("stats") or {}
+    silent, malformed, orphan, low = set(), 0, 0, 0
+    for r in rows:
+        if (not all(k in r for k in ("ep", "t", "e", "text", "kind", "script"))
+                or r["e"] <= r["t"] or r["kind"] not in ("seated", "quoted")):
+            malformed += 1
+            continue
+        if not (eps.get(r["ep"]) or {}).get("yt"):
+            silent.add(r["ep"])
+        if r["kind"] == "seated" and r.get("book") not in books:
+            orphan += 1
+        if r.get("conf") is not None and r["conf"] < CONF_FLOOR:
+            low += 1
+    for n, what in ((malformed, "rows are malformed or end before they start"),
+                    (orphan, "seated rows name a book the file does not carry"),
+                    (low, "rows are below the %.2f confidence floor" % CONF_FLOOR)):
+        if n:
+            bad += fail("%s: %d %s" % (name, n, what))
+    if silent:
+        bad += fail("%s: no video id for %s" % (name, ", ".join(sorted(silent))))
+    seated = [r for r in rows if r.get("kind") == "seated"]
+    on = sum(1 for r in seated if r.get("book") == "padma_उत्तरखण्डः"
+             and 125 <= int(str(r.get("ref", "0")).split(".")[0]) <= 129)
+    for k, v in (("rows", len(rows)), ("seated", len(seated)),
+                 ("quoted", len(rows) - len(seated)), ("books", len(books)),
+                 ("on_magha_mahatmya", on),
+                 ("days_seated", sum(1 for e in eps.values() if e.get("books")))):
+        if st.get(k) != v:
+            bad += fail("%s: stats say %s %s, the rows say %d"
+                        % (name, st.get(k), k, v))
+    return bad, d
+
+
 def check_shraddha(path):
     """This page's failure is a spine that points at nothing.
 
@@ -933,6 +991,7 @@ def main():
                 "span": (four.get("walk") or {}).get("span") or [],
                 "book_chapters": fs["book_chapters"],
                 "book_verses": fs["book_verses"],
+                "book_name": fs.get("book_name"),
             })
         print("  %d verses · %d reached by a real recording (%.1f%%) · "
               "%d lanes (%d real) · %d parts, %d recordings"
@@ -1031,6 +1090,44 @@ def main():
                      anuk["chant_hours"], anuk["quoted"],
                      format(anuk["index_verses"], ","),
                      anuk["quoted_in_runs"]))
+        for pth in (page_dst, data_dst):
+            raw, gz = sizes(pth)
+            total_raw += raw; total_gz += gz
+            print("    %-34s %7.2f MB raw  %6.2f MB gzip"
+                  % (os.path.basename(pth), raw / 1e6, gz / 1e6))
+        for u in cites:
+            print("      %-32s cites %s" % ("", u))
+
+    print("\n%s" % MAGHA_ANUK[0])
+    manuk = {}
+    page_dst = os.path.join(HERE, MAGHA_ANUK[0])
+    data_dst = os.path.join(data_dir, MAGHA_ANUK[1])
+    if not a.check:
+        for name, sub_dir, dst in ((MAGHA_ANUK[0], WITNESS_SRC[0], page_dst),
+                                   (MAGHA_ANUK[1], WITNESS_SRC[1], data_dst)):
+            src = os.path.join(a.ingest, sub_dir, name)
+            if not os.path.exists(src):
+                bad += fail("missing in audio-ingest: %s -- run "
+                            "scripts/magha_anukramanika.py there" % src)
+                continue
+            shutil.copyfile(src, dst)
+    if not os.path.exists(page_dst):
+        bad += fail("%s is not here" % MAGHA_ANUK[0])
+    else:
+        bad += check_fetches(page_dst, (MAGHA_ANUK[1],))
+        b, cites = check_selfcontained(page_dst); bad += b
+        b, md = check_magha_anuk(data_dst); bad += b
+        if md:
+            st = md["stats"]
+            manuk = {k: st[k] for k in ("episodes", "hours", "days_seated",
+                                        "books", "seated", "quoted",
+                                        "on_magha_mahatmya")}
+            manuk["speakers"] = [md["speaker"]["name"]]
+            print("  %d days, %.1f h · %d seated on %d books · %d verses "
+                  "seated, %d quoted · %d on Padma 125-129"
+                  % (st["episodes"], st["hours"], st["days_seated"],
+                     st["books"], st["seated"], st["quoted"],
+                     st["on_magha_mahatmya"]))
         for pth in (page_dst, data_dst):
             raw, gz = sizes(pth)
             total_raw += raw; total_gz += gz
@@ -1217,7 +1314,7 @@ def main():
         # (group in the manifest, syllable, devanagari, roman, atlas key)
         FOUR = [("ashadha", "आ", "आषाढः", "Āṣāḍha", None),
                 ("kartika", "का", "कार्तिकः", "Kārtika", "kartika"),
-                ("magha", "मा", "माघः", "Māgha", None),
+                ("magha", "मा", "माघः", "Māgha", "magha"),
                 ("vaishakha", "वै", "वैशाखः", "Vaiśākha", "vaishakha")]
         # EACH MONTH IS EVERY RECITER WHO RECORDED IT. The dsb days are an
         # attribute.py `group`; the Musiri Māgha Snānam and Vaiśākha Māhātmyam
@@ -1278,6 +1375,7 @@ def main():
         json.dump({"built": datetime.date.today().isoformat(),
                    "simulated_lanes": bool(a.with_sim), "atlases": stats,
                    "witness": wit, "anukramanika": anuk,
+                   "magha_anukramanika": manuk,
                    # `sraddha` stays the smp6 kāṇḍa so index.html's existing
                    # card is untouched; `kandas` is all three, for the
                    # Smṛtimuktāphalam grouping.
