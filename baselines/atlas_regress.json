@@ -1,9 +1,10 @@
 {
  "_meta": {
-  "harness_version": 3,
+  "harness_version": 4,
   "repo": "purana-atlas"
  },
  "adhyatma-atlas.html": {
+  "addresses_published": 120,
   "buttons_at_start": 148,
   "chapters": 66,
   "controls": {
@@ -15,6 +16,66 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 772,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "1.1",
+     "chars": 772,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "1.21",
+     "chars": 866,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "1.49",
+     "chars": 778,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "2.21",
+     "chars": 1041,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "2.41",
+     "chars": 899,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "3.5",
+     "chars": 969,
+     "overflow": 0,
+     "scrollY": 0
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "1.1",
+    "1.21",
+    "1.49",
+    "2.21",
+    "2.41",
+    "3.5"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": [
@@ -51,6 +112,7 @@
   "yt_order": true
  },
  "aparakarya-atlas.html": {
+  "addresses_published": 3,
   "buttons_at_start": 72,
   "chapters": 0,
   "controls": {
@@ -62,6 +124,45 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 493,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "auth",
+     "chars": 1223,
+     "overflow": 0,
+     "scrollY": 1682
+    },
+    {
+     "addr": "rec",
+     "chars": 1144,
+     "overflow": 0,
+     "scrollY": 1638
+    },
+    {
+     "addr": "text",
+     "chars": 1224,
+     "overflow": 0,
+     "scrollY": 1661
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "auth",
+    "rec",
+    "text"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": null,
@@ -85,6 +186,7 @@
   "yt_order": true
  },
  "garuda-atlas.html": {
+  "addresses_published": 147,
   "buttons_at_start": 213,
   "chapters": 5,
   "controls": {
@@ -96,6 +198,66 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 1216,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "5.63",
+     "chars": 918,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "5.106",
+     "chars": 973,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "5.139",
+     "chars": 1082,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "7.21",
+     "chars": 1084,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "7.57",
+     "chars": 1101,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "7.84",
+     "chars": 993,
+     "overflow": 0,
+     "scrollY": 0
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "5.63",
+    "5.106",
+    "5.139",
+    "7.21",
+    "7.57",
+    "7.84"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": [
@@ -126,6 +288,7 @@
   "yt_order": true
  },
  "kartika-atlas.html": {
+  "addresses_published": 137,
   "buttons_at_start": 351,
   "chapters": 36,
   "controls": {
@@ -137,6 +300,66 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 1280,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "1.1",
+     "chars": 871,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "1.24",
+     "chars": 1091,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "1.47",
+     "chars": 986,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "2.14",
+     "chars": 1074,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "2.39",
+     "chars": 1634,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "3.4",
+     "chars": 838,
+     "overflow": 0,
+     "scrollY": 0
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "1.1",
+    "1.24",
+    "1.47",
+    "2.14",
+    "2.39",
+    "3.4"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": [
@@ -186,6 +409,7 @@
   "yt_order": true
  },
  "magha-anukramanika.html": {
+  "addresses_published": 15,
   "buttons_at_start": 1058,
   "chapters": 0,
   "controls": {
@@ -197,6 +421,66 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 147,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "day-dsb-031",
+     "chars": 791,
+     "overflow": 0,
+     "scrollY": 3683
+    },
+    {
+     "addr": "day-dsb-038",
+     "chars": 818,
+     "overflow": 0,
+     "scrollY": 31277
+    },
+    {
+     "addr": "day-dsb-043",
+     "chars": 735,
+     "overflow": 0,
+     "scrollY": 55812
+    },
+    {
+     "addr": "day-dsb-034",
+     "chars": 718,
+     "overflow": 0,
+     "scrollY": 11607
+    },
+    {
+     "addr": "day-dsb-047",
+     "chars": 703,
+     "overflow": 0,
+     "scrollY": 96831
+    },
+    {
+     "addr": "day-dsb-046",
+     "chars": 796,
+     "overflow": 0,
+     "scrollY": 83728
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "day-dsb-031",
+    "day-dsb-038",
+    "day-dsb-043",
+    "day-dsb-034",
+    "day-dsb-047",
+    "day-dsb-046"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": null,
@@ -220,6 +504,7 @@
   "yt_order": true
  },
  "magha-atlas.html": {
+  "addresses_published": 34,
   "buttons_at_start": 76,
   "chapters": 5,
   "controls": {
@@ -231,6 +516,66 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 1087,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "125.1",
+     "chars": 1087,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "125.6",
+     "chars": 1456,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "125.43",
+     "chars": 1354,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "125.49",
+     "chars": 1429,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "125.58",
+     "chars": 1389,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "126.7",
+     "chars": 1007,
+     "overflow": 0,
+     "scrollY": 0
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "125.1",
+    "125.6",
+    "125.43",
+    "125.49",
+    "125.58",
+    "126.7"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": [
@@ -261,6 +606,7 @@
   "yt_order": true
  },
  "shraddha-atlas.html": {
+  "addresses_published": 4,
   "buttons_at_start": 82,
   "chapters": 0,
   "controls": {
@@ -272,6 +618,52 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 487,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "auth",
+     "chars": 1211,
+     "overflow": 0,
+     "scrollY": 1699
+    },
+    {
+     "addr": "exp",
+     "chars": 2639,
+     "overflow": 0,
+     "scrollY": 1769
+    },
+    {
+     "addr": "rec",
+     "chars": 1078,
+     "overflow": 0,
+     "scrollY": 1654
+    },
+    {
+     "addr": "text",
+     "chars": 1229,
+     "overflow": 0,
+     "scrollY": 1678
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "auth",
+    "exp",
+    "rec",
+    "text"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": null,
@@ -295,6 +687,7 @@
   "yt_order": true
  },
  "shravana-anukramanika.html": {
+  "addresses_published": 0,
   "buttons_at_start": 996,
   "chapters": 0,
   "controls": {
@@ -306,6 +699,10 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "note": "no address of its own",
+   "tested": []
   },
   "errors": [],
   "lanes": null,
@@ -329,6 +726,7 @@
   "yt_order": true
  },
  "tulakaveri-witness.html": {
+  "addresses_published": 0,
   "buttons_at_start": 426,
   "chapters": 0,
   "controls": {
@@ -340,6 +738,10 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "note": "no address of its own",
+   "tested": []
   },
   "errors": [],
   "lanes": null,
@@ -363,6 +765,7 @@
   "yt_order": true
  },
  "vaishakha-atlas.html": {
+  "addresses_published": 103,
   "buttons_at_start": 102,
   "chapters": 25,
   "controls": {
@@ -374,6 +777,66 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 786,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "1.1",
+     "chars": 907,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "2.3",
+     "chars": 883,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "2.21",
+     "chars": 931,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "2.38",
+     "chars": 917,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "3.19",
+     "chars": 995,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "3.36",
+     "chars": 1140,
+     "overflow": 0,
+     "scrollY": 0
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "1.1",
+    "2.3",
+    "2.21",
+    "2.38",
+    "3.19",
+    "3.36"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": [
@@ -417,6 +880,7 @@
   "yt_order": true
  },
  "varaha-atlas.html": {
+  "addresses_published": 102,
   "buttons_at_start": 152,
   "chapters": 7,
   "controls": {
@@ -428,6 +892,66 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 1193,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "1.1",
+     "chars": 1302,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "1.24",
+     "chars": 999,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "2.13",
+     "chars": 1061,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "2.39",
+     "chars": 1090,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "2.64",
+     "chars": 1022,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "3.11",
+     "chars": 1036,
+     "overflow": 0,
+     "scrollY": 0
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "1.1",
+    "1.24",
+    "2.13",
+    "2.39",
+    "2.64",
+    "3.11"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": [
@@ -458,6 +982,7 @@
   "yt_order": true
  },
  "varnasrama-atlas.html": {
+  "addresses_published": 4,
   "buttons_at_start": 202,
   "chapters": 0,
   "controls": {
@@ -469,6 +994,52 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 555,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "auth",
+     "chars": 1306,
+     "overflow": 0,
+     "scrollY": 1733
+    },
+    {
+     "addr": "exp",
+     "chars": 1159,
+     "overflow": 0,
+     "scrollY": 1803
+    },
+    {
+     "addr": "rec",
+     "chars": 1117,
+     "overflow": 0,
+     "scrollY": 1688
+    },
+    {
+     "addr": "text",
+     "chars": 1340,
+     "overflow": 0,
+     "scrollY": 1712
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "auth",
+    "exp",
+    "rec",
+    "text"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": null,
@@ -492,6 +1063,7 @@
   "yt_order": true
  },
  "virata-atlas.html": {
+  "addresses_published": 73,
   "buttons_at_start": 144,
   "chapters": 72,
   "controls": {
@@ -503,6 +1075,66 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 1169,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "1.4",
+     "chars": 793,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "1.16",
+     "chars": 1002,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "1.28",
+     "chars": 820,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "2.12",
+     "chars": 872,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "2.24",
+     "chars": 817,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "3.4",
+     "chars": 971,
+     "overflow": 0,
+     "scrollY": 0
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "1.4",
+    "1.16",
+    "1.28",
+    "2.12",
+    "2.24",
+    "3.4"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": [
@@ -533,6 +1165,7 @@
   "yt_order": true
  },
  "vishnu-atlas.html": {
+  "addresses_published": 110,
   "buttons_at_start": 281,
   "chapters": 4,
   "controls": {
@@ -544,6 +1177,66 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 1294,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "9.1",
+     "chars": 1378,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "9.34",
+     "chars": 1214,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "9.71",
+     "chars": 1195,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "9.101",
+     "chars": 1172,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "9.120",
+     "chars": 1213,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "16.2",
+     "chars": 906,
+     "overflow": 0,
+     "scrollY": 0
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "9.1",
+    "9.34",
+    "9.71",
+    "9.101",
+    "9.120",
+    "16.2"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": [

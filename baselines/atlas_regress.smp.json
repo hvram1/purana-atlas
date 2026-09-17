@@ -1,9 +1,10 @@
 {
  "_meta": {
-  "harness_version": 3,
+  "harness_version": 4,
   "repo": "smp"
  },
  "index.html": {
+  "addresses_published": 1117,
   "buttons_at_start": 12,
   "chapters": 0,
   "controls": {
@@ -15,6 +16,10 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "note": "no address of its own",
+   "tested": []
   },
   "errors": [],
   "lanes": null,
@@ -38,6 +43,7 @@
   "yt_order": null
  },
  "smp1.html": {
+  "addresses_published": 194,
   "buttons_at_start": 529,
   "chapters": 0,
   "controls": {
@@ -49,6 +55,66 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 609,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "SMP:V1:Q0061",
+     "chars": 970,
+     "overflow": 0,
+     "scrollY": 13396
+    },
+    {
+     "addr": "SMP:V1:S192",
+     "chars": 1793,
+     "overflow": 0,
+     "scrollY": 15850
+    },
+    {
+     "addr": "q:\u092e\u0928\u0941",
+     "chars": 728,
+     "overflow": 0,
+     "scrollY": 8650
+    },
+    {
+     "addr": "SMP:V1:Q0040",
+     "chars": 663,
+     "overflow": 0,
+     "scrollY": 9879
+    },
+    {
+     "addr": "SMP:V1:S032",
+     "chars": 1825,
+     "overflow": 0,
+     "scrollY": 15850
+    },
+    {
+     "addr": "q:\u0928\u093e\u0930\u0926",
+     "chars": 721,
+     "overflow": 0,
+     "scrollY": 8650
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "SMP:V1:Q0061",
+    "SMP:V1:S192",
+    "q:\u092e\u0928\u0941",
+    "SMP:V1:Q0040",
+    "SMP:V1:S032",
+    "q:\u0928\u093e\u0930\u0926"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": null,
@@ -72,6 +138,7 @@
   "yt_order": null
  },
  "smp2.html": {
+  "addresses_published": 53,
   "buttons_at_start": 244,
   "chapters": 0,
   "controls": {
@@ -83,6 +150,66 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 720,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "SMP:V2:Q0462",
+     "chars": 846,
+     "overflow": 0,
+     "scrollY": 7524
+    },
+    {
+     "addr": "SMP:V2:S046",
+     "chars": 1853,
+     "overflow": 0,
+     "scrollY": 4466
+    },
+    {
+     "addr": "q:\u092e\u0928\u0941",
+     "chars": 756,
+     "overflow": 0,
+     "scrollY": 7323
+    },
+    {
+     "addr": "SMP:V2:Q0375",
+     "chars": 775,
+     "overflow": 0,
+     "scrollY": 21379
+    },
+    {
+     "addr": "SMP:V2:S008",
+     "chars": 1566,
+     "overflow": 0,
+     "scrollY": 4466
+    },
+    {
+     "addr": "q:\u0938\u0902\u0935\u0930\u094d\u0924",
+     "chars": 749,
+     "overflow": 0,
+     "scrollY": 7323
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "SMP:V2:Q0462",
+    "SMP:V2:S046",
+    "q:\u092e\u0928\u0941",
+    "SMP:V2:Q0375",
+    "SMP:V2:S008",
+    "q:\u0938\u0902\u0935\u0930\u094d\u0924"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": null,
@@ -106,6 +233,7 @@
   "yt_order": null
  },
  "smp3.html": {
+  "addresses_published": 66,
   "buttons_at_start": 240,
   "chapters": 0,
   "controls": {
@@ -117,6 +245,66 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 690,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "SMP:V3:Q0323",
+     "chars": 910,
+     "overflow": 0,
+     "scrollY": 14190
+    },
+    {
+     "addr": "SMP:V3:S065",
+     "chars": 1459,
+     "overflow": 0,
+     "scrollY": 5473
+    },
+    {
+     "addr": "q:\u092e\u0928\u0941",
+     "chars": 1120,
+     "overflow": 0,
+     "scrollY": 6275
+    },
+    {
+     "addr": "SMP:V3:Q0255",
+     "chars": 1527,
+     "overflow": 0,
+     "scrollY": 21859
+    },
+    {
+     "addr": "SMP:V3:S010",
+     "chars": 1652,
+     "overflow": 0,
+     "scrollY": 5473
+    },
+    {
+     "addr": "q:\u092c\u0943\u0939\u0938\u094d\u092a\u0924\u093f",
+     "chars": 744,
+     "overflow": 0,
+     "scrollY": 6275
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "SMP:V3:Q0323",
+    "SMP:V3:S065",
+    "q:\u092e\u0928\u0941",
+    "SMP:V3:Q0255",
+    "SMP:V3:S010",
+    "q:\u092c\u0943\u0939\u0938\u094d\u092a\u0924\u093f"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": null,
@@ -140,6 +328,7 @@
   "yt_order": null
  },
  "smp4.html": {
+  "addresses_published": 68,
   "buttons_at_start": 191,
   "chapters": 0,
   "controls": {
@@ -151,6 +340,66 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 656,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "SMP:V4:Q0373",
+     "chars": 850,
+     "overflow": 0,
+     "scrollY": 17928
+    },
+    {
+     "addr": "SMP:V4:S064",
+     "chars": 1636,
+     "overflow": 0,
+     "scrollY": 6073
+    },
+    {
+     "addr": "q:\u092e\u0928\u0941",
+     "chars": 722,
+     "overflow": 0,
+     "scrollY": 4658
+    },
+    {
+     "addr": "SMP:V4:Q0245",
+     "chars": 838,
+     "overflow": 0,
+     "scrollY": 4858
+    },
+    {
+     "addr": "SMP:V4:S011",
+     "chars": 1676,
+     "overflow": 0,
+     "scrollY": 6073
+    },
+    {
+     "addr": "q:\u0935\u0938\u093f\u0937\u094d\u0920",
+     "chars": 765,
+     "overflow": 0,
+     "scrollY": 4658
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "SMP:V4:Q0373",
+    "SMP:V4:S064",
+    "q:\u092e\u0928\u0941",
+    "SMP:V4:Q0245",
+    "SMP:V4:S011",
+    "q:\u0935\u0938\u093f\u0937\u094d\u0920"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": null,
@@ -174,6 +423,7 @@
   "yt_order": null
  },
  "smp5.html": {
+  "addresses_published": 65,
   "buttons_at_start": 304,
   "chapters": 0,
   "controls": {
@@ -185,6 +435,66 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 719,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "SMP:V5:Q0613",
+     "chars": 906,
+     "overflow": 0,
+     "scrollY": 10266
+    },
+    {
+     "addr": "SMP:V5:S061",
+     "chars": 1643,
+     "overflow": 0,
+     "scrollY": 5519
+    },
+    {
+     "addr": "q:\u092e\u0928\u0941",
+     "chars": 808,
+     "overflow": 0,
+     "scrollY": 7203
+    },
+    {
+     "addr": "SMP:V5:Q0081",
+     "chars": 730,
+     "overflow": 0,
+     "scrollY": 8353
+    },
+    {
+     "addr": "SMP:V5:S010",
+     "chars": 1892,
+     "overflow": 0,
+     "scrollY": 5519
+    },
+    {
+     "addr": "q:\u0926\u0915\u094d\u0937",
+     "chars": 790,
+     "overflow": 0,
+     "scrollY": 7203
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "SMP:V5:Q0613",
+    "SMP:V5:S061",
+    "q:\u092e\u0928\u0941",
+    "SMP:V5:Q0081",
+    "SMP:V5:S010",
+    "q:\u0926\u0915\u094d\u0937"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": null,
@@ -208,6 +518,7 @@
   "yt_order": null
  },
  "smp6.html": {
+  "addresses_published": 76,
   "buttons_at_start": 275,
   "chapters": 0,
   "controls": {
@@ -219,6 +530,66 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 691,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "SMP:V6:Q0394",
+     "chars": 654,
+     "overflow": 0,
+     "scrollY": 7733
+    },
+    {
+     "addr": "SMP:V6:S067",
+     "chars": 2309,
+     "overflow": 0,
+     "scrollY": 6427
+    },
+    {
+     "addr": "q:\u092e\u0928\u0941",
+     "chars": 816,
+     "overflow": 0,
+     "scrollY": 6874
+    },
+    {
+     "addr": "SMP:V6:Q0458",
+     "chars": 839,
+     "overflow": 0,
+     "scrollY": 11755
+    },
+    {
+     "addr": "SMP:V6:S012",
+     "chars": 2141,
+     "overflow": 0,
+     "scrollY": 6427
+    },
+    {
+     "addr": "q:\u0905\u0919\u094d\u0917\u093f\u0930\u093e",
+     "chars": 879,
+     "overflow": 0,
+     "scrollY": 6874
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "SMP:V6:Q0394",
+    "SMP:V6:S067",
+    "q:\u092e\u0928\u0941",
+    "SMP:V6:Q0458",
+    "SMP:V6:S012",
+    "q:\u0905\u0919\u094d\u0917\u093f\u0930\u093e"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": null,
@@ -242,6 +613,7 @@
   "yt_order": null
  },
  "smp7.html": {
+  "addresses_published": 132,
   "buttons_at_start": 283,
   "chapters": 0,
   "controls": {
@@ -253,6 +625,66 @@
     "e": [],
     "n": 0
    }
+  },
+  "deep_links": {
+   "collisions": [],
+   "errors": [],
+   "loads": [
+    {
+     "addr": "(bare)",
+     "chars": 691,
+     "overflow": 0,
+     "scrollY": 0
+    },
+    {
+     "addr": "SMP:V7:Q0429",
+     "chars": 656,
+     "overflow": 0,
+     "scrollY": 19244
+    },
+    {
+     "addr": "SMP:V7:S001",
+     "chars": 1876,
+     "overflow": 0,
+     "scrollY": 10872
+    },
+    {
+     "addr": "q:\u092e\u0928\u0941",
+     "chars": 746,
+     "overflow": 0,
+     "scrollY": 5726
+    },
+    {
+     "addr": "SMP:V7:Q0001",
+     "chars": 1055,
+     "overflow": 0,
+     "scrollY": 5927
+    },
+    {
+     "addr": "SMP:V7:S022",
+     "chars": 1675,
+     "overflow": 0,
+     "scrollY": 10872
+    },
+    {
+     "addr": "q:\u0936\u094c\u0928\u0915",
+     "chars": 789,
+     "overflow": 0,
+     "scrollY": 5726
+    }
+   ],
+   "reused": [],
+   "tested": [
+    "SMP:V7:Q0429",
+    "SMP:V7:S001",
+    "q:\u092e\u0928\u0941",
+    "SMP:V7:Q0001",
+    "SMP:V7:S022",
+    "q:\u0936\u094c\u0928\u0915"
+   ],
+   "uncompared": false,
+   "vh": 780,
+   "viewport": 390
   },
   "errors": [],
   "lanes": null,
