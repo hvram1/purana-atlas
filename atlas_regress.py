@@ -446,7 +446,7 @@ def instrument(src, dst):
     open(dst, 'w', encoding='utf-8').write(html)
 
 
-PHONE_HOST = """<!doctype html><body style="margin:0">
+PHONE_HOST = """<!doctype html><meta charset="utf-8"><body style="margin:0">
 <iframe id="f" src="%s" style="width:%dpx;height:780px;border:0;display:block"></iframe>
 <script>
 (function poll(){
@@ -461,8 +461,18 @@ PHONE_HOST = """<!doctype html><body style="margin:0">
 </script>"""
 
 
+# A PAGE MAY LIVE IN A SUBDIRECTORY. Every deployment this file had driven was
+# flat, so the host files were named `__phone__<page>` and written beside it --
+# which for `vol-1-part-1/31-the-manusmriti.html` means a directory that does
+# not exist, and the run died there. The host always sits at the scratch root
+# (so the iframe's src, the page's own relative path, resolves from the root
+# exactly as it does on the published site); only its NAME is flattened.
+def flat(name):
+    return name.replace('/', '__')
+
+
 def phone_host(root, name):
-    host = '__phone__' + name
+    host = '__phone__' + flat(name)
     open(os.path.join(root, host), 'w', encoding='utf-8').write(PHONE_HOST % (name, PHONE_WIDTH))
     return host
 
@@ -560,7 +570,7 @@ DEEPLINK_PROBE = r"""<script>
 })();
 </script>"""
 
-DEEPLINK_HOST = """<!doctype html><body style="margin:0">
+DEEPLINK_HOST = """<!doctype html><meta charset="utf-8"><body style="margin:0">
 <iframe id="f" style="width:%(w)dpx;height:%(h)dpx;border:0;display:block"></iframe>
 <script>
 var PAGE = %(page)s, ADDR = %(addrs)s, out = [], i = 0;
@@ -675,8 +685,10 @@ def deep_link_pass(root, repo, port, page, frags, n):
                        STUB + NO_SMOOTH)
     html = (html.replace('</body>', DEEPLINK_PROBE + '\n</body>', 1) if '</body>' in html
             else html + DEEPLINK_PROBE)
-    open(os.path.join(dl_dir, page), 'w', encoding='utf-8').write(html)
-    host = '__deep__' + page
+    dst = os.path.join(dl_dir, page)
+    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    open(dst, 'w', encoding='utf-8').write(html)
+    host = '__deep__' + flat(page)
     open(os.path.join(root, host), 'w', encoding='utf-8').write(
         DEEPLINK_HOST % {'w': PHONE_WIDTH, 'h': PHONE_HEIGHT, 'page': json.dumps(copy),
                          'addrs': json.dumps([''] + addrs)})   # '' = the bare page
@@ -827,15 +839,34 @@ def main():
     # index.html is a real page on a site whose landing page is its content (the
     # anukramaṇikā), so it is only skipped where it is a hand-written front door.
     skip_index = os.path.samefile(repo, HERE)
-    pages = a.page or sorted(f for f in os.listdir(repo)
-                             if f.endswith('.html') and not (skip_index and f == 'index.html'))
+    if a.page:
+        pages = a.page
+    else:
+        # NESTED SITES. The atlases and the edition are flat; the History of
+        # Dharmaśāstra is 596 pages in a dozen directories. Walk, but skip the
+        # scratch directories a previous run may have left and anything under a
+        # dot-directory.
+        pages = []
+        for base, dirs, files in os.walk(repo):
+            dirs[:] = [d for d in dirs
+                       if not d.startswith('.') and d not in ('baselines', '__pycache__')]
+            for f in files:
+                if not f.endswith('.html'):
+                    continue
+                rel = os.path.relpath(os.path.join(base, f), repo)
+                if skip_index and rel == 'index.html':
+                    continue
+                pages.append(rel)
+        pages.sort()
     root = tempfile.mkdtemp(prefix='atlas-regress-')
     for d in os.listdir(repo):
         src = os.path.join(repo, d)
         if os.path.isdir(src) and not d.startswith('.') and d not in ('baselines', '__pycache__'):
             os.symlink(src, os.path.join(root, d))
     for p in pages:
-        instrument(os.path.join(repo, p), os.path.join(root, p))
+        dst = os.path.join(root, p)
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        instrument(os.path.join(repo, p), dst)
 
     httpd, port = serve(root)
     base = json.load(open(BASELINE)) if os.path.exists(BASELINE) else {}
