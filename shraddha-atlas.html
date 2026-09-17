@@ -744,15 +744,24 @@ TABS.forEach(function(p){
 
 // `#text`, `#rec/shr-134`, `#auth/मनु`, `#text/s67` -- a section or an
 // authority is a thing worth linking to, and the hash is how you link to it.
+// Returns whether the address named anything, because a spine set from a URL
+// has to be REVEALED the way a tapped one is: stacked on a phone, the panel it
+// chooses starts below the fold, so arriving at `#auth` showed the same first
+// screen as arriving at `#text` -- the page had honoured the link and the
+// reader could not tell. reveal() is the same one a pick uses and it bails
+// when the columns are side by side, so nothing moves on a desktop.
 function fromHash(){
   var h = decodeURIComponent((location.hash || '').replace(/^#/,''));
-  if (!h) return;
+  if (!h) return false;
   var bits = h.split('/');
-  if (['text','rec','auth','exp'].indexOf(bits[0]) < 0) return;
+  if (['text','rec','auth','exp'].indexOf(bits[0]) < 0) return false;
   setSpine(bits[0], true);
   sel = bits[1] || null;
+  return true;
 }
-window.addEventListener('hashchange', function(){ fromHash(); draw(); });
+window.addEventListener('hashchange', function(){
+  var got = fromHash(); draw(); if (got) reveal();
+});
 
 // ONE TEMPLATE, THREE KĀṆḌAS. The page loads the data file named after
 // itself -- shraddha-atlas.html -> data/shraddha_atlas.json -- so the three
@@ -848,8 +857,9 @@ fetch(DATA).then(function(r){ return r.json(); })
     'Seating: ' + d._provenance.seating + '. Quotes: ' + d._provenance.quotes +
     '. Corpus: ' + d._provenance.corpus + '.';
   document.getElementById('built').textContent = 'Built ' + d.built + '.';
-  fromHash();
+  var addressed = fromHash();
   draw();
+  if (addressed) reveal();
 })
 .catch(function(err){
   document.getElementById('rows').innerHTML =

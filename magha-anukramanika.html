@@ -467,6 +467,25 @@ function render(D){
     FIND = ev.target.value.trim(); draw();
   });
   draw();
+  landOnHash();
+}
+
+// A COLD LOAD AT AN ADDRESS. Every `#day-dsb-038` on this page is an id this
+// script assigns while drawing, and the browser applies the fragment long
+// before the fetch returns -- so it scrolls to an element that does not exist
+// yet and leaves the reader at the top of the page. Following the same link
+// from inside the page always worked, because by then the div is there, which
+// is why the dead ones are exactly the links shared from elsewhere. Not a
+// phone fault: this one was broken at every width. The sticky player would
+// otherwise sit on top of the day's heading, so the margin is its height.
+function landOnHash(){
+  var id = decodeURIComponent((location.hash || '').slice(1));
+  if (!id) return;
+  var n = document.getElementById(id);
+  if (!n) return;
+  var bar = document.querySelector('.player');
+  n.style.scrollMarginTop = ((bar ? bar.offsetHeight : 0) + 10) + 'px';
+  n.scrollIntoView({block: 'start'});
 }
 fetch('data/magha_anukramanika.json')
   .then(function(r){ return r.json(); })
