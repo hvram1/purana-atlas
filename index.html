@@ -372,6 +372,17 @@ const CARDS = {
          + 'translation, the named cast of every adhyāya, and a Tamil upanyāsam '
          + 'aligned verse by verse.'
   },
+  // Beside Virāṭa because it is the other Mahābhārata page, and SCOPED like
+  // the purāṇa parāyaṇas: seven adhyāyas of the Śānti Parva's 365, so it
+  // carries the same scope line under its numbers.
+  shanti: {
+    href: 'shanti-atlas.html',
+    title: 'भीष्मस्तवराजः',
+    rom: 'Śānti Parva · Mahābhārata, book 12 · adhyāyas 41–47',
+    blurb: 'The hymn Bhīṣma sings to Kṛṣṇa from the bed of arrows, and the '
+         + 'chapters that lead to it — expounded in English by one speaker and '
+         + 'in Tamil by another, so a verse can be heard both ways.'
+  },
   kartika: {
     href: 'kartika-atlas.html',
     title: 'कार्तिकमासमाहात्म्यम्',
@@ -490,7 +501,7 @@ fetch('data/stats.json').then(r => r.json()).then(S => {
       + '<div class="go">Open the atlas →</div>';
     box.appendChild(a);
   };
-  ['virata', 'adhyatma', 'varaha', 'garuda', 'vishnu'].forEach(makeCard);
+  ['virata', 'shanti', 'adhyatma', 'varaha', 'garuda', 'vishnu'].forEach(makeCard);
 
   // ------------------------------------------------------------ ĀKĀMĀVAI
   // Four months under one heading, and the heading is the tradition's, not

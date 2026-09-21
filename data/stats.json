@@ -1,5 +1,5 @@
 {
- "built": "2026-09-17",
+ "built": "2026-09-21",
  "simulated_lanes": false,
  "atlases": {
   "virata": {
@@ -190,6 +190,42 @@
    "book_chapters": 255,
    "book_verses": 14794,
    "book_name": "Padma Uttarakhaṇḍa"
+  },
+  "shanti": {
+   "verses": 227,
+   "chapters": 7,
+   "reached": 139,
+   "reached_pct": 61.2,
+   "lanes": 2,
+   "real_lanes": 2,
+   "recordings": 15,
+   "parts": 15,
+   "both_lanes": 50,
+   "speakers": [
+    "G Kameshwar",
+    "Pondicherry Vaisampayanar"
+   ],
+   "lane_axis": "speaker and language",
+   "scope": "run",
+   "walk": [
+    41,
+    43,
+    45,
+    46,
+    47
+   ],
+   "span": [
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+   ],
+   "book_chapters": 365,
+   "book_verses": 13763,
+   "book_name": "Śānti Parva"
   }
  },
  "witness": {

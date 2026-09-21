@@ -108,6 +108,11 @@ ATLASES = [
     # published whole (build_purana_audio.py --purana magha). The other Māgha
     # series is not a verse atlas: it draws each day from a different book.
     ("magha-atlas.html", "magha_4lang.json", "magha_atlas_substrate.json"),
+    # Śānti Parva adhyāyas 41-47 of 365, around the Bhīṣmastavarāja (47): an
+    # English lane (G Kameshwar, bsh) and a Tamil one (Vaiśampāyanar's two
+    # Bhīṣmāṣṭamī days). Scoped like Varāha, laned like Vaiśākha --
+    # build_shanti_audio.py.
+    ("shanti-atlas.html", "shanti_4lang.json", "shanti_atlas_substrate.json"),
 ]
 
 # The Tulā Kāverī page is not an atlas and deliberately does not have a
