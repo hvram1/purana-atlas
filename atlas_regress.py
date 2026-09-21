@@ -685,8 +685,7 @@ def deep_link_pass(root, repo, port, page, frags, n):
                        STUB + NO_SMOOTH)
     html = (html.replace('</body>', DEEPLINK_PROBE + '\n</body>', 1) if '</body>' in html
             else html + DEEPLINK_PROBE)
-    dst = os.path.join(dl_dir, page)
-    os.makedirs(os.path.dirname(dst), exist_ok=True)
+    dst = scratch_path(dl_dir, repo, page)
     open(dst, 'w', encoding='utf-8').write(html)
     host = '__deep__' + flat(page)
     open(os.path.join(root, host), 'w', encoding='utf-8').write(
@@ -818,6 +817,46 @@ def compare(name, now, was):
     return bad
 
 
+
+def scratch_path(root, repo, rel):
+    """Where an instrumented copy of `rel` may be written: inside `root`, never
+    through it into `repo`.
+
+    The scratch root LINKS each of the repo's top-level directories rather than
+    copying them, which is cheap and keeps relative fetches working. It is also
+    how this harness wrote its probe into docs/purana-audio.html and two other
+    authored pages on 2026-09-21: the copy of `docs/x.html` was written at
+    `root/docs/x.html`, and `root/docs` was a link to the repo's docs/. 809
+    lines of instrumentation landed in files the deployment publishes, and the
+    overflow it then measured was its own.
+
+    So every linked directory on the path is replaced by a real one whose
+    entries are linked one by one, the page's own link is removed, and the
+    result is checked to resolve inside the scratch root before anything is
+    written.
+    """
+    cur_root, cur_repo = root, repo
+    for part in os.path.dirname(rel).split(os.sep):
+        if not part:
+            continue
+        r, src = os.path.join(cur_root, part), os.path.join(cur_repo, part)
+        if os.path.islink(r):
+            os.unlink(r)
+            os.mkdir(r)
+            for e in os.listdir(src):
+                os.symlink(os.path.join(src, e), os.path.join(r, e))
+        elif not os.path.isdir(r):
+            os.makedirs(r)
+        cur_root, cur_repo = r, src
+    dst = os.path.join(root, rel)
+    if os.path.islink(dst):
+        os.unlink(dst)
+    real_root = os.path.realpath(root)
+    if not os.path.realpath(dst).startswith(real_root + os.sep):
+        raise SystemExit('refusing to write %s: it resolves outside the scratch '
+                         'root (%s)' % (dst, os.path.realpath(dst)))
+    return dst
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--page', action='append', help='one page; repeatable')
@@ -864,9 +903,7 @@ def main():
         if os.path.isdir(src) and not d.startswith('.') and d not in ('baselines', '__pycache__'):
             os.symlink(src, os.path.join(root, d))
     for p in pages:
-        dst = os.path.join(root, p)
-        os.makedirs(os.path.dirname(dst), exist_ok=True)
-        instrument(os.path.join(repo, p), dst)
+        instrument(os.path.join(repo, p), scratch_path(root, repo, p))
 
     httpd, port = serve(root)
     base = json.load(open(BASELINE)) if os.path.exists(BASELINE) else {}

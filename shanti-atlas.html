@@ -156,6 +156,40 @@ body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:15px;
 .chap .nm{font-family:var(--serif);font-size:12px;color:var(--ink2);overflow:hidden;
   text-overflow:ellipsis;white-space:nowrap}
 .chap .cnt{font-family:var(--mono);font-size:9.5px;color:var(--faint)}
+/* Which speakers reach this adhyāya: one dot per lane, in the lane's colour. */
+.chap .dots{display:inline-flex;gap:3px;margin-left:6px;vertical-align:middle}
+.chap .dots i{width:6px;height:6px;border-radius:50%;display:inline-block}
+.lanehead{display:flex;align-items:center;gap:6px;margin:12px 12px 4px;font:600 10px/1.3 var(--ui);
+  letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lanehead .sw{width:8px;height:8px;border-radius:50%;flex:none}
+.chap .nm .pt{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chap .nm .rng{display:block;font-family:var(--mono);font-size:10px;color:var(--faint);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chap.part{align-items:start}
+/* THE TRACK MAP: where each recording sits inside this adhyāya. One row per
+   speaker (more when two of his recordings overlap); a segment spans the first
+   to the last verse a recording reaches, and pressing it goes there. */
+.tmapwrap{padding:0 30px}
+@media (max-width:760px){.tmapwrap{padding:0 14px}}
+.tmap{margin:12px 0 2px;padding:10px 12px;background:var(--sunk);border:1px solid var(--line);
+  border-radius:8px}
+.tmap .tt{font:600 10px/1 var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  margin-bottom:8px;display:flex;justify-content:space-between}
+.tlane{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:10px;align-items:start;margin:5px 0}
+.tlane .twho{font:12px/1.3 var(--ui);color:var(--ink2);display:flex;gap:6px;align-items:center;padding-top:2px}
+.tlane .twho .sw{width:8px;height:8px;border-radius:50%;flex:none}
+.tbar{position:relative;height:20px;background:var(--panel);border:1px solid var(--line2);
+  border-radius:4px;margin-bottom:3px}
+.tseg{position:absolute;top:1px;bottom:1px;border:0;border-radius:3px;color:#fff;cursor:pointer;
+  font:600 10px/18px var(--mono);padding:0 4px;overflow:hidden;white-space:nowrap;text-align:left;opacity:.88}
+.tseg:hover,.tseg:focus{opacity:1;outline:2px solid var(--ink);outline-offset:0}
+.tones{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin:2px 0 4px;
+  font:10.5px var(--ui);color:var(--muted)}
+.tones .tone{font:10px var(--mono);padding:1px 6px;border:1px solid;border-radius:10px;
+  background:var(--panel);color:var(--ink2);cursor:pointer}
+.tscale{display:flex;justify-content:space-between;font:10px var(--mono);color:var(--faint);
+  margin-left:calc(min(190px,max(120px,30%)) + 10px)}
+@media (max-width:760px){.tlane{grid-template-columns:1fr;gap:3px}.tscale{margin-left:0}}
 
 .chaphead{padding:20px 30px 14px;border-bottom:1px solid var(--line);background:var(--panel);
   position:sticky;top:0;z-index:1}
@@ -592,7 +626,10 @@ Promise.all([fetch('data/shanti_4lang.json').then(r=>r.json()),
      // carrying is dropped on arrival, and nothing errors when it is.
      const a=audio[r]||{};
      V.verses[r]={ch:+p[0],v:+p[1],sa:t.sa,en:t.en,lang:a.lang||{},
-                  ...(a.q?{q:a.q}:{})};
+                  ...(a.q?{q:a.q}:{}),...(t.enw?{enw:t.enw}:{}),
+                  // A work split into books cites a verse by its book --
+                  // `बालकाण्डम् 3.20` -- and the flat ref cannot say which.
+                  ...(t.cit?{cit:t.cit}:{}),...(t.kanda?{kanda:t.kanda}:{})};
    }
    if(A.chapters)V.chapters=A.chapters;
    // An audio lane for a verse the text does not contain is a mismatch to
@@ -602,7 +639,13 @@ Promise.all([fetch('data/shanti_4lang.json').then(r=>r.json()),
      console.warn('4lang has audio for %d verse(s) absent from the text:',
                   orphan.length,orphan);
    CITE=V.cite_prefix||'';
+   // Lane colours are --s1, --s2, --s3. A builder that names its lanes
+   // otherwise (Adhyātma: `up`, `pa`) got var(--up), which is undefined, and
+   // every lane on that page drew colourless. Alias them by position.
+   V.langs.forEach((l,i)=>{if(!/^s\d$/.test(l.id))
+     document.documentElement.style.setProperty('--'+l.id,'var(--s'+(i+1)+')');});
    loadMissing(A);
+   nameLayer(A);
    buildTimelines();
    buildRail();
    const h=location.hash.replace('#','');
@@ -676,6 +719,24 @@ const laneNote = l => l.nourl
   ? l.name+' — '+(l.speaker||'')+'. Chanted and force-aligned, but these '
     +'recordings are not uploaded, so there is nothing to play yet.'
   : l.sim ? l.name+' is simulated: there is no audio to play.' : '';
+// A page built from this template usually has NO name layer -- the purāṇas
+// have no name index -- and the controls say so in the markup. A page that
+// does have one (Śānti: Sørensen through the substrate) must not keep saying
+// "no name layer" beside the cards it is showing, nor keep its filters
+// disabled. Read off the data, never set by hand.
+const hasNames=()=>Object.keys(A.cards||{}).length>0;
+function nameLayer(A){
+  if(!hasNames()) return;
+  MISSING.short='';
+  ['showtog','gradetog','ambtog'].forEach(id=>{
+    const t=document.getElementById(id); if(!t) return;
+    t.classList.remove('nolayer');
+    t.querySelectorAll('button:disabled').forEach(b=>b.disabled=false);
+    const i=t.querySelector('.toglbl i'); if(i) i.remove();
+  });
+  const st=document.getElementById('showtog');
+  if(st) st.title='Which kinds of name to mark in the text';
+}
 function loadMissing(A){
   const m=(A.missing||{}).cards; if(!m) return;
   MISSING={short:m.reason||'no entity layer',detail:m.detail||'',
@@ -709,7 +770,7 @@ function buildRail(){
   if(railMode==='part'){buildRailParts(rail);return;}
     if(railMode==='part'){buildRailParts(rail);return;}
   rail.appendChild(el('div','railhead',
-    Object.keys(V.chapters).length+' adhyāyas · '+MISSING.short));
+    Object.keys(V.chapters).length+' adhyāyas'+(MISSING.short?' · '+MISSING.short:'')));
   let last=null;
   Object.keys(V.chapters).map(Number).sort((a,b)=>a-b).forEach(ch=>{
     const c=V.chapters[ch];
@@ -718,26 +779,134 @@ function buildRail(){
     const n=Object.keys(V.verses).filter(r=>V.verses[r].ch===ch)
       .reduce((a,r)=>a+(heardRef(r)?1:0),0);
     const row=el('div','chap');row.dataset.ch=ch;
+    const sp=recordingSpans();
+    const here=V.langs.filter(l=>!l.sim&&Object.keys(sp).some(e=>sp[e].lane===l.id&&sp[e].chapters.has(ch)));
+    const dots=here.length?'<span class="dots" title="'+esc(here.map(l=>l.native||l.name).join(' · '))+'">'
+      +here.map(l=>'<i style="background:var(--'+l.id+')"></i>').join('')+'</span>':'';
     row.innerHTML='<div class="n">'+ch+'</div><div class="nm" title="'+esc(c.name)+'">'+esc(c.name)
-      +'</div><div class="cnt">'+n+'</div>';
+      +dots+'</div><div class="cnt">'+n+'</div>';
     row.onclick=()=>showChapter(ch);
     rail.appendChild(row);
   });
 }
 
+// WHERE EACH RECORDING IS. Read off the verse marks -- the one thing every
+// atlas carries -- so it does not depend on a part `timeline` (the one-lane
+// purāṇa pages have none) or on `ep.lane` (they do not set it either).
+//   {ep: {lane, refs:[sorted], chapters:Set}}
+let SPANS=null;
+function recordingSpans(){
+  if(SPANS) return SPANS;
+  SPANS={};
+  Object.keys(V.verses).sort(cmpRef).forEach(r=>{
+    const v=V.verses[r];
+    V.langs.forEach(l=>{
+      if(l.sim) return;
+      ((v.lang[l.id]||{}).occ||[]).forEach(o=>{
+        const s=SPANS[o.ep]||(SPANS[o.ep]={lane:l.id,refs:[],chapters:new Set()});
+        if(s.refs[s.refs.length-1]!==r) s.refs.push(r);
+        s.chapters.add(v.ch);
+      });
+    });
+  });
+  return SPANS;
+}
+const laneOf=id=>V.langs.find(l=>l.id===id)||{};
+const citeOf=r=>(V.verses[r]&&V.verses[r].cit)||CITE+r;
+const partNo=id=>{const e=episode(id)||{};return String(e.n||id.replace(/^[a-z]+-0*/,''));};
+const partName=id=>{const e=episode(id)||{};
+  return 'Part '+partNo(id)+(e.title?' · '+e.title:'');};
+
+function trackMap(ch,refs){
+  const at={};refs.forEach((r,i)=>at[r]=i);
+  const sp=recordingSpans(),N=refs.length;
+  const box=el('div','tmap');
+  let lanes=0;
+  box.appendChild(el('div','tt','<span>Where each recording is</span><span>'
+    +'press a segment to go there</span>'));
+  V.langs.filter(l=>!l.sim).forEach(l=>{
+    let segs=Object.keys(sp).filter(e=>sp[e].lane===l.id&&sp[e].chapters.has(ch))
+      .map(e=>{const mine=sp[e].refs.filter(r=>r in at);
+               return {e,lo:at[mine[0]],hi:at[mine[mine.length-1]],n:mine.length};})
+      .sort((a,b)=>a.lo-b.lo||a.hi-b.hi);
+    if(!segs.length) return;
+    lanes++;
+    // A recording that touches ONE verse here gets no bar of its own. Musiri
+    // chants 1.1 of that māhātmya, its maṅgala verse, at the start of nearly every part,
+    // and as bars those were twenty one-verse rows burying the one part that
+    // actually walks the chapter. They are listed on one line instead.
+    const ones=segs.filter(g=>g.n===1);
+    segs=segs.filter(g=>g.n>1);
+    // Pack into rows: consecutive parts of one series share a line, and only
+    // two recordings of the same verses (two years, two sittings) stack.
+    const rows=[];
+    segs.forEach(g=>{let row=rows.find(rw=>rw.end<g.lo);
+      if(!row){row={end:-1,items:[]};rows.push(row);}
+      row.items.push(g);row.end=g.hi;});
+    const lane=el('div','tlane');
+    lane.appendChild(el('div','twho','<span class="sw" style="background:var(--'+l.id+')"></span>'
+      +esc(l.native||l.name)));
+    const bars=el('div');
+    rows.forEach(rw=>{const bar=el('div','tbar');
+      rw.items.forEach(g=>{
+        const b=el('button','tseg',esc(partNo(g.e)));
+        b.style.left=(100*g.lo/N)+'%';
+        b.style.width='calc('+(100*(g.hi-g.lo+1)/N)+'% - 1px)';
+        b.style.minWidth='18px';
+        b.style.background='var(--'+l.id+')';
+        b.title=partName(g.e)+' — '+(l.speaker||l.name)+'\n'+citeOf(refs[g.lo])+' – '+citeOf(refs[g.hi])
+          +' · '+g.n+' verse'+(g.n===1?'':'s')+' heard';
+        b.onclick=()=>focus(refs[g.lo]);
+        bar.appendChild(b);});
+      bars.appendChild(bar);});
+    if(ones.length){
+      const also=el('div','tones','<span>'+(segs.length?'also, one verse each:':'one verse each:')+'</span>');
+      ones.forEach(g=>{const b=el('button','tone',esc(partNo(g.e))+' · '+esc(citeOf(refs[g.lo])));
+        b.style.borderColor='var(--'+l.id+')';
+        b.title=partName(g.e)+' — '+(l.speaker||l.name);
+        b.onclick=()=>focus(refs[g.lo]);also.appendChild(b);});
+      bars.appendChild(also);
+    }
+    lane.appendChild(bars);box.appendChild(lane);
+  });
+  if(!lanes) return null;
+  box.appendChild(el('div','tscale','<span>'+esc(citeOf(refs[0]))+'</span><span>'+esc(citeOf(refs[N-1]))+'</span>'));
+  return box;
+}
+
+// The recordings, GROUPED BY SPEAKER, each saying what it covers. A part used
+// to read "4 · 15 min": nothing said whose it was, what it was called, or
+// where in the text it sat, so finding a recording meant opening them in turn.
 function buildRailParts(rail){
-  const eps=(V.ta_episodes||[]).filter(e=>e.timeline);
-  rail.appendChild(el('div','railhead',eps.length+' parts, in order'));
-  eps.forEach(e=>{
-    const q=e.timeline.filter(r=>r.cit).length;
-    const row=el('div','chap');row.dataset.part=e.id;
-    row.innerHTML='<div class="n">'+(e.n||e.id.replace(/^[a-z]+-0*/,''))+'</div>'
-      +'<div class="nm">'+esc(fmtdur(e.duration))+(e.yt?'':' · no video')+'</div>'
-      +'<div class="cnt">'+q+'</div>';
-    row.title=q+' quotation'+(q===1?'':'s')+' · '
-      +e.timeline.filter(r=>!r.cit).length+' verses of this text';
-    row.onclick=()=>showPart(e.id);
-    rail.appendChild(row);
+  const sp=recordingSpans();
+  const eps=(V.ta_episodes||[]).filter(e=>e.timeline||sp[e.id]);
+  rail.appendChild(el('div','railhead',eps.length+' parts, by speaker'));
+  const laneIds=V.langs.filter(l=>!l.sim).map(l=>l.id);
+  const lid=e=>e.lane||(sp[e.id]||{}).lane||laneIds[0];
+  laneIds.forEach(L=>{
+    const mine=eps.filter(e=>lid(e)===L);
+    if(!mine.length) return;
+    const l=laneOf(L);
+    rail.appendChild(el('div','lanehead','<span class="sw" style="background:var(--'+L+')"></span>'
+      +esc(l.native||l.name)+' · '+mine.length));
+    mine.forEach(e=>{
+      const s=sp[e.id],refs=s?s.refs:[];
+      const rng=refs.length?citeOf(refs[0])+(refs.length>1?' – '+citeOf(refs[refs.length-1]):''):'';
+      const q=(e.timeline||[]).filter(r=>r.cit).length;
+      const row=el('div','chap part');row.dataset.part=e.id;
+      // Two lines: what it is called, then where it sits and how long it runs.
+      // On one line the range was the first thing the ellipsis ate.
+      row.innerHTML='<div class="n">'+esc(partNo(e.id))+'</div>'
+        +'<div class="nm"><span class="pt">'+esc(e.title||('Part '+partNo(e.id)))+'</span>'
+        +'<span class="rng">'+(rng?esc(rng)+' · ':'')+esc(fmtdur(e.duration))
+        +(e.yt?'':' · no video')+'</span></div>'
+        +'<div class="cnt">'+refs.length+'</div>';
+      row.title=partName(e.id)+' · '+refs.length+' verse'+(refs.length===1?'':'s')+' of this text'
+        +(q?' · '+q+' quotation'+(q===1?'':'s'):'');
+      row.onclick=()=>e.timeline?showPart(e.id):(refs.length&&(railMode='text',buildRail(),
+        showChapter(+refs[0].split('.')[0]),focus(refs[0])));
+      rail.appendChild(row);
+    });
   });
 }
 const fmtdur=s=>s?Math.round(s/60)+' min':'—';
@@ -791,7 +960,7 @@ function showPart(id){
       if(qt.txt) right.appendChild(el('span','tline',esc(qt.txt)));
     }else{
       const v=V.verses[r.ref]||{};
-      const ref=el('span','tref','4.'+(r.ref||''));
+      const ref=el('span','tref',CITE+(r.ref||''));
       ref.title='Go to this verse in the text';
       ref.onclick=()=>{railMode='text';buildRail();
                        showChapter(+r.ref.split('.')[0]);focus(r.ref);};
@@ -831,12 +1000,17 @@ function showChapter(ch){
   const cur=ev.length?ev[ev.length-1]:null;
   const head=el('div','chaphead');
   const nheard=refs.filter(heardRef).length;
-  head.innerHTML='<h2>'+esc(c.name)+'</h2><div class="sub"><span>अध्याय <b>'+ch+'</b></span>'
+  head.innerHTML='<h2>'+esc(c.name)+'</h2><div class="sub"><span>'
+    +(c.kanda?esc(c.kanda)+' सर्गः <b>'+(c.sarga||ch)+'</b>':'अध्याय <b>'+ch+'</b>')+'</span>'
     +'<span><b>'+refs.length+'</b> verses</span>'
     +'<span><b>'+nheard+'</b> heard</span>'
-    +'<span class="miss">'+esc(MISSING.short)+'</span></div>'
+    +(MISSING.short?'<span class="miss">'+esc(MISSING.short)+'</span>':'')+'</div>'
     +((c.topics||[]).length?'<div class="storytag">📖 '+(c.topics||[]).map(esc).join(' · ')+'</div>':'');
   stage.appendChild(head);
+  // Below the header, not inside it: the header is sticky, and a map pinned
+  // over the verses would take a third of a phone screen for the whole read.
+  const tm=trackMap(ch,refs);
+  if(tm){const w=el('div','tmapwrap');w.appendChild(tm);stage.appendChild(w);}
   // The opening is chanted before the first verse, so it is shown before the
   // first verse -- on this adhyāya only, never repeated down the text.
   if(ch===firstChap()&&V.opening&&V.opening.length) stage.appendChild(openingBlock(V.opening));
@@ -948,7 +1122,7 @@ function mark(text,hits,surface){
 function verse(ref){
   const v=V.verses[ref],hits=A.ann[ref]||[],node=el('div','v');
   node.id='v-'+ref;node.dataset.ref=ref;
-  const num=el('div','vnum','<span>'+CITE+v.ch+'.'+v.v+'</span>');
+  const num=el('div','vnum','<span>'+esc(v.cit||CITE+v.ch+'.'+v.v)+'</span>');
   // Only offer to play a verse somebody actually chanted. A `sim` lane is an
   // invented second and must not look like a recording from the verse either.
   // Heard is heard, by either speaker -- that is what the atlas records.
@@ -979,6 +1153,14 @@ function verse(ref){
   node.appendChild(sa);
   if(v.en){const e=el('div','layer en');
     e.innerHTML='<div class="lbl">M. N. Dutt · 1897</div><div class="txt">'+mark(v.en,hits,'en')+'</div>';
+    node.appendChild(e);}
+  // Dutt renders a run of ślokas as ONE sentence; it is shown on the first and
+  // the others say where, rather than repeating the paragraph down the run.
+  else if(v.enw){const e=el('div','layer en');
+    e.innerHTML='<div class="lbl">M. N. Dutt · 1897</div><div class="txt"><i>'
+      +'Translated with '+esc(CITE+v.enw.run[0])+'–'+esc(CITE+v.enw.run[1])
+      +' as one sentence — </i><a href="#'+esc(v.enw.see)+'">see '+esc(CITE+v.enw.see)+'</a></div>';
+    e.querySelector('a').onclick=ev=>{ev.preventDefault();focus(v.enw.see);};
     node.appendChild(e);}
   // Silent by design: Dutt has no purāṇa counterpart, so saying it on
   // each of 1817 verses would report the corpus as a per-verse gap.
@@ -1200,14 +1382,16 @@ function buildCtx(ch,refs){
   // The entity column of the Virāṭa atlas cannot be filled here, and an empty
   // column reads as "nothing found in this adhyāya". Say which it is, once,
   // in the place the pills would have stood.
-  const gap=el('div','gapsec');
-  gap.appendChild(el('h4',null,'Cards · missing'));
-  gap.appendChild(el('p',null,esc(MISSING.detail)));
-  if(MISSING.schema)
-    gap.appendChild(el('p',null,'Anticipated but undefined: <code>'+esc(MISSING.schema)+'</code>'));
-  if(MISSING.needs)
-    gap.appendChild(el('div','need','<b>Needs:</b> '+esc(MISSING.needs)));
-  ctx.appendChild(gap);
+  if(!hasNames()){
+    const gap=el('div','gapsec');
+    gap.appendChild(el('h4',null,'Cards · missing'));
+    gap.appendChild(el('p',null,esc(MISSING.detail)));
+    if(MISSING.schema)
+      gap.appendChild(el('p',null,'Anticipated but undefined: <code>'+esc(MISSING.schema)+'</code>'));
+    if(MISSING.needs)
+      gap.appendChild(el('div','need','<b>Needs:</b> '+esc(MISSING.needs)));
+    ctx.appendChild(gap);
+  }
 
   // The 133 topic headings are the only structural spine this text carries.
   const tp=(V.chapters[ch]||{}).topics||[];
